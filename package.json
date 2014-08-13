@@ -1,0 +1,44 @@
+{
+  "name": "blog-app",
+  "version": "0.0.0",
+  "description": "The self-hosted Dropbox-powered blogging platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brandon Brown <brandon@brandonb.io> (http://brandonb.io/)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "*",
+    "feed": "*",
+    "hbs": "*",
+    "highlight.js": "*",
+    "marked": "*",
+    "marked-metadata": "git://github.com/brandonb927/marked-metadata.git",
+    "metalsmith": "*",
+    "moment": "^2.8.1",
+    "morgan": "*",
+    "node-oembed-io": "^0.1.1",
+    "nodejs-gravatar": "^1.0.2",
+    "nodemon": "*",
+    "pagination": "*",
+    "serve-favicon": "*",
+    "shortcode-parser": "0.0.1",
+    "sitemap": "*",
+    "slug": "^0.5.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-concat": "*",
+    "gulp-jshint": "*",
+    "gulp-less": "*",
+    "gulp-minify-css": "*",
+    "gulp-nodemon": "*",
+    "gulp-rename": "*",
+    "gulp-rimraf": "*",
+    "gulp-uglify": "*",
+    "jshint-stylish": "*"
+  }
+}

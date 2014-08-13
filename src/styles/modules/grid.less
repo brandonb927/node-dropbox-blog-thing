@@ -1,0 +1,44 @@
+// Grid wrapper
+.grid {
+  margin: 0 0 @base-padding -@base-padding;
+  .cf;
+}
+
+// column
+.column {
+  float: left;
+  padding-left: @base-padding;
+
+  .grid,
+  &:first-child {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+
+// Opt-in gutter padding
+.gutter {
+  padding: @base-padding @base-padding @base-padding 0;
+
+  > .column:first-child { padding-left: @base-padding; }
+}
+
+// column types
+.full-width { width: 100%; }
+.one-third { width: 33.33%; }
+.two-thirds { width: 66.66%; }
+.one-half { width: 50%; }
+.one-fourth { width: 25%; }
+.one-eigth { width: 12.5%; }
+
+// Inner column
+.module { padding: @base-padding; }
+
+// Smaller screens use 100% width
+@media (max-width: 47.9375em) {
+  .one-third,
+  .two-thirds,
+  .one-half,
+  .one-fourth,
+  .one-eigth { width: 100%; }
+}

@@ -1,0 +1,78 @@
+@import 'utilities.less';
+@import 'variables.less';
+
+@import 'modules/normalize.less';
+@import 'modules/base.less';
+@import 'modules/embedded-content.less';
+@import 'modules/grid.less';
+@import 'modules/print.less';
+@import 'modules/syntax.less';
+@import 'modules/tables.less';
+@import 'modules/typography.less';
+
+.site-avatar {
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+}
+
+
+.container {
+  margin: 0 auto;
+  max-width: 56rem;
+}
+
+.page-header {
+  padding: (@base-rem-unit * 2) @base-rem-unit 0;
+}
+
+.feed {
+
+}
+
+.feed-post {
+  padding: 4rem 0;
+  border-bottom: solid 1px @gray-lighter;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.post-meta {
+  margin-bottom: (@base-rem-unit * 2);
+  .text-bold;
+  .cf;
+
+  .meta-left,
+  .meta-right { width: 49.9%; }
+  .meta-left  { float: left;  }
+  .meta-right {
+    float: right;
+    text-align: right;
+  }
+
+  .meta-label {
+    display: inline-block;
+  }
+}
+
+.pagination {
+  margin-top: (@base-rem-unit * 2);
+  .cf;
+
+  a {
+    .no-underline;
+
+    &.pagination-prev { float: left;  }
+    &.pagination-next { float: right; }
+  }
+}
+
+.page-home {
+
+}

@@ -1,0 +1,21 @@
+{
+  "site": {
+    "domain": "example.com",
+    "title": "Example Test Site",
+    "description": "This is an example of a drop-in self-hosted Dropbox blogging platform.",
+    "author": {
+      "name": "Brandon Brown",
+      "email": "brandon@brandonb.io"
+    },
+    "social": {
+      "twitter": "",
+      "github": ""
+    },
+    "settings": {
+      "formatDate": "MMM Do YY",
+      "postsPerPage": 10,
+      "showPostExcerpt": true
+    }
+  },
+  "postFileExt": "md"
+}

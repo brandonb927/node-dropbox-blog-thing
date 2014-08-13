@@ -1,0 +1,47 @@
+/* Clearfix to contain floats */
+.cf {
+    &:before,
+    &:after {
+        display: table; /* 1 */
+        content: " ";   /* 2 */
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+/**
+ * Show/hide ($show-hide)
+ */
+
+/**
+ * Hide only visually, but have it available for screenreaders -
+ * http://cbrac.co/TUcUgH
+ */
+
+.visuallyhidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -.0625rem;
+    padding: 0;
+    width: .0625rem;
+    height: .0625rem;
+    border: 0;
+
+    /**
+     * Extends the `.visuallyhidden` class to allow the element to be
+     * focusable when navigated to via the keyboard - http://cbrac.co/RR8gO6
+     */
+
+    &.focusable:active,
+    &.focusable:focus {
+        position: static;
+        overflow: visible;
+        clip: auto;
+        margin: 0;
+        width: auto;
+        height: auto;
+    }
+}

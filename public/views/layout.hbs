@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{site.title}} | {{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}</title>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500|Lato:400|Droid+Sans+Mono|Vollkorn" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="page-header"><a href="{{baseUrl}}">{{site.title}}</a></h1>
+
+    <div class="grid gutter">
+      <div class="column two-thirds">
+        <div class="module">
+        {{{body}}}
+        </div>
+      </div>
+
+      <div class="column one-third">
+        <div class="module">
+          <div class="site-bio">
+            <h3>Bio</h3>
+            <img src="{{gravatar}}" class="site-avatar" />
+            <p>{{site.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

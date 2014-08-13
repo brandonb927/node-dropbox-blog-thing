@@ -1,0 +1,29 @@
+{{#each posts}}
+<div class="feed-post">
+  <h2 class="post-title">{{this.title}}</h2>
+  <div class="post-meta">
+    <div class="meta-left">Posted on <time datetime="{{this.dateObj}}">{{this.date}}</time></div>
+    <div class="meta-right">
+      {{#if this.tags}}
+      <span class="meta-label">Tags: </span>
+      <span class="meta-tags">
+      {{#each this.tags}}
+        <a href="/tag/{{this}}">{{this}}</a>
+      {{/each}}
+      </span>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="post-content">
+    {{this.content}}
+  </div>
+</div>
+{{/each}}
+
+{{#if pagination}}
+<div class="pagination">
+  {{#if pagination.prev}}<a href="/page/{{pagination.prev}}" class="pagination-prev">&larr; Newer posts</a>{{/if}}
+  {{#if pagination.next}}<a href="/page/{{pagination.next}}" class="pagination-next">Older posts &rarr;</a>{{/if}}
+</div>
+{{/if}}
