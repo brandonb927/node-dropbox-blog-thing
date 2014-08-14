@@ -15,100 +15,97 @@ var markedOptions = {
   gfm         : true,
   tables      : true,
   breaks      : true,
-  // smartypants : true,
-  highlight: function (code) {
-    return require('highlight.js').highlightAuto(code).value;
-  }
-};
-
-var _safe = function (string) {
-  return new hbs.handlebars.SafeString(string);
+  // smartypants : true
 };
 
 // Used to render the content of a post/page
-var renderContent = function (content) {
-  var newContent = shortcode.parse(content);
-  // console.log(shortcode);
-  // console.log(newContent);
+function renderContent (content, callback) {
+  // Return the HTML-safe content that will be rendered to the page
+  callback(null, new hbs.handlebars.SafeString(content));
+}
 
-  // Finally, return the HTML-safe content that will be rendered to the page
-  return _safe(newContent);
-};
+function renderShortcodes (content, callback) {
+  callback(null, shortcode.parse(content));
+}
 
-// private-ish method
 // Process the markdown file given a filename/filepath
 // and return an object containing the data to be sent to the view
-var _getPostData = function (file_path) {
-  var md = new MarkedMetaData(file_path);
-  md.defineTokens('---', '---');
+function getPost (filePath, callback) {
+  var fileContents = String(fs.readFileSync(filePath));
 
-  var meta = md.metadata();
-  var content = md.markdown(markedOptions);
-  var slug = slugify(meta.title);
-  slug = slug.toLowerCase();
+  renderShortcodes(fileContents, function (err, parsedContent) {
+    // if (err) throw Error('Could not parse shortcode content');
 
-  // Some titles come as an array if they have commas,
-  // so we rebuild them as a string
-  if (Array.isArray(meta.title)) {
-    meta.title = meta.title.join(', ');
-  }
+    var md = new MarkedMetaData(parsedContent);
+    var meta = md.metadata();
+    var content = md.markdown(markedOptions);
+    var slug = slugify(meta.title);
+    slug = slug.toLowerCase();
 
-  var postData = {
-    date    : moment(meta.date).format(config.site.settings.formatDate),
-    dateObj : moment(meta.date).toDate(),
-    title   : meta.title,
-    tags    : meta.tags || [],
-    slug    : slug,
-    url     : app.locals.baseUrl + '/' + slug,
-    content : renderContent(content)
-  };
+    // Some titles come as an array if they have commas,
+    // so we rebuild them as a string
+    if (Array.isArray(meta.title)) {
+      meta.title = meta.title.join(', ');
+    }
 
-  // remove these duplicates from the meta
-  delete meta.title;
-  delete meta.date;
-  delete meta.tags;
+    var post = {
+      date    : moment(meta.date).format(config.site.settings.formatDate),
+      dateObj : moment(meta.date).toDate(),
+      title   : meta.title,
+      tags    : meta.tags || [],
+      slug    : slug,
+      url     : app.locals.baseUrl + '/' + slug
+    };
 
-  postData.meta = meta;
+    renderContent(content, function (err, renderedContent) {
+      // if (err) throw Error('Could not render HTML safely');
+      post.content = renderedContent;
+    });
 
-  return postData;
-};
+    // remove these duplicates from the meta
+    delete meta.title;
+    delete meta.date;
+    delete meta.tags;
+    post.meta = meta;
 
-// private-ish method
+    callback(null, post);
+  });
+}
+
 // TODO cache this somewhere so we don't have to do a filesystem lookup on every request
-var _getAllPosts = function (includePages) {
+function getAllPosts (includePages, callback) {
   var posts = [];
   var files = fs.readdirSync('posts');
 
-  files.forEach(function(file_name, i) {
-    if (!file_name.endsWith(config.postFileExt)) {
+  files.forEach(function (fileName, i) {
+    if (!fileName.endsWith(config.postFileExt)) {
       return;
     }
 
-    // console.log(file_name);
-    var file_path = 'posts/' + file_name;
-    // console.log(file_path);
+    var filePath = 'posts/' + fileName;
 
-    var post = _getPostData(file_path);
-    if (post.meta.type !== 'undefined') {
-      // type must contain the page attribute
-      if (includePages && post.meta.type === 'page') {
-        // we want to include pages into the posts array
+    getPost(filePath, function (err, post) {
+      if (post.meta.type !== 'undefined') {
+        // type must contain the page attribute
+        if (includePages && post.meta.type === 'page') {
+          // we want to include pages into the posts array
+          posts.push(post);
+        }
+      }
+
+      if (post.meta.type !== 'page') {
+        // Must be a post, just add it
         posts.push(post);
       }
-    }
-
-    if (post.meta.type !== 'page') {
-      // Must be a post, just add it
-      posts.push(post);
-    }
+    });
   });
 
   // TODO: better way to do this if file order changes
   // Rudimentary way to reverse the order of the posts from the files list
   posts.reverse();
 
-  return posts;
-};
+  callback(null, posts);
+}
 
 // Get all post
 exports.getAll = function (includePages, callback) {
@@ -116,57 +113,60 @@ exports.getAll = function (includePages, callback) {
     callback = includePages;
     includePages = false;
   }
-  var posts = _getAllPosts(includePages);
-  callback(null, posts);
+
+  getAllPosts(includePages, function (err, posts) {
+    callback(null, posts);
+  });
 };
 
 // Get post by it's slug
 exports.getBySlug = function (slug, callback) {
   if (slug !== 'test') throw Error();
 
-  var file_name = slug.replace('-','_');
-  var file_path = 'posts/' + file_name + '.' + config.postFileExt;
-  var post = _getPostData(file_path);
+  var fileName = slug.replace('-','_');
+  var filePath = 'posts/' + fileName + '.' + config.postFileExt;
 
-  callback(null, post);
+  getPost(filePath, function (post) {
+    callback(null, post);
+  });
 };
 
 // Get all posts by a given pagination number based on postsPerPage in config.json
 exports.getByPagination = function (pageNum, callback) {
   var data  = {};
   var posts = [];
-  var allPosts = _getAllPosts();
   var postsPerPage = config.site.settings.postsPerPage;
 
-  pageNum = parseInt(pageNum);
+  getAllPosts(false, function (err, allPosts) {
+    pageNum = parseInt(pageNum);
 
-  var paginator = new pagination.SearchPaginator({
-    current: pageNum || 1,
-    rowsPerPage: postsPerPage,
-    totalResult: allPosts.length
+    var paginator = new pagination.SearchPaginator({
+      current: pageNum || 1,
+      rowsPerPage: postsPerPage,
+      totalResult: allPosts.length
+    });
+
+    var pgData = paginator.getPaginationData();
+    if (pageNum > pgData.pageCount) throw Error('Pagination number too high');
+    for (var i = (pgData.fromResult === 1 ? pgData.fromResult - 1 : pgData.fromResult); i <= pgData.toResult; i++) {
+      posts.push(allPosts[i]);
+    }
+
+    data.pagination = {};
+    data.pagination.next = pgData.next;
+    data.pagination.prev = pgData.previous;
+
+    data.pageNum = pgData.current;
+    data.posts = posts;
+    callback(null, data);
   });
-
-  var pgData = paginator.getPaginationData();
-  if (pageNum > pgData.pageCount) throw Error('Pagination number too high');
-  for (var i = (pgData.fromResult === 1 ? pgData.fromResult - 1 : pgData.fromResult); i <= pgData.toResult; i++) {
-    posts.push(allPosts[i]);
-  }
-
-  data.pagination = {};
-  data.pagination.next = pgData.next;
-  data.pagination.prev = pgData.previous;
-
-  data.pageNum = pgData.current;
-  data.posts = posts;
-
-  callback(null, data);
 };
 
 // Get all posts by a given tag
 // exports.getByTag = function (tag, callback) {
 //   var data  = {};
 //   var posts = [];
-//   var allPosts = _getAllPosts();
+//   var allPosts = getAllPosts();
 
 //   // for (var post in allPosts) {
 //   //   if () {

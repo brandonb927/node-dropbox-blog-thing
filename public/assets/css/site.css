@@ -1143,8 +1143,27 @@ sub {
   margin: 0 auto;
   max-width: 56rem;
 }
-.page-header {
+.site-header {
   padding: 2rem 1rem 0;
+}
+.site-header:before,
+.site-header:after {
+  display: table;
+  /* 1 */
+  content: " ";
+  /* 2 */
+}
+.site-header:after {
+  clear: both;
+}
+.site-header .header-title {
+  float: left;
+}
+.site-header .header-nav {
+  float: right;
+}
+.site-header .nav-menu li a {
+  vertical-align: middle;
 }
 .feed-post {
   padding: 4rem 0;
@@ -1205,4 +1224,12 @@ sub {
 }
 .pagination a.pagination-next {
   float: right;
+}
+.highlight {
+  margin: 0;
+}
+.highlight .line-data .line-pre {
+  color: inherit;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }

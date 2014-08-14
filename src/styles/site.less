@@ -22,9 +22,27 @@
   max-width: 56rem;
 }
 
-.page-header {
+.site-header {
   padding: (@base-rem-unit * 2) @base-rem-unit 0;
+  .cf;
+
+  .header-title {
+    float: left;
+  }
+
+  .header-nav {
+    float: right;
+  }
+
+  .nav-menu {
+    li {
+      a {
+        vertical-align: middle;
+      }
+    }
+  }
 }
+
 
 .feed {
 
@@ -75,4 +93,16 @@
 
 .page-home {
 
+}
+
+// Fix Github gists
+.highlight {
+  margin: 0;
+
+  .line-data {
+    .line-pre {
+      color: inherit;
+      box-shadow: none;
+    }
+  }
 }

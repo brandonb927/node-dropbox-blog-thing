@@ -89,7 +89,10 @@ gulp.task('server', function () {
   nodemon({
     script: 'server.js',
     ext: 'js',
-    env: { 'NODE_ENV': 'development' }
+    env: { 'NODE_ENV': 'development' },
+    ignore: [
+      'node_modules/**'
+    ]
   })
   .on('start', ['watch'])
   .on('change', ['watch'])
