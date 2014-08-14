@@ -943,7 +943,7 @@ h5,
 h6 {
   font-size: 1rem;
 }
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 48rem) {
   h1 {
     font-size: 3.157rem;
   }
@@ -1067,7 +1067,7 @@ strong {
 }
 .container {
   margin: 0 auto;
-  max-width: 56rem;
+  max-width: 68.75rem;
 }
 .site-header {
   padding: 2rem 1rem 0;
