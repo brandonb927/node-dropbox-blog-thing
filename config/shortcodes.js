@@ -1,6 +1,5 @@
-var shortcode = require('shortcode-parser');
-var oembed    = require('node-oembed-io');
-var httpsync  = require('httpsync');
+var shortcode     = require('shortcode-parser');
+var requestSync   = require('request-sync');
 
 
 /**
@@ -10,11 +9,14 @@ var httpsync  = require('httpsync');
  * used) but it proved impossible to use in this situation
  */
 function getEmbedCode (url) {
-  var req = httpsync.get(url);
-  var res = req.end();
-  var data = new Buffer(res.data);
-  var embed = JSON.parse(data.toString('utf-8')).html;
-  console.log(embed);
+  // console.log(url);
+  var res = requestSync(url);
+  var embed = JSON.parse(res.body.toString('utf-8')).html;
+  // console.log(embed);
+  if (!embed) {
+    embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s and issue with this embed!</p><p>' + url + '</p></div>';
+  }
+
   return embed;
 };
 
@@ -24,4 +26,24 @@ shortcode.add('gist', function(str, opts) {
 
 shortcode.add('codepen', function (str, opts) {
   return getEmbedCode('http://codepen.io/api/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+});
+
+shortcode.add('twitter', function (str, opts) {
+  return getEmbedCode('https://api.twitter.com/1/statuses/oembed.json?url=' + encodeURIComponent(opts.url));
+});
+
+// The rest of the embeds use the oembed.io api
+var embeds = [
+  'instagram',
+  'slideshare',
+  'soundcloud',
+  'vimeo',
+  'vine',
+  'youtube'
+];
+
+embeds.forEach(function (embed, index) {
+  shortcode.add(embed, function (str, opts) {
+    return getEmbedCode('http://oembed.io/api?url=' + encodeURIComponent(opts.url));
+  });
 });

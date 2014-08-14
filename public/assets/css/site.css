@@ -516,8 +516,8 @@ figcaption {
   font-style: italic;
   font-size: 0.75rem;
 }
-/* Flexible videos embeds! */
-.flex-video {
+/* Reponsive embeds! */
+.responsive-embed {
   position: relative;
   overflow: hidden;
   margin-bottom: 1rem;
@@ -527,20 +527,20 @@ figcaption {
   /* Different padding value for widescreen */
   /* Remove top padding for Vimeo embeds only */
 }
-.flex-video iframe,
-.flex-video object,
-.flex-video embed,
-.flex-video video {
+.responsive-embed iframe,
+.responsive-embed object,
+.responsive-embed embed,
+.responsive-embed video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
-.flex-video.widescreen {
+.responsive-embed.widescreen {
   padding-bottom: 57.25%;
 }
-.flex-video.vimeo {
+.responsive-embed.vimeo {
   padding-top: 0;
 }
 /**
@@ -1033,6 +1033,9 @@ sup {
 sub {
   bottom: -0.238rem;
 }
+strong {
+  font-weight: 500;
+}
 /**
  * Text alignment ($text-alignment)
  */
@@ -1155,4 +1158,9 @@ sub {
   color: inherit;
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+.embed-error {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #dedede;
 }
