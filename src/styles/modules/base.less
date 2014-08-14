@@ -17,7 +17,7 @@
 *,
 *:before,
 *:after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* Add a margin to elements that typically need it */
@@ -35,7 +35,7 @@ pre,
 summary,
 table,
 ul {
-    margin: 0 0 @base-rem-unit;
+  margin: 0 0 @base-rem-unit;
 }
 
 /**
@@ -44,18 +44,18 @@ ul {
  */
 
 ::selection {
-    background: @selection-background-color; /* 1 */
-    text-shadow: none;                       /* 2 */
+  background: @selection-background-color; /* 1 */
+  text-shadow: none;           /* 2 */
 
-    // Change `background` for text selections when browser is unfocused
-    &:window-inactive {
-        background: @gray-light;
-    }
+  // Change `background` for text selections when browser is unfocused
+  &:window-inactive {
+    background: @gray-light;
+  }
 
-    // Remove `background` on images when selected
-    img& {
-        background: transparent;
-    }
+  // Remove `background` on images when selected
+  img& {
+    background: transparent;
+  }
 }
 
 /**
@@ -67,7 +67,7 @@ ul {
  */
 
 html {
-    overflow-y: scroll; /* 1 */
-    min-height: 100%;
-    font-size: 100%;
+  overflow-y: scroll; /* 1 */
+  min-height: 100%;
+  font-size: 100%;
 }

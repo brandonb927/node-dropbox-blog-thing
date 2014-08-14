@@ -545,7 +545,7 @@ figcaption {
 }
 /**
  * 1. Remove the gap between <img> elements and the bottom of their
- *    containers - http://cbrac.co/Q6smqV
+*    containers - http://cbrac.co/Q6smqV
  */
 img {
   vertical-align: middle;
@@ -686,7 +686,6 @@ code {
   padding: 0.064rem 0.317rem;
   border: 1px solid #dedede;
   border-radius: 0.178rem;
-  background: #f8f8f8;
 }
 kbd {
   position: relative;
@@ -703,10 +702,6 @@ kbd {
 pre {
   position: relative;
   overflow: auto;
-  padding: 0 1rem;
-  background: #222222;
-  -webkit-box-shadow: inset 0 0 0.356rem rgba(0, 0, 0, 0.6);
-          box-shadow: inset 0 0 0.356rem rgba(0, 0, 0, 0.6);
   color: #cccccc;
   white-space: pre;
   word-wrap: normal;
@@ -731,6 +726,9 @@ pre code {
   background: transparent;
   color: inherit;
   white-space: pre;
+}
+pre code.hljs-code {
+  padding: 1rem;
 }
 /* ================================================================== *\
    Tables ($tables)
@@ -869,9 +867,9 @@ blockquote cite {
   font-size: 0.75rem;
   font-family: "Roboto", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   /**
-         * 1. Add an m-dash character before the <footer> tag
-         * TIP: Use <cite> inside blockquotes - http://cbrac.co/18LWCOw
-         */
+     * 1. Add an m-dash character before the <footer> tag
+     * TIP: Use <cite> inside blockquotes - http://cbrac.co/18LWCOw
+     */
 }
 blockquote cite:before {
   content: "\2014 \0020";
@@ -895,40 +893,6 @@ th {
       -ms-hyphens: auto;
           hyphens: auto;
 }
-/**
- * The parent of every `.crossbars` element must have `overflow:
- * hidden` to prevent pseudo elements from breaking outside
- */
-.crossbars {
-  position: relative;
-  display: table;
-  margin: 0 auto 0.75rem;
-  padding: 0 1rem;
-  width: auto;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.125rem;
-  font-size: 1.125rem;
-  line-height: 1.125;
-}
-.crossbars:before,
-.crossbars:after {
-  position: absolute;
-  top: 50%;
-  display: block;
-  overflow: hidden;
-  margin-top: -0.5rem;
-  width: 9999%;
-  height: 1rem;
-  background: #dedede;
-  content: " ";
-}
-.crossbars:before {
-  left: -9999%;
-}
-.crossbars:after {
-  right: -9999%;
-}
 dl dt {
   color: #222222;
   font-weight: 700;
@@ -943,16 +907,6 @@ del {
 details {
   cursor: pointer;
 }
-.drop-cap:first-letter {
-  float: left;
-  margin-right: 0.75rem;
-  color: #222222;
-  text-transform: uppercase;
-  font-weight: 400;
-  font-size: 4.209rem;
-  font-family: "Vollkorn", Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
-  line-height: 1;
-}
 em,
 i,
 cite {
@@ -963,17 +917,11 @@ cite {
  * NOTE: Use `text-rendering` with caution - http://cbrac.co/SJt8p1
  */
 h1,
-.h1,
 h2,
-.h2,
 h3,
-.h3,
 h4,
-.h4,
 h5,
-.h5,
-h6,
-.h6 {
+h6 {
   margin: 0 0 0.75rem;
   color: #222222;
   font-weight: 400;
@@ -981,47 +929,35 @@ h6,
   line-height: 1.333;
   text-rendering: optimizeLegibility;
 }
-h1,
-.h1 {
+h1 {
   font-size: 1.777rem;
 }
-h2,
-.h2 {
+h2 {
   font-size: 1.333rem;
 }
-h3,
-.h3 {
+h3 {
   font-size: 1.125rem;
 }
 h4,
-.h4,
 h5,
-.h5,
-h6,
-.h6 {
+h6 {
   font-size: 1rem;
 }
 @media only screen and (min-width: 600px) {
-  h1,
-  .h1 {
+  h1 {
     font-size: 3.157rem;
   }
-  h2,
-  .h2 {
+  h2 {
     font-size: 2.369rem;
   }
-  h3,
-  .h3 {
+  h3 {
     font-size: 1.777rem;
   }
-  h4,
-  .h4 {
+  h4 {
     font-size: 1.333rem;
   }
   h5,
-  .h5,
-  h6,
-  .h6 {
+  h6 {
     font-size: 1rem;
   }
 }
@@ -1029,22 +965,6 @@ hr {
   margin: 1rem 0;
   border: 0;
   border-bottom: 1px solid #cccccc;
-}
-hr.symbol {
-  margin: 0 0 1rem;
-  padding: 1rem 0;
-  height: 1.333rem;
-  border: 0;
-}
-hr.symbol:before {
-  display: block;
-  width: 100%;
-  border: 0;
-  color: #222222;
-  content: "⁂";
-  text-align: center;
-  font-size: 1.333rem;
-  line-height: 1;
 }
 /* Address styling not present in IE 8/9 */
 ins,
@@ -1134,6 +1054,9 @@ sub {
 .no-underline {
   text-decoration: none;
 }
+/**
+ * Custom main classes
+ */
 .site-avatar {
   height: 96px;
   width: 96px;

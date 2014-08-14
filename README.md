@@ -15,8 +15,9 @@
     ---
     title: This is the post title
     date: 2014-08-08
-    tags(optional): a tag, another tag
-    <other metadata in the form of key: value
+    tags (optional): a tag, another tag
+    type (optional): page # used to denote a static page accessible in the navigation rather than a post
+    <other metadata in the form of key: value>
     ---
 
     # Header
