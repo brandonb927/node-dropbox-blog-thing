@@ -12,31 +12,48 @@ module.exports = {
 
   index: function (req, res, next) {
     Posts.getByPagination(1, function (err, data) {
-      if(err) return next(err);
-      res.render('index', {
+      if(err || !data) return next(err);
+
+      var pageData = {
         page        : data.pageNum,
         posts       : data.posts,
         pagination  : data.pagination
-      });
+      };
+
+      if (req.accepts('json')) {
+        return res.send(pageData);
+      }
+
+      res.render('index', pageData);
     });
   },
 
   post: function (req, res, next) {
-    console.log(req.params.slug);
     Posts.getBySlug(req.params.slug, function (err, post) {
-      if(err) return next(err);
-      res.render('post', post);
+      if(err || !post) return next(err);
+
+      if (req.accepts('json')) {
+        return res.send(post);
+      }
+
+      res.render('index', post);
     });
   },
 
   pagination: function (req, res, next) {
     Posts.getByPagination(req.params.num, function (err, data) {
-      if(err) return next(err);
-      res.render('index', {
+      if(err || !data) return next(err);
+      var pageData = {
         page        : data.pageNum,
         posts       : data.posts,
         pagination  : data.pagination
-      });
+      };
+
+      if (req.accepts('json')) {
+        return res.send(pageData);
+      }
+
+      res.render('index', pageData);
     });
   },
 
@@ -54,7 +71,7 @@ module.exports = {
   // The RSS feed for the site
   rss: function (req, res, next) {
     Posts.getAll(function (err, posts) {
-      if(err) return next(err);
+      if(err || !posts) return next(err);
       // Initializing feed object
       var feed = new Feed({
         title:       config.site.title,
@@ -85,7 +102,7 @@ module.exports = {
   // Generate the sitemap.xml page
   sitemap: function (req, res, next) {
     Posts.getAll(true, function (err, posts) {
-      if(err) return next(err);
+      if(err || !posts) return next(err);
       var sitemap = sm.createSitemap ({
         hostname: config.site.base_url,
         cacheTime: 600000

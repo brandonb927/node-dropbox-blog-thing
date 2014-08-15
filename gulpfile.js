@@ -68,13 +68,13 @@ gulp.task('watch', function () {
   gulp.watch([
     'gulpfile.js',
     'app/**/*.js',
-    'config/**/*.js',
+    'config/*.js',
     // 'src/scripts/**/*.js',
     // 'test/**/*.js'
   ], ['lint']);
 
   // Copy templates from the src directory to the public dir
-  gulp.watch(['src/views/**/*.hbs'], ['templates']);
+  gulp.watch(['src/views/*.hbs'], ['templates']);
 
   // Copy images from src to public dir
   gulp.watch(['src/images/**/*.{png,gif,jpg,jpeg,ico}'], ['images']);
@@ -89,7 +89,8 @@ gulp.task('server', function () {
   nodemon({
     script: 'server.js',
     ext: 'js',
-    env: { 'NODE_ENV': 'development' },
+    // env: { 'NODE_ENV': 'development' },
+    env: { 'NODE_ENV': 'production' },
     ignore: [
       'node_modules/**'
     ]

@@ -1,15 +1,14 @@
-var fs              = require('fs');
-var async           = require('async');
-var cache           = require('memory-cache');
-var hbs             = require('hbs');
-var moment          = require('moment');
-var pagination      = require('pagination');
-var slugify         = require('slug');
-var shortcode       = require('shortcode-parser');
-var MarkedMetaData  = require('marked-metadata');
+var fs            = require('fs');
+var cache         = require('memory-cache');
+var hbs           = require('hbs');
+var moment        = require('moment');
+var pagination    = require('pagination');
+var slugify       = require('slug');
+var shortcode     = require('shortcode-parser');
+var MMD           = require('marked-metadata');
 
-var app             = require('../../server');
-var config          = require('../../config.json');
+var app           = require('../../server');
+var config        = require('../../config.json');
 
 
 // Init the markdown parser options
@@ -36,7 +35,7 @@ function getPost (filePath, callback) {
   var fileContents = fs.readFileSync(filePath, 'utf-8');
 
   renderShortcodes(fileContents, function (err, parsedContent) {
-    var md = new MarkedMetaData(parsedContent);
+    var md = new MMD(parsedContent);
     var meta = md.metadata();
     var content = md.markdown(markedOptions);
     var slug = slugify(meta.title);
@@ -91,7 +90,7 @@ function getAllPosts (includePages, callback) {
       }
     });
 
-    console.log('[Cache] Getting posts all');
+    console.log('[Cache] Getting all posts');
     return callback(null, postsArr);
   }
 
@@ -149,6 +148,8 @@ exports.initCache = function () {
 
     cache.put('posts', postsAssoc);
     console.log('[Cache] Posts inserted into cache');
+    // console.log('[Cache] Posts cache size', cache.size());
+    // console.log('[Cache] Posts cache memsize', cache.memsize());
   });
 };
 
@@ -160,6 +161,9 @@ exports.getAll = function (includePages, callback) {
   }
 
   getAllPosts(includePages, function (err, posts) {
+    if (err || !posts) {
+      return callback(Error('Posts not found :('));
+    }
     callback(null, posts);
   });
 };
@@ -167,12 +171,15 @@ exports.getAll = function (includePages, callback) {
 // Get post by it's slug
 exports.getBySlug = function (slug, callback) {
   getAllPosts(false, function (err, posts) {
-    posts.forEach(function (post, i) {
-      if (Object.keys(post)[0] === slug) {
-        callback(null, post[slug]);
-      }
-    });
+    var post = posts.filter(function (p) { return p.slug === slug; })[0];
+
+    if (err || !posts) {
+      return callback(err);
+    }
+
+    callback(null, post);
   });
+
 };
 
 // Get all posts by a given pagination number based on postsPerPage in config.json
@@ -191,9 +198,15 @@ exports.getByPagination = function (pageNum, callback) {
     });
 
     var pgData = paginator.getPaginationData();
-    if (pageNum > pgData.pageCount) throw Error('Pagination number too high');
+
+    if (pageNum > pgData.pageCount) {
+      return callback(Error('Pagination out of range'));
+    }
+
     for (var i = (pgData.fromResult === 1 ? pgData.fromResult - 1 : pgData.fromResult); i <= pgData.toResult; i++) {
-      posts.push(allPosts[i]);
+      if (allPosts[i]) {
+        posts.push(allPosts[i]);
+      }
     }
 
     data.pagination = {};

@@ -10,6 +10,7 @@ var requestSync   = require('request-sync');
  */
 function getEmbedCode (url) {
   // console.log(url);
+  if (typeof url === 'undefined') return;
   var res = requestSync(url);
   var embed = JSON.parse(res.body.toString('utf-8')).html;
   // console.log(embed);
@@ -21,6 +22,7 @@ function getEmbedCode (url) {
 };
 
 shortcode.add('gist', function(str, opts) {
+  if (typeof opts.url === 'undefined') return;
   return '<script src="' + opts.url + '.js"></script>';
 });
 

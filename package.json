@@ -25,7 +25,8 @@
     "serve-favicon": "*",
     "shortcode-parser": "*",
     "sitemap": "*",
-    "slug": "*"
+    "slug": "*",
+    "watchr": "^2.4.11"
   },
   "private": true,
   "devDependencies": {
