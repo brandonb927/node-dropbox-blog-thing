@@ -22,6 +22,7 @@ module.exports = {
   },
 
   post: function (req, res, next) {
+    console.log(req.params.slug);
     Posts.getBySlug(req.params.slug, function (err, post) {
       if(err) return next(err);
       res.render('post', post);

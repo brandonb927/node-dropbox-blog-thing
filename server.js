@@ -9,6 +9,7 @@ var config        = require('./config.json');
 var routes        = require('./config/routes');
 var route_errors  = require('./config/route_errors');
 var port          = process.env.PORT || 8080;
+var Posts         = require('./app/models/posts');
 
 
 // Use Handlebars rather than Jade
@@ -41,8 +42,11 @@ app.use(routes);
 // app.use(route_errors);
 // require('./config/middleware')(app);
 
+// Setup the posts cache
+Posts.initCache();
+
 // Start this server!
 app.listen(port);
-// console.log(app);
-console.log('Magic happens on port ' + port);
+
+console.log('All systems ready to go! The magic happens on port ' + port);
 module.exports = app;

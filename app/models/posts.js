@@ -1,4 +1,6 @@
 var fs              = require('fs');
+var async           = require('async');
+var cache           = require('memory-cache');
 var hbs             = require('hbs');
 var moment          = require('moment');
 var pagination      = require('pagination');
@@ -18,12 +20,12 @@ var markedOptions = {
   // smartypants : true
 };
 
-// Used to render the content of a post/page
+// Return the HTML-safe content that will be rendered to the page
 function renderContent (content, callback) {
-  // Return the HTML-safe content that will be rendered to the page
   callback(null, new hbs.handlebars.SafeString(content));
 }
 
+// Render the shortcodes on the page
 function renderShortcodes (content, callback) {
   callback(null, shortcode.parse(content));
 }
@@ -31,11 +33,9 @@ function renderShortcodes (content, callback) {
 // Process the markdown file given a filename/filepath
 // and return an object containing the data to be sent to the view
 function getPost (filePath, callback) {
-  var fileContents = String(fs.readFileSync(filePath));
+  var fileContents = fs.readFileSync(filePath, 'utf-8');
 
   renderShortcodes(fileContents, function (err, parsedContent) {
-    // if (err) throw Error('Could not parse shortcode content');
-
     var md = new MarkedMetaData(parsedContent);
     var meta = md.metadata();
     var content = md.markdown(markedOptions);
@@ -58,26 +58,48 @@ function getPost (filePath, callback) {
     };
 
     renderContent(content, function (err, renderedContent) {
-      // if (err) throw Error('Could not render HTML safely');
       post.content = renderedContent;
+
+      // remove these duplicates from the meta
+      delete meta.title;
+      delete meta.date;
+      delete meta.tags;
+      post.meta = meta;
+
+      callback(null, post);
     });
-
-    // remove these duplicates from the meta
-    delete meta.title;
-    delete meta.date;
-    delete meta.tags;
-    post.meta = meta;
-
-    callback(null, post);
   });
 }
 
-// TODO cache this somewhere so we don't have to do a filesystem lookup on every request
 function getAllPosts (includePages, callback) {
+  // Check the cache to see if we already have the posts available
+  if (cache.get('posts')) {
+    var cachePosts = cache.get('posts');
+    var postsArr = [];
+
+    cachePosts.forEach(function (post, i) {
+      var postData = post[Object.keys(post)[0]];
+
+      if (postData.meta.type !== 'undefined') {
+        if (includePages && postData.meta.type === 'page') {
+          postsArr.push(postData);
+        }
+      }
+
+      if (postData.meta.type !== 'page') {
+        postsArr.push(postData);
+      }
+    });
+
+    console.log('[Cache] Getting posts all');
+    return callback(null, postsArr);
+  }
+
+  // Otherwise query the filesystem and get the posts
   var posts = [];
   var files = fs.readdirSync('posts');
 
-  files.forEach(function (fileName, i) {
+  files.forEach(function (fileName) {
     if (!fileName.endsWith(config.postFileExt)) {
       return;
     }
@@ -107,6 +129,29 @@ function getAllPosts (includePages, callback) {
   callback(null, posts);
 }
 
+// function getPages () {
+
+// }
+
+exports.initCache = function () {
+  // Clear the current posts cache
+  cache.del('posts');
+
+  // Get all the posts
+  getAllPosts(true, function (err, posts) {
+    var postsAssoc = [];
+
+    for (var i in posts) {
+      var postObj = {};
+      postObj[posts[i].slug] = posts[i];
+      postsAssoc.push(postObj);
+    }
+
+    cache.put('posts', postsAssoc);
+    console.log('[Cache] Posts inserted into cache');
+  });
+};
+
 // Get all post
 exports.getAll = function (includePages, callback) {
   if (typeof callback === 'undefined') {
@@ -121,13 +166,12 @@ exports.getAll = function (includePages, callback) {
 
 // Get post by it's slug
 exports.getBySlug = function (slug, callback) {
-  if (slug !== 'test') throw Error();
-
-  var fileName = slug.replace('-','_');
-  var filePath = 'posts/' + fileName + '.' + config.postFileExt;
-
-  getPost(filePath, function (post) {
-    callback(null, post);
+  getAllPosts(false, function (err, posts) {
+    posts.forEach(function (post, i) {
+      if (Object.keys(post)[0] === slug) {
+        callback(null, post[slug]);
+      }
+    });
   });
 };
 

@@ -1,6 +1,6 @@
 {{#each posts}}
 <div class="feed-post">
-  <h2 class="post-title">{{this.title}}</h2>
+  <h2 class="post-title"><a href="{{this.url}}">{{this.title}}</a></h2>
   <div class="post-meta">
     <div class="meta-left">Posted on <time datetime="{{this.dateObj}}">{{this.date}}</time></div>
     <div class="meta-right">

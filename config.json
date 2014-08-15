@@ -17,5 +17,9 @@
       "showPostExcerpt": true
     }
   },
+  "googleAnalytics": "",
+  "disqus": {
+    "shortname": "brandonstestblog2"
+  },
   "postFileExt": "md"
 }
