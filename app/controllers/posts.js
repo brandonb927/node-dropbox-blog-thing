@@ -20,11 +20,13 @@ module.exports = {
         pagination  : data.pagination
       };
 
+      if (req.accepts('html')) {
+        return res.render('index', pageData);
+      }
+
       if (req.accepts('json')) {
         return res.send(pageData);
       }
-
-      res.render('index', pageData);
     });
   },
 
@@ -32,11 +34,13 @@ module.exports = {
     Posts.getBySlug(req.params.slug, function (err, post) {
       if(err || !post) return next(err);
 
+      if (req.accepts('html')) {
+        return res.render('post', post);
+      }
+
       if (req.accepts('json')) {
         return res.send(post);
       }
-
-      res.render('index', post);
     });
   },
 
@@ -49,11 +53,13 @@ module.exports = {
         pagination  : data.pagination
       };
 
+      if (req.accepts('html')) {
+        return res.render('index', pageData);
+      }
+
       if (req.accepts('json')) {
         return res.send(pageData);
       }
-
-      res.render('index', pageData);
     });
   },
 
