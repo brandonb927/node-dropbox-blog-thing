@@ -1,15 +1,118 @@
 ## Dropbox-powered Blog Thing
 
-Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button.
+Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button. For the sake of the setup, 
+it is imperative that you read this article before starting.
 
 ### Setup
 
- 1. Download the latest release of DpBT and unpack it to a folder on your server
- 2. Configure your site using the the `config.json` file
- 6. If everything is setup correctly, make a symlink from your blog posts folder to the `/posts` folder in the root of this project
+Setting up this project to work on AWS EC2 isn't too hard, but it is fairly technical if you don't kno wwhat you're doing.
+Follow along closely and you should be fine!
+
+Most of the setup is derived from a few places:
+- http://techprd.com/setup-node-js-web-server-on-amazon-ec2/
+- http://cuppster.com/2011/05/12/diy-node-js-server-on-amazon-ec2/
+
+Let's get started shall we? 
+
+Start by creating an EC2 instance with an Elastic IP if you don't have one, and setup your Security Group with allowing 
+ports 22, 80, and 443 (optional) inbound from any source. You can set it up however you like, 
+but for the sake up this project, these are the few ports you need for the server to serve content.
+
+Make sure you server is completely up to-date before you continue. Once you've done that, 
+setup the Dropbox-cli client on the server
+
+    cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - ~/.dropbox-dist/dropboxd
+    # below is optional, but is used to control the daemon and is very helpful to have
+    wget https://www.dropbox.com/download?dl=packages/dropbox.py 
+
+Once you've got that setup, go ahead and install the latest version of Node (0.10.30) as of this writing.
+
+    sudo apt-get install build-essential libssl-dev git-core rcconf nginx
+    tar xzf node-latest.tar.gz && cd node-v0.10.30
+    ./configure --prefix=/usr && make && sudo make install
+
+After you install `node`, you'll wanna install `npm` as well. `npm` is one of the most popular package managers
+for `node`.
+
+    cd ~ && git clone http://github.com/isaacs/npm.git
+    cd npm && sudo make install
+
+Now it's time to setup `nginx` as a reverse proxy for the `node` app. Copy the default site as a backup,
+then edit the original and delete it's contents.
+
+    sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.BAK
+    sudo vim /etxnginx/sites-available/default
+    
+Replace default file contents with with the following:
+
+    server {
+      listen 80; # or 443 if you're running secure site
+      server_name localhost;
+
+      location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_pass http://127.0.0.1:3000; # of the port you set in the confi.json later on
+        proxy_redirect off;
+      }
+    }
+
+then restart `nginx`
+
+    sudo service nginx restart
+
+So now we technically have a working environment for a node app, but we want to make sure that in the event
+that the app shuts down or ungracefully has it's process killed, it can start itself back up again. This is where 
+`supervisor` comes into play. `supervisor` is a process control system that can ensure your app always stays running.
+You can install `supervisor` from `pip`, the popular python package manager (because nobody has time for `easy_install`).
+
+    sudo apt-get install python-setuptools
+    sudo easy_install pip
+    sudo pip install supervisor
+
+We want `supervisor` to be part of the system startup, so we download an `init.d` script to do this.
+
+    curl https://gist.githubusercontent.com/howthebodyworks/176149/raw/88d0d68c4af22a7474ad1d011659ea2d27e35b8d/supervisord.sh > supervisord
+    chmod +x supervisord && sudo mv supervisord /etc/init.d/supervisord
+
+`rcconf` manages system startup tasks, so we make sure that `supervisord` (daemon) is checked to run on startup.
+
+    sudo rcconf
+
+Now we generate the `supervisor.conf` that will be used for the app. There are a few ways to do this, like specifying a local config
+when running the `supervisor` commant, but for the sake of this project we just add our config to the global `supervisor` config file.
+
+    sudo echo_supervisord_conf > supervisord.conf
+    sudo mv supervisord.conf /etc/supervisord.conf
+
+Configure your `supervisor.conf` file like so
+
+    sudo vim /etc/supervisord.conf
+      # Under [unix_http_server] uncomment the chmod and change it to 0777
+      # Under [supervisord] uncomment user and change the value to ubuntu
+      # Under [program:theprogramname] block, add
+      [program:node]
+      command=node app.js
+      directory=/home/ubuntu/LOCATION_OF_PUBLIC_APP
+      environment=NODE_ENV=production
+
+then restart `supervisor`
+
+    sudo service supervisord restart
+
+Once you've completed the above, setup git push to deploy using the following steps: http://www.jeffhoefs.com/2012/09/setup-git-deploy-for-aws-ec2-ubuntu-instance/
+
+**Note**: When you're asked to create a new repo on your *local machine*, just clone this repo instead and use that.
+
+## Configuring the app
+
+ 1. Change to the directory where your app Configure your site using the the `config.json` file
+ 2. If everything is setup correctly, make a symlink from your blog posts folder to the `/posts` folder in the root of this project
     Example: `ln -s ~/Dropbox/blog/posts ./posts` where `./posts` is the posts folder in the root of the project
- 7. Start the server (if setup correctly it should just work): node server.js
- 8. From your original posts folder, you can create new, or convert old, markdown posts with the filename `.md`
+ 3. Start the server (if setup correctly it should just work): `node server.js`
+ 4. From your original posts folder, you can create new, or convert old, markdown posts with the filename `.md`
     and the following format 
     ```
     ---
@@ -28,9 +131,9 @@ Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button.
 
 ## Global template variables
 
-There are a tonne of template variables to be used, but the basics are:
+There are a bunch of template variables to be used, but the basics are:
 
-`baseUrl` - the base URL of the site, example: 
+`baseUrl` - the base URL of the site 
 ```html
 <head>
   <base href="{{baseUrl}}" />
@@ -43,37 +146,38 @@ There are a tonne of template variables to be used, but the basics are:
 <img src="{{gravatar}}" alt="This is my avatar" />
 ```
 
-``
 
-The rest of the variables are available via their respective route. A few are:
+The rest of the variables used are available via their respective route. A few are:
 ```
-GET / 
+GET / # site root
 > {
-    posts: Array   // an array of post objects
+    posts: Array                // an array of post objects
   }
 
-GET /page/2
+GET /page/2 # posts pagination, where 2 is the page number
 > {
-    page        : Integer, // the current pagination page number
-    posts       : Array,   // an array of post objects
-    pagination  : Object   // an object containing pagination data
+    page        : Integer,     // the current pagination page number
+    posts       : Array,       // an array of post objects
+    pagination  : Object       // an object containing pagination data of the current, prev, and next pages
   }
 
-GET /this-is-a-post-title
+GET /this-is-a-post-title # post slug, uses the post title
 > {
-    meta    : Object, // contains at least *title* and *date*, can also contain arbitrary meta data
-    content : String  // the post content in a large string
+    meta    : Object,          // contains at least *title* and *date*, can also contain arbitrary meta data
+    content : String           // the post content in a large string
   }
 
-GET /rss(.xml) (.xml in url is optional)
+GET /rss(.xml) (.xml in url is optional) # Atom XML feed of the site
 > Generated Atom 1.0 XML feed for RSS of all posts
 
-GET /sitemap(.xml) (.xml in url is optional)
+GET /sitemap(.xml) (.xml in url is optional) # Sitemap XML feed for search engines
 > Generated sitemap XML feed for all pages and posts on site for sitemap
 
-
-[COMING SOON]
-GET /tag/a-simple-tag
+GET /tag/a-simple-tag # when you tag a post, you can then access a list of posts with that tag from this url
+> {
+    page        : Integer,    // the current pagination page number
+    posts       : Array       // an array of post objects
+  }
 ```
 
 All routes accept JSON headers so you can retreive your posts via a JSON API :).
