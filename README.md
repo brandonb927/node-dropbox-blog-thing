@@ -1,7 +1,5 @@
 ## Dropbox-powered Blog Thing
 
-<!-- [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy) -->
-
 ### Setup
 
  1. Download the latest release of DpBT and unpack it to a folder on your server
@@ -74,8 +72,10 @@ GET /sitemap(.xml) (.xml in url is optional)
 
 [COMING SOON]
 GET /tag/a-simple-tag
-GET /
 ```
+
+All routes accept JSON headers so you can retreive your posts via a JSON API :).
+
 
 
 ## Contributing
