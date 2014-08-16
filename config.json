@@ -1,6 +1,6 @@
 {
   "site": {
-    "domain": "example.com",
+    "domain": "test.brandonb.io",
     "title": "Example Test Site",
     "description": "This is an example of a drop-in self-hosted Dropbox blogging platform.",
     "author": {
