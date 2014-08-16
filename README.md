@@ -1,5 +1,7 @@
 ## Dropbox-powered Blog Thing
 
+Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button.
+
 ### Setup
 
  1. Download the latest release of DpBT and unpack it to a folder on your server
