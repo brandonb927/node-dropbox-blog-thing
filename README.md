@@ -1,7 +1,11 @@
 ## Dropbox-powered Blog Thing
 
 Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button. For the sake of the setup, 
-it is imperative that you read this article before starting.
+it is imperative that you read this article before starting. Incase that post dissappears, here is the relevant quote:
+
+> Start by installing the Dropbox Linux command line client. At the end of the install script, it will ask you to link your Dropbox account by copying and pasting a URL into your browser. **Do not do this yet**. If you do, it will link your personal Dropbox account to the server, downloading the hundreds of megabytes of files you may have on Dropbox, and exposing potentially sensitive files to any intrepid hacker who breaks into your server.
+> 
+> You only want to synchronize the files needed by your CMS, so you need to create a new Dropbox account that is dedicated to this purpose. Of course, the Dropbox client only works with one account at a time, and your personal computer is going to be logged into your personal account. Luckily, Dropbox folder sharing solves this problem nicely. Once you have your new account, go to your personal account and share the folder containing your CMS files with the new account. Then you can link the new account to your server. Be sure you are logged into the new account in your browser, and then load that URL the installer gave you. Done.
 
 ### Setup
 
