@@ -1,4 +1,7 @@
-## Dropbox-powered Blog Thing
+# Dropbox-powered Blog Thing
+
+**tl;dr** If you have some time on your hands, like node.js, and blog minimally (as in text, etc), you can make a sweet 
+Dropbox-powered blog thing like mine running on your own server.
 
 Inspired by http://joehewitt.com/2011/10/03/dropbox-is-my-publish-button. For the sake of the setup, 
 it is imperative that you read this article before starting. Incase that post dissappears, here is the relevant quote:
@@ -7,7 +10,7 @@ it is imperative that you read this article before starting. Incase that post di
 > 
 > You only want to synchronize the files needed by your CMS, so you need to create a new Dropbox account that is dedicated to this purpose. Of course, the Dropbox client only works with one account at a time, and your personal computer is going to be logged into your personal account. Luckily, Dropbox folder sharing solves this problem nicely. Once you have your new account, go to your personal account and share the folder containing your CMS files with the new account. Then you can link the new account to your server. Be sure you are logged into the new account in your browser, and then load that URL the installer gave you. Done.
 
-### Setup
+## Setup
 
 Setting up this project to work on AWS EC2 isn't too hard, but it is fairly technical if you don't kno wwhat you're doing.
 Follow along closely and you should be fine!
@@ -18,18 +21,35 @@ Most of the setup is derived from a few places:
 
 Let's get started shall we? 
 
+### Amazon EC2 instance (or other Ubuntu server)
+
 Start by creating an EC2 instance with an Elastic IP if you don't have one, and setup your Security Group with allowing 
 ports 22, 80, and 443 (optional) inbound from any source. You can set it up however you like, 
 but for the sake up this project, these are the few ports you need for the server to serve content.
 
+### Dropbox-cli
+
 Make sure you server is completely up to-date before you continue. Once you've done that, 
-setup the Dropbox-cli client on the server
+setup the Dropbox-cli client on the server.
 
     cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - ~/.dropbox-dist/dropboxd
     # below is optional, but is used to control the daemon and is very helpful to have
     wget https://www.dropbox.com/download?dl=packages/dropbox.py 
 
-Once you've got that setup, go ahead and install the latest version of Node (0.10.30) as of this writing.
+The only outstanding issue now is that if the server reboots or crashes for any reason, you'll have
+to SSH in and start the Dropbox daemon. This is not an ideal circumstance, but one that can be alleviated
+with a n `init.d` script!
+
+Create a new file `/etc/init.d/dropbox` and put the contents of this Gist into it: https://gist.github.com/brandonb927/a0b33ecbe6fa8337b0b4
+
+Now ensure that you you set the script as executable and add it to the server startup sequence
+
+    chmod +x /etc/init.d/dropbox 
+    update-rc.d dropbox defaults
+
+### Node.js & npm
+
+Once you've got Dropbox setup, go ahead and install the latest version of Node (0.10.30) as of this writing.
 
     sudo apt-get install build-essential libssl-dev git-core rcconf nginx
     tar xzf node-latest.tar.gz && cd node-v0.10.30
@@ -40,6 +60,8 @@ for `node`.
 
     cd ~ && git clone http://github.com/isaacs/npm.git
     cd npm && sudo make install
+
+### Nginx
 
 Now it's time to setup `nginx` as a reverse proxy for the `node` app. Copy the default site as a backup,
 then edit the original and delete it's contents.
@@ -66,6 +88,8 @@ Replace default file contents with with the following:
 then restart `nginx`
 
     sudo service nginx restart
+
+### Supervisor & rcconf
 
 So now we technically have a working environment for a node app, but we want to make sure that in the event
 that the app shuts down or ungracefully has it's process killed, it can start itself back up again. This is where 
