@@ -9,23 +9,27 @@
 @import 'modules/syntax.less';
 @import 'modules/tables.less';
 @import 'modules/typography.less';
+@import 'modules/buttons.less';
 
 
 /**
- * Custom main classes
+ * Main style classes
  */
+
+// Avatar
 .site-avatar {
   height: 96px;
   width: 96px;
   border-radius: 50%;
 }
 
-
-.container {
+// Main site container
+.site-container {
   margin: 0 auto;
   max-width: @grid-breakpoint-large;
 }
 
+// Main site header
 .site-header {
   padding: (@base-rem-unit * 2) @base-rem-unit 0;
   .cf;
@@ -47,11 +51,12 @@
   }
 }
 
-
+// Posts feed on homepage
 .feed {
 
 }
 
+// Post within feed
 .feed-post {
   padding: 4rem 0;
   border-bottom: solid 1px @gray-lighter;
@@ -65,6 +70,7 @@
   }
 }
 
+// Posts metadata (byline, datetime, etc)
 .post-meta {
   margin-bottom: (@base-rem-unit * 2);
   .text-bold;
@@ -83,6 +89,7 @@
   }
 }
 
+// Posts pagination in homepage feed
 .pagination {
   margin-top: (@base-rem-unit * 2);
   .cf;
@@ -95,9 +102,13 @@
   }
 }
 
-.page-home {
-
+// If there is an error with an embed, style it a bit
+.embed-error {
+  margin: @base-rem-unit 0;
+  padding: @base-rem-unit;
+  background: @gray-light;
 }
+
 
 // Fix Github gists
 .highlight {
@@ -109,10 +120,4 @@
       box-shadow: none;
     }
   }
-}
-
-.embed-error {
-  margin: @base-rem-unit 0;
-  padding: @base-rem-unit;
-  background: @gray-light;
 }

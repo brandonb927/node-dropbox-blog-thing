@@ -1,24 +1,64 @@
-<h1>{{title}}</h1>
-{{content}}
+<article class="single-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+  <h2 class="post-title" itemprop="name headline">
+    <a href="{{url}}">{{title}}</a>
+  </h2>
+  <div class="post-meta">
+    <div class="meta-left">
+      Posted by
+      <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+        {{#if site.social.googleplus}}
+        <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+          <span itemprop="name">{{site.author.name}}</span>
+        </a>
+        {{else}}
+        <span itemprop="name">{{site.author.name}}</span>
+        {{/if}}
+      </span>
+      on <time datetime="{{dateObj}}" itemprop="datePublished">{{date}}</time>
+    </div>
+    <div class="meta-right">
+      {{#if this.tags}}
+      <span class="meta-label">Tags: </span>
+      <span class="meta-tags">
+      {{#each this.tags}}
+        <a href="/tag/{{this}}">{{this}}</a>
+      {{/each}}
+      </span>
+      {{/if}}
+    </div>
+  </div>
 
-<!-- An element a visitor can click if they <3 comments! -->
-<button class="show-comments">Load Disqus comments</button>
+  <div class="post-content" itemprop="text">
+    {{content}}
+  </div>
+</article>
 
-<!-- The empty element required for Disqus to loads comments into -->
-<div id="disqus_thread"></div>
+{{#if disqus.shortname}}
+<hr />
+<div class="post-comments">
+  <div class="text-center">
+    <button class="button show-comments">Load Comments</button>
+  </div>
+  <div id="disqus_thread"></div>
+</div>
 
 <script>
 $(document).ready(function () {
   $('.show-comments').on('click', function () {
-    var disqus_shortname = '{{disqus.shortname}}';
-    $.ajax({
-      type      : "GET",
-      url       : "http://" + disqus_shortname + ".disqus.com/embed.js",
-      dataType  : "script",
-      cache     : true
-    })
+    $(this).fadeOut('fast');
 
-    $(this).fadeOut();
+    // Delay the script loading so the button fades out
+    // before the disqus loader takes it's place
+    setTimeout(function () {
+      $.ajax({
+        type      : "GET",
+        url       : "http://{{disqus.shortname}}.disqus.com/embed.js",
+        dataType  : "script",
+        cache     : true
+      })
+    }, 500)
+
   });
 });
 </script>
+{{/if}}

@@ -1,8 +1,22 @@
 {{#each posts}}
-<div class="feed-post">
-  <h2 class="post-title"><a href="{{this.url}}">{{this.title}}</a></h2>
+<article class="feed-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+  <h2 class="post-title" itemprop="name headline">
+    <a href="{{this.url}}">{{this.title}}</a>
+  </h2>
   <div class="post-meta">
-    <div class="meta-left">Posted on <time datetime="{{this.dateObj}}">{{this.date}}</time></div>
+    <div class="meta-left">
+      Posted by
+      <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+        {{#if site.social.googleplus}}
+        <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+          <span itemprop="name">{{site.author.name}}</span>
+        </a>
+        {{else}}
+        <span itemprop="name">{{site.author.name}}</span>
+        {{/if}}
+      </span>
+      on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
+    </div>
     <div class="meta-right">
       {{#if this.tags}}
       <span class="meta-label">Tags: </span>
@@ -15,15 +29,19 @@
     </div>
   </div>
 
-  <div class="post-content">
+  <div class="post-content" itemprop="text">
     {{this.content}}
   </div>
-</div>
+</article>
 {{/each}}
 
 {{#if pagination}}
-<div class="pagination">
-  {{#if pagination.prev}}<a href="/page/{{pagination.prev}}" class="pagination-prev">&larr; Newer posts</a>{{/if}}
-  {{#if pagination.next}}<a href="/page/{{pagination.next}}" class="pagination-next">Older posts &rarr;</a>{{/if}}
-</div>
+<nav class="pagination" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement" >
+  {{#if pagination.prev}}
+  <a href="/page/{{pagination.prev}}" rel="prev" itemprop="name" title="Newer Posts" class="pagination-prev">&larr; Newer posts</a>
+  {{/if}}
+  {{#if pagination.next}}
+  <a href="/page/{{pagination.next}}" rel="next" itemprop="name" title="Older Posts" class="pagination-next">Older posts &rarr;</a>
+  {{/if}}
+</nav>
 {{/if}}

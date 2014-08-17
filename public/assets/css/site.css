@@ -1057,15 +1057,92 @@ strong {
 .no-underline {
   text-decoration: none;
 }
+/* ================================================================== *\
+   Buttons ($buttons)
+\* ================================================================== */
+/* States */
+.button {
+  display: inline-block;
+  margin: 0;
+  padding: 0.633rem 0.875rem;
+  border: 0 none;
+  border-radius: 0;
+  background-color: #dedede;
+  color: #444;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 700;
+  font-family: inherit;
+  line-height: 1.5;
+  cursor: pointer;
+  /* Consistent button focus style across browsers */
+}
+.button:hover {
+  background-color: #e5e5e5;
+}
+.button:active,
+.button.active {
+  background-color: #cccccc;
+  -webkit-box-shadow: inset 0 0 0.317rem rgba(0, 0, 0, 0.25);
+          box-shadow: inset 0 0 0.317rem rgba(0, 0, 0, 0.25);
+}
+.button:active:focus,
+.button.active:focus {
+  outline: 0 none;
+}
+.button:focus {
+  outline: thin dotted #222222;
+}
+.button[disabled],
+.button.disabled {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+  opacity: 0.50;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+/* Sizes */
+.button-mini {
+  padding: 0.238rem 0.475rem;
+  font-size: 0.75rem;
+}
+.button-small {
+  padding: 0.356rem 0.633rem;
+  font-size: 0.875rem;
+}
+.button-large,
+.button-block {
+  padding: 1rem 1.333rem;
+  font-size: 1.333rem;
+  line-height: 1.333;
+}
+.button-block {
+  display: block;
+}
+/* Colors */
+.button-primary {
+  background-color: #1fa3ec;
+  color: #ffffff;
+}
+.button-primary:hover {
+  background-color: #3eb0ef;
+}
+.button-primary:active,
+.button-primary.active {
+  background-color: #1291d7;
+}
 /**
- * Custom main classes
+ * Main style classes
  */
 .site-avatar {
   height: 96px;
   width: 96px;
   border-radius: 50%;
 }
-.container {
+.site-container {
   margin: 0 auto;
   max-width: 68.75rem;
 }
@@ -1151,6 +1228,11 @@ strong {
 .pagination a.pagination-next {
   float: right;
 }
+.embed-error {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #dedede;
+}
 .highlight {
   margin: 0;
 }
@@ -1158,9 +1240,4 @@ strong {
   color: inherit;
   -webkit-box-shadow: none;
           box-shadow: none;
-}
-.embed-error {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: #dedede;
 }
