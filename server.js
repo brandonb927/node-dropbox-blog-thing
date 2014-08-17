@@ -121,11 +121,12 @@ Posts.initCache();
 
 // Setup file-watching in posts folder to re-fill post cache when files are updated
 watchr.watch({
-  paths: ['posts'],
+  paths: ['./posts'],
   listeners: {
     change: function (changeType, filePath, fileCurrentStat, filePreviousStat) {
       // TODO
       // Update only changed/update file using filePath in arguments
+      console.log(filePath + ' changed');
       Posts.initCache();
     }
   }
