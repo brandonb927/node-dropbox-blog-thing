@@ -1200,6 +1200,14 @@ strong {
   -webkit-animation-timing-function: linear;
           animation-timing-function: linear;
 }
+.wf-loading * {
+  opacity: 0;
+  -webkit-transition: opacity 0.4s ease-in;
+          transition: opacity 0.4s ease-in;
+}
+.wf-active * {
+  opacity: 1;
+}
 a {
   -webkit-transition: all 0.2s;
           transition: all 0.2s;
