@@ -3,7 +3,44 @@
 <head>
   <meta charset="utf-8">
   <title>{{site.title}} | {{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="author" content="{{site.author.name}}">
+  <meta name="description" content="{{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}">
+
   <base href="{{baseUrl}}/">
+
+  <!-- OpenGraph tags -->
+  <meta property="og:site_name" content="{{site.title}}">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="{{gravatar}}">
+  <meta property="og:title" content="{{site.title}}">
+  <meta property="og:url" content="{{baseUrl}}">
+  <meta property="og:description" content="{{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@{{site.social.twitter}}">
+  <meta name="twitter:creator" content="@{{site.social.twitter}}">
+  <meta name="twitter:image:src" content="{{gravatar}}">
+  <meta name="twitter:domain" content="{{baseUrl}}">
+
+  <!-- Favicons for all browsers and unfortunately IE8/9 -->
+  <link rel="icon" href="">
+  <!--[if IE]><link rel="shortcut icon" href="" /><![endif]-->
+  <link rel="apple-touch-icon" sizes="144x144" href="">
+  <link rel="apple-touch-icon" sizes="114x114" href="">
+  <link rel="apple-touch-icon" sizes="72x72" href="">
+  <link rel="apple-touch-icon" href="">
+  <link rel="apple-touch-icon-precomposed" href="">
+
+  <!-- Because IE10 ignores conditionals and doesn't support PNG for favicons, we use start screen tile icons!
+     - http://www.jonathantneal.com/blog/understand-the-favicon/ -->
+  <meta name="msapplication-TileColor" content="#D83434">
+  <meta name="msapplication-TileImage" content="">
 
   <link href="/assets/css/site.css" rel="stylesheet">
 
