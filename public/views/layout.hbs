@@ -45,6 +45,7 @@
   <meta name="msapplication-TileImage" content="/path/to/favicon.png">
 
   <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
   <!-- WebFont loader -->
   <script>
@@ -78,31 +79,65 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="site-sidebar">
     <div class="site-bio">
-      <img src="{{gravatar}}" class="site-avatar" />
+      <a href="#" class="shake">
+        <img src="{{gravatar}}" class="site-avatar" />
+      </a>
       <p>{{site.description}}</p>
     </div>
 
     {{#if pages}}
     <nav class="header-nav" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-      <ul class="nav-menu menu-list">
+      <ul class="nav-menu">
         {{#each pages}}
-        <li itemprop="url"><a href="{{ site.baseUrl }}{{ this.url }}" title="{{ this.title }}" itemprop="name">{{ this.title }}</a></li>
+        <li itemprop="url">
+          <a href="{{ site.baseUrl }}{{ this.url }}" title="{{ this.title }}" itemprop="name">{{ this.title }}</a>
+        </li>
         {{/each}}
       </ul>
     </nav>
     {{/if}}
+
+    <ul class="social-icons">
+      {{#if site.social.twitter}}
+      <li>
+        <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
+          <i class="fa fa-twitter-square"></i>
+        </a>
+      </li>
+      {{/if}}
+      {{#if site.social.github}}
+      <li>
+        <a href="https://github.com/{{site.social.github}}" title="Github">
+          <i class="fa fa-github-square"></i>
+        </a>
+      </li>
+      {{/if}}
+      {{#if site.social.googleplus}}
+      <li>
+        <a href="{{site.social.googleplus}}?rel=author" title="Google+">
+          <i class="fa fa-google-plus-square"></i>
+        </a>
+      </li>
+      {{/if}}
+      <li>
+        <a href="{{baseUrl}}/rss" title="RSS">
+          <i class="fa fa-rss-square"></i>
+        </a>
+      </li>
+    </ul>
   </div>
 
   <div class="site-container">
     <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
-      <h1 class="header-title" itemprop="headline"><a href="{{baseUrl}}">{{site.title}}</a></h1>
+      <h1 class="header-title" itemprop="headline">
+        <a href="{{baseUrl}}">{{site.title}}</a>
+      </h1>
+      <div class="menu-trigger button">Menu</div>
     </header>
 
     <main class="grid gutter" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
       <div class="column full-width">
         <div class="module">
-          <div class="menu-trigger button">Menu</div>
-
           {{{body}}}
         </div>
       </div>
@@ -132,6 +167,12 @@
 
     $overlay.on('click', function () {
       $body.removeClass('menu-open');
+    });
+
+    $(document).keydown(function (e) {
+      if (e.keyCode == 27) { // esc pressed
+        $body.removeClass('menu-open');
+      }
     });
 
     $('pre code').each(function (i, e) {
