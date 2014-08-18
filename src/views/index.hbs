@@ -1,4 +1,8 @@
 <div class="feed">
+  {{#if tag}}
+  <p>Showing posts found with tag: <strong>{{tag}}</strong></p>
+  <hr />
+  {{/if}}
   {{#each posts}}
   <article class="feed-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
     <h2 class="post-title" itemprop="name headline">
