@@ -1192,6 +1192,10 @@ strong {
 .site-bio p {
   margin-top: 2rem;
 }
+.feed {
+  width: 80%;
+  margin: 0 auto;
+}
 .feed-post {
   padding: 0 0 4rem;
   border-bottom: solid 1px #efefef;
@@ -1278,7 +1282,7 @@ strong {
   }
   .site-container {
     width: 100%;
-    padding: 0 1rem 0 19rem;
+    padding-left: 18rem;
     float: right;
   }
   .site-sidebar {
@@ -1304,5 +1308,8 @@ strong {
   }
   .site-container {
     padding-left: 1rem;
+  }
+  .feed {
+    width: 100%;
   }
 }
