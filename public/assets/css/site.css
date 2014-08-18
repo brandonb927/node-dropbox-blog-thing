@@ -1192,11 +1192,8 @@ strong {
 .site-bio p {
   margin-top: 2rem;
 }
-.feed {
-  width: 80%;
-}
 .feed-post {
-  padding: 4rem 0;
+  padding: 0 0 4rem;
   border-bottom: solid 1px #efefef;
 }
 .feed-post:first-child {
@@ -1281,7 +1278,7 @@ strong {
   }
   .site-container {
     width: 100%;
-    padding-left: 18rem;
+    padding: 0 1rem 0 19rem;
     float: right;
   }
   .site-sidebar {
@@ -1304,5 +1301,8 @@ strong {
   }
   body.menu-open .overlay {
     display: block;
+  }
+  .site-container {
+    padding-left: 1rem;
   }
 }

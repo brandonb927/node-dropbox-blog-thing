@@ -16,7 +16,7 @@
 
   .site-container {
     width: 100%;
-    padding-left: @sidebar-width + @base-rem-unit;
+    padding: 0 @base-rem-unit 0 (@sidebar-width + (@base-rem-unit * 2));
     float: right;
   }
 
@@ -43,4 +43,9 @@
     }
   }
 
+  .site-container {
+    padding-left: @base-rem-unit;
+  }
+
 }
+
