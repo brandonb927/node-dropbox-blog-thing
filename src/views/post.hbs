@@ -1,64 +1,66 @@
-<article class="single-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
-  <h2 class="post-title" itemprop="name headline">
-    <a href="{{url}}">{{title}}</a>
-  </h2>
-  <div class="post-meta">
-    <div class="meta-left">
-      Posted by
-      <span itemprop="author" itemscope itemptype="http://schema.org/Person">
-        {{#if site.social.googleplus}}
-        <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+<div class="post-wrapper">
+  <article class="post-article" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+    <h2 class="post-title" itemprop="name headline">
+      <a href="{{url}}">{{title}}</a>
+    </h2>
+    <div class="post-meta">
+      <div class="meta-left">
+        Posted by
+        <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+          {{#if site.social.googleplus}}
+          <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+            <span itemprop="name">{{site.author.name}}</span>
+          </a>
+          {{else}}
           <span itemprop="name">{{site.author.name}}</span>
-        </a>
-        {{else}}
-        <span itemprop="name">{{site.author.name}}</span>
+          {{/if}}
+        </span>
+        on <time datetime="{{dateObj}}" itemprop="datePublished">{{date}}</time>
+      </div>
+      <div class="meta-right">
+        {{#if this.tags}}
+        <span class="meta-label">Tags: </span>
+        <span class="meta-tags">
+        {{#each this.tags}}
+          <a href="/tag/{{this}}">{{this}}</a>
+        {{/each}}
+        </span>
         {{/if}}
-      </span>
-      on <time datetime="{{dateObj}}" itemprop="datePublished">{{date}}</time>
+      </div>
     </div>
-    <div class="meta-right">
-      {{#if this.tags}}
-      <span class="meta-label">Tags: </span>
-      <span class="meta-tags">
-      {{#each this.tags}}
-        <a href="/tag/{{this}}">{{this}}</a>
-      {{/each}}
-      </span>
-      {{/if}}
+
+    <div class="post-content" itemprop="text">
+      {{content}}
     </div>
+  </article>
+
+  {{#if disqus.shortname}}
+  <hr />
+  <div class="post-comments">
+    <div class="text-center">
+      <button class="button show-comments">Load Comments</button>
+    </div>
+    <div id="disqus_thread"></div>
   </div>
 
-  <div class="post-content" itemprop="text">
-    {{content}}
-  </div>
-</article>
+  <script>
+  $(document).ready(function () {
+    $('.show-comments').on('click', function () {
+      $(this).fadeOut('fast');
 
-{{#if disqus.shortname}}
-<hr />
-<div class="post-comments">
-  <div class="text-center">
-    <button class="button show-comments">Load Comments</button>
-  </div>
-  <div id="disqus_thread"></div>
-</div>
+      // Delay the script loading so the button fades out
+      // before the disqus loader takes it's place
+      setTimeout(function () {
+        $.ajax({
+          type      : "GET",
+          url       : "http://{{disqus.shortname}}.disqus.com/embed.js",
+          dataType  : "script",
+          cache     : true
+        })
+      }, 400)
 
-<script>
-$(document).ready(function () {
-  $('.show-comments').on('click', function () {
-    $(this).fadeOut('fast');
-
-    // Delay the script loading so the button fades out
-    // before the disqus loader takes it's place
-    setTimeout(function () {
-      $.ajax({
-        type      : "GET",
-        url       : "http://{{disqus.shortname}}.disqus.com/embed.js",
-        dataType  : "script",
-        cache     : true
-      })
-    }, 500)
-
+    });
   });
-});
-</script>
-{{/if}}
+  </script>
+  {{/if}}
+</div>

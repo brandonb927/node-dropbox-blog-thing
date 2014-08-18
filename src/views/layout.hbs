@@ -81,9 +81,7 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="site-sidebar">
     <div class="site-bio">
-      <a href="#" class="shake">
-        <img src="{{gravatar}}" class="site-avatar" />
-      </a>
+      <img src="{{gravatar}}" class="site-avatar" />
       <p>{{site.description}}</p>
     </div>
 
@@ -154,15 +152,6 @@
     var $body           = $('body');
     var $overlay        = $('.overlay');
     var $menuTrigger    = $('.menu-trigger');
-    // var $siteContainer  = $('.site-container');
-    // var $siteSideBar    = $('.site-sidebar');
-
-    // var resizeContainer = function () {
-    //   $siteContainer.width($siteContainer.width() - $siteSideBar.width());
-    // };
-
-    // resizeContainer();
-    // $(window).resize(resizeContainer);
 
     $menuTrigger.on('click', function () {
       $body.addClass('menu-open');

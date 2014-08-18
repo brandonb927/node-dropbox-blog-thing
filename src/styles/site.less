@@ -16,33 +16,6 @@
  * Main style classes
  */
 
-@-webkit-keyframes shaky {
-  0%    { transform: translate(2px, 1px)    rotate(0deg);   }
-  10%   { transform: translate(-1px, -2px)  rotate(-1deg);  }
-  20%   { transform: translate(-3px, 0px)   rotate(1deg);   }
-  30%   { transform: translate(0px, 2px)    rotate(0deg);   }
-  40%   { transform: translate(1px, -1px)   rotate(1deg);   }
-  50%   { transform: translate(-1px, 2px)   rotate(-1deg);  }
-  60%   { transform: translate(-3px, 1px)   rotate(0deg);   }
-  70%   { transform: translate(2px, 1px)    rotate(-1deg);  }
-  80%   { transform: translate(-1px, -1px)  rotate(1deg);   }
-  90%   { transform: translate(2px, 2px)    rotate(0deg);   }
-  100%  { transform: translate(1px, -2px)   rotate(-1deg);  }
-}
-
-.shake {
-  display: inline-block;
-
-  &:hover,
-  &:focus {
-    transform-origin: 50% 50%;
-    animation-name: shaky;
-    animation-duration: .8s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-}
-
 // Fix FOUT
 .wf-loading {
   * {
@@ -170,7 +143,7 @@ a {
 
 // Posts feed on homepage
 .feed {
-  width: 90%;
+  max-width: @grid-breakpoint-medium-max;
   margin: 0 auto;
 }
 
@@ -216,6 +189,19 @@ a {
     &.pagination-prev { float: left;  }
     &.pagination-next { float: right; }
   }
+}
+
+.post-wrapper {
+  max-width: @grid-breakpoint-medium-max;
+  margin: 0 auto;
+}
+
+.post-article {
+  margin-bottom: (@base-rem-unit * 3);
+}
+
+.post-comments {
+  margin-top: (@base-rem-unit * 3);
 }
 
 // If there is an error with an embed, style it a bit
