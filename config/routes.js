@@ -17,6 +17,6 @@ router.get('/:slug',          controllers.posts.post);
 router.get('/page/:num',      controllers.posts.pagination);
 
 // Tag list page
-// router.get('/tag/:tag',     controllers.posts.tag);
+router.get('/tag/:tag',       controllers.posts.tag);
 
 module.exports = router;

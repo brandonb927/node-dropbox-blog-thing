@@ -41,17 +41,11 @@ function getPost (filePath, callback) {
     var slug = slugify(meta.title);
     slug = slug.toLowerCase();
 
-    // Some titles come as an array if they have commas,
-    // so we rebuild them as a string
-    if (Array.isArray(meta.title)) {
-      meta.title = meta.title.join(', ');
-    }
-
     var post = {
       date    : moment(meta.date).format(config.site.settings.formatDate),
       dateObj : moment(meta.date).toDate(),
-      title   : meta.title,
-      tags    : meta.tags || [],
+      title   : (!Array.isArray(meta.title) ? meta.title : meta.title.join(', ')),
+      tags    : (Array.isArray(meta.tags) ? meta.tags : [meta.tags]) || [],
       slug    : slug,
       url     : app.locals.baseUrl + '/' + slug
     };
@@ -139,6 +133,10 @@ exports.initCache = function (callback) {
 
   // Get all the posts
   getAllPosts(true, function (err, posts) {
+    if (err || !posts) {
+      return callback(Error('Posts not found :('));
+    }
+
     var postsAssoc = [];
 
     for (var i in posts) {
@@ -208,17 +206,14 @@ exports.getBySlug = function (slug, callback) {
 
 // Get all posts by a given pagination number based on postsPerPage in config.json
 exports.getByPagination = function (pageNum, callback) {
-  var data  = {};
-  var posts = [];
-  var postsPerPage = config.site.settings.postsPerPage;
-
   getAllPosts(false, function (err, allPosts) {
+    var postsPerPage = config.site.settings.postsPerPage;
     pageNum = parseInt(pageNum);
 
     var paginator = new pagination.SearchPaginator({
-      current: pageNum || 1,
-      rowsPerPage: postsPerPage,
-      totalResult: allPosts.length
+      current     : pageNum || 1,
+      rowsPerPage : postsPerPage,
+      totalResult : allPosts.length
     });
 
     var pgData = paginator.getPaginationData();
@@ -227,36 +222,47 @@ exports.getByPagination = function (pageNum, callback) {
       return callback(Error('Pagination out of range'));
     }
 
+    var posts = [];
+
     for (var i = (pgData.fromResult === 1 ? pgData.fromResult - 1 : pgData.fromResult); i <= pgData.toResult; i++) {
       if (allPosts[i]) {
         posts.push(allPosts[i]);
       }
     }
 
-    data.pagination = {};
-    data.pagination.next = pgData.next;
-    data.pagination.prev = pgData.previous;
+    var data = {
+      pageNum : pgData.current,
+      posts   : posts,
+      pagination: {
+        next  : pgData.next,
+        prev  : pgData.previous
+      }
+    };
 
-    data.pageNum = pgData.current;
-    data.posts = posts;
     callback(null, data);
   });
 };
 
 // Get all posts by a given tag
-// exports.getByTag = function (tag, callback) {
-//   var data  = {};
-//   var posts = [];
-//   var allPosts = getAllPosts();
+exports.getByTag = function (tag, callback) {
+  getAllPosts(false, function (err, posts) {
+    if (err || !posts) {
+      return callback(Error('No posts found with tag' + tag + ' :('));
+    }
 
-//   // for (var post in allPosts) {
-//   //   if () {
-//   //     posts.push(post)
-//   //   }
-//   // }
+    var postsArr = [];
 
-//   data.posts  = posts;
-//   data.tag    = tag;
+    for (var i in posts) {
+      if (posts[i].tags !== 'undefined' && posts[i].tags.indexOf(tag) !== -1) {
+        postsArr.push(posts[i]);
+      }
+    }
 
-//   callback(null, data);
-// };
+    var data = {
+      tag   : tag,
+      posts : postsArr
+    };
+
+    callback(null, data);
+  });
+};

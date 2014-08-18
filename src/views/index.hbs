@@ -34,6 +34,12 @@
       {{this.content}}
     </div>
   </article>
+  {{else}}
+  {{#if tag}}
+  <p>No posts found with tag <strong>{{tag}}</strong> :(</p>
+  {{else}}
+  <h3>No posts found :(</h3>
+  {{/if}}
   {{/each}}
 </div>
 

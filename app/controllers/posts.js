@@ -64,16 +64,24 @@ module.exports = {
     });
   },
 
-  // tag: function (req, res, next) {
-  //   Posts.getByTag(req.params.tag, function (err, data) {
-  //     if(err) return next(err);
-  //     res.render('index', {
-  //       tag         : data.tag,
-  //       posts       : data.posts,
-  //       pagination  : data.pagination
-  //     });
-  //   });
-  // },
+  tag: function (req, res, next) {
+    Posts.getByTag(req.params.tag, function (err, data) {
+      if(err || !data) return next(err);
+
+      var pageData = {
+        tag   : data.tag,
+        posts : data.posts
+      };
+
+      if (req.accepts('html')) {
+        return res.render('index', pageData);
+      }
+
+      if (req.accepts('json')) {
+        return res.send(pageData);
+      }
+    });
+  },
 
   // The RSS feed for the site
   rss: function (req, res, next) {
@@ -82,13 +90,13 @@ module.exports = {
 
       // Initializing feed object
       var feed = new Feed({
-        title:       config.site.title,
-        description: config.site.description,
-        link:        app.locals.baseUrl,
-        image:       app.locals.gravatar,
+        title       : config.site.title,
+        description : config.site.description,
+        link        : app.locals.baseUrl,
+        image       : app.locals.gravatar,
         author: {
-          name:  config.site.author.name,
-          email: config.site.author.email
+          name  : config.site.author.name,
+          email : config.site.author.email
         }
       });
 
