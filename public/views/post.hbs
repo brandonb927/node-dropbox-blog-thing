@@ -43,6 +43,8 @@
 
   <script>
   $(document).ready(function () {
+    $('head').append('<!-- On DOMReady, fade in elements to avoid FOUT -->\n<style>\n.wf-active * { opacity: 1; }\n</style>');
+
     $('.show-comments').on('click', function () {
       $(this).fadeOut('fast');
 
@@ -55,7 +57,7 @@
           dataType  : "script",
           cache     : true
         })
-      }, 400)
+      }, 200);
 
     });
   });
