@@ -85,9 +85,9 @@ a {
 }
 
 .menu-trigger {
-  position: absolute;
-  top: (@base-rem-unit * 2.5);
-  left: @base-rem-unit;
+  // position: absolute;
+  // top: (@base-rem-unit * 2.5);
+  // left: @base-rem-unit;
 }
 
 // Main site container
@@ -108,8 +108,12 @@ a {
 
 // Main site header
 .site-header {
-  padding: (@base-rem-unit * 2) @base-rem-unit 0;
+  padding: @base-rem-unit @base-rem-unit 0;
   .text-center;
+
+  .header-title {
+    margin-top: @base-rem-unit;
+  }
 }
 
 .header-nav {
