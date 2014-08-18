@@ -195,10 +195,10 @@ GET /this-is-a-post-title # post slug, uses the post title
     content : String           // the post content in a large string
   }
 
-GET /rss(.xml) (.xml in url is optional) # Atom XML feed of the site
+GET /rss.xml # Atom XML feed of the site
 > Generated Atom 1.0 XML feed for RSS of all posts
 
-GET /sitemap(.xml) (.xml in url is optional) # Sitemap XML feed for search engines
+GET /sitemap.xml # Sitemap XML feed for search engines
 > Generated sitemap XML feed for all pages and posts on site for sitemap
 
 GET /tag/a-simple-tag # when you tag a post, you can then access a list of posts with that tag from this url

@@ -113,8 +113,8 @@ module.exports = {
       if(err || !posts) return next(err);
 
       var sitemap = sm.createSitemap ({
-        hostname: config.site.base_url,
-        cacheTime: 600000
+        hostname  : config.site.base_url,
+        cacheTime : 600000
       });
 
       // Add the posts to the feed

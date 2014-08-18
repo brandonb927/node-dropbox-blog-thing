@@ -193,6 +193,7 @@ exports.getAllPages = function (callback) {
 
 // Get post by it's slug
 exports.getBySlug = function (slug, callback) {
+  console.log('Getting post by slug');
   getAllPosts(false, function (err, posts) {
     var post = posts.filter(function (p) { return p.slug === slug; })[0];
 

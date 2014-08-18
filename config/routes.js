@@ -9,8 +9,8 @@ var controllers = require('../app/controllers');
 router.get('/',               controllers.posts.index);
 
 // because we do slug-lookups, we have to put the /rss  and /sitemap routes first
-router.get('/rss(.xml)',      controllers.posts.rss);
-router.get('/sitemap(.xml)',  controllers.posts.sitemap);
+router.get('/rss.xml',        controllers.posts.rss);
+router.get('/sitemap.xml',    controllers.posts.sitemap);
 router.get('/:slug',          controllers.posts.post);
 
 // used for pagination
