@@ -10,6 +10,18 @@ it is imperative that you read this article before starting. Incase that post di
 > 
 > You only want to synchronize the files needed by your CMS, so you need to create a new Dropbox account that is dedicated to this purpose. Of course, the Dropbox client only works with one account at a time, and your personal computer is going to be logged into your personal account. Luckily, Dropbox folder sharing solves this problem nicely. Once you have your new account, go to your personal account and share the folder containing your CMS files with the new account. Then you can link the new account to your server. Be sure you are logged into the new account in your browser, and then load that URL the installer gave you. Done.
 
+
+## Overview
+
+The basic overview of what we're accomplishing here is as follows:
+- Setting up a simple Ubuntu server on Amazon EC2 (or your preferred distro)
+- Installing the Dropbox-cli client
+- Installing and configuring all the relevant packages to run the site
+- Setting up git hooks for seemless push-to-deploy procedure
+- Setting up the node.js app `config.json` with your information
+- ???
+- PROFIT
+
 ## Setup
 
 Setting up this project to work on AWS EC2 isn't too hard, but it is fairly technical if you don't kno wwhat you're doing.
