@@ -117,24 +117,30 @@ app.use(function (err, req, res, next) {
 // require('./config/middleware');
 
 // Setup the posts cache
-Posts.initCache();
+Posts.initCache(function () {
 
-// Setup file-watching in posts folder to re-fill post cache when files are updated
-watchr.watch({
-  paths: ['./posts'],
-  listeners: {
-    change: function (changeType, filePath, fileCurrentStat, filePreviousStat) {
-      // TODO
-      // Update only changed/update file using filePath in arguments
-      console.log(filePath + ' changed');
-      Posts.initCache();
+  // Add pages for use in navigation
+  Posts.getAllPages(function (err, pages) {
+    app.locals.pages = pages;
+  });
+
+  // Setup file-watching in posts folder to re-fill post cache when files are updated
+  watchr.watch({
+    paths: ['./posts'],
+    listeners: {
+      change: function (changeType, filePath, fileCurrentStat, filePreviousStat) {
+        // TODO
+        // Update only changed/update file using filePath in arguments
+        console.log(filePath + ' changed');
+        Posts.initCache();
+      }
     }
-  }
+  });
+
+  // Start this server!
+  app.listen(port);
+
+  console.log('All systems ready to go! The magic happens on port ' + port);
 });
 
-
-// Start this server!
-app.listen(port);
-
-console.log('All systems ready to go! The magic happens on port ' + port);
 module.exports = app;

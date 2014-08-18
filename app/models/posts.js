@@ -132,7 +132,8 @@ function getAllPosts (includePages, callback) {
 
 // }
 
-exports.initCache = function () {
+// Initialize the posts cache
+exports.initCache = function (callback) {
   // Clear the current posts cache
   cache.del('posts');
 
@@ -150,10 +151,12 @@ exports.initCache = function () {
     console.log('[Cache] Posts inserted into cache');
     // console.log('[Cache] Posts cache size', cache.size());
     // console.log('[Cache] Posts cache memsize', cache.memsize());
+
+    callback();
   });
 };
 
-// Get all post
+// Get all posts
 exports.getAll = function (includePages, callback) {
   if (typeof callback === 'undefined') {
     callback = includePages;
@@ -164,7 +167,27 @@ exports.getAll = function (includePages, callback) {
     if (err || !posts) {
       return callback(Error('Posts not found :('));
     }
+
     callback(null, posts);
+  });
+};
+
+// Get all post
+exports.getAllPages = function (callback) {
+  getAllPosts(true, function (err, posts) {
+    if (err || !posts) {
+      return callback(Error('Posts not found :('));
+    }
+
+    var pagesArr = [];
+
+    for (var i in posts) {
+      if (posts[i].meta.type !== 'undefined' && posts[i].meta.type === 'page') {
+        pagesArr.push(posts[i]);
+      }
+    }
+
+    callback(null, pagesArr);
   });
 };
 

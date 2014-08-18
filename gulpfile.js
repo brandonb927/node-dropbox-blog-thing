@@ -86,6 +86,7 @@ gulp.task('watch', function () {
 
 // Run the server
 gulp.task('server', function () {
+  gulp.start(['lint', 'templates', 'images', 'styles', 'scripts'])
   nodemon({
     script: 'server.js',
     ext: 'js',

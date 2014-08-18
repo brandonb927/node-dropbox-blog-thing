@@ -39,8 +39,10 @@
 
 // Layout
 @grid-gutter:                      (@base-rem-unit * 2);
-@grid-breakpoint-medium:           48rem;
-@grid-breakpoint-large:            68.75rem;
+@grid-breakpoint-medium-min:       48rem;
+@grid-breakpoint-medium-max:       (@grid-breakpoint-medium-min - .0625);
+@grid-breakpoint-large-min:        68.75rem;
+@grid-breakpoint-large-max:        (@grid-breakpoint-large-min - .0625);
 
 // Syntax
 @syntax-font-size:                 0.875rem;
@@ -69,3 +71,6 @@
 @button-primary-background:        #1fa3ec;
 @button-primary-hover-background:  #3eb0ef;
 @button-primary-active-background: #1291d7;
+
+// Sidebar
+@sidebar-width:                    (@base-rem-unit * 17);

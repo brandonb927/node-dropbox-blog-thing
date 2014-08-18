@@ -16,6 +16,50 @@
  * Main style classes
  */
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.6);
+  display: none;
+}
+
+// Site sidebar
+.site-sidebar {
+  width: @sidebar-width;
+  height: 100%;
+  // float: left;
+  background: #222;
+  position: fixed;
+  top: 0;
+  left: -@sidebar-width;
+  z-index: 20;
+  overflow: hidden;
+  transition: all 0.2s;
+  .text-center;
+}
+
+.menu-trigger {
+  position: absolute;
+  top: (@base-rem-unit * 2.5);
+  left: @base-rem-unit;
+}
+
+// Main site container
+.site-container {
+  position: relative;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  transition: all 0.2s;
+  // margin: 0 auto;
+  // max-width: @grid-breakpoint-large-min;
+}
+
+
 // Avatar
 .site-avatar {
   height: 96px;
@@ -23,25 +67,22 @@
   border-radius: 50%;
 }
 
-// Main site container
-.site-container {
-  margin: 0 auto;
-  max-width: @grid-breakpoint-large;
-}
-
 // Main site header
 .site-header {
   padding: (@base-rem-unit * 2) @base-rem-unit 0;
-  .cf;
+  .text-center;
+  // .cf;
 
-  .header-title {
-    float: left;
-  }
+  // .header-title {
+  //   float: left;
+  // }
 
-  .header-nav {
-    float: right;
-  }
+  // .header-nav {
+  //   float: right;
+  // }
+}
 
+.header-nav {
   .nav-menu {
     li {
       a {
@@ -51,9 +92,16 @@
   }
 }
 
+.site-bio {
+  padding-top: (@base-rem-unit * 2);
+  color: @gray-light;
+
+  p { margin-top: (@base-rem-unit * 2); }
+}
+
 // Posts feed on homepage
 .feed {
-
+  width: 80%;
 }
 
 // Post within feed
@@ -109,6 +157,8 @@
   background: @gray-light;
 }
 
+.error-page { .text-center; }
+
 
 // Fix Github gists
 .highlight {
@@ -121,3 +171,6 @@
     }
   }
 }
+
+// Responsive-related classes
+@import 'responsive.less';

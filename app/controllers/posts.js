@@ -47,6 +47,7 @@ module.exports = {
   pagination: function (req, res, next) {
     Posts.getByPagination(req.params.num, function (err, data) {
       if(err || !data) return next(err);
+
       var pageData = {
         page        : data.pageNum,
         posts       : data.posts,
@@ -78,6 +79,7 @@ module.exports = {
   rss: function (req, res, next) {
     Posts.getAll(function (err, posts) {
       if(err || !posts) return next(err);
+
       // Initializing feed object
       var feed = new Feed({
         title:       config.site.title,
@@ -109,6 +111,7 @@ module.exports = {
   sitemap: function (req, res, next) {
     Posts.getAll(true, function (err, posts) {
       if(err || !posts) return next(err);
+
       var sitemap = sm.createSitemap ({
         hostname: config.site.base_url,
         cacheTime: 600000
