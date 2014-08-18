@@ -14,13 +14,13 @@ it is imperative that you read this article before starting. Incase that post di
 ## Overview
 
 The basic overview of what we're accomplishing here is as follows:
-- Setting up a simple Ubuntu server on Amazon EC2 (or your preferred distro)
-- Installing the Dropbox-cli client
-- Installing and configuring all the relevant packages to run the site
-- Setting up git hooks for seemless push-to-deploy procedure
-- Setting up the node.js app `config.json` with your information
+- [Setting up a simple Ubuntu server on Amazon EC2 (or your preferred distro)](#amazon-ec2-instance-or-other-ubuntu-server)
+- [Installing the Dropbox-cli client](#dropbox-cli)
+- [Installing and configuring all the relevant packages to run the site](#nodejs--npm)
+- [Setting up git hooks for seemless push-to-deploy procedure](#git-push-to-deploy)
+- [Setting up the node.js app `config.json` with your information](#configuring-the-app)
 - ???
-- PROFIT
+- [PROFIT](http://1.bp.blogspot.com/-OnJtmIOFb3w/UBroj-ycpYI/AAAAAAAAB_I/F9oSLxwAAxk/s1600/mayweather-money.gif)
 
 ## Setup
 
@@ -141,6 +141,8 @@ Configure your `supervisor.conf` file like so
 then restart `supervisor`
 
     sudo service supervisord restart
+
+## Git push-to-Deploy
 
 Once you've completed the above, setup git push to deploy using the following steps: http://www.jeffhoefs.com/2012/09/setup-git-deploy-for-aws-ec2-ubuntu-instance/
 
