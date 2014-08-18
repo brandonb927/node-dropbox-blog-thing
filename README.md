@@ -214,7 +214,12 @@ All routes accept JSON headers so you can retreive your posts via a JSON API :).
 ## Base theme
 
 The base theme is built with a customized version of [CardinalCSS](http://cardinalcss.com) and [Simple Grid](https://github.com/brandonb927/simple-grid) 
-to give a very minimal, yet functional, blog theme. I'll be improving it over time and hope to implement some form of theming into the project.
+to give a very minimal, yet functional, blog theme.
+
+Some of the theme features are:
+- Full Schema.org support, optimized for a blog
+- Opengraph and Twitter Cards support
+- Fully responsive and minimal
 
 
 ## Contributing
