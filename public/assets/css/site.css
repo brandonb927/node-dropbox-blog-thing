@@ -1412,3 +1412,8 @@ a {
     width: 100%;
   }
 }
+@media (max-width: 30rem) {
+  .grid.gutter .module {
+    padding: 0.5rem;
+  }
+}
