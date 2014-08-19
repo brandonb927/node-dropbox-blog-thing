@@ -1145,7 +1145,6 @@ h5,
 h6,
 p,
 a,
-span,
 ul,
 ol {
   opacity: 0;
@@ -1160,7 +1159,6 @@ ol {
 .wf-active h6,
 .wf-active p,
 .wf-active a,
-.wf-active span,
 .wf-active ul,
 .wf-active ol {
   opacity: 1 !important;
