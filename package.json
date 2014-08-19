@@ -13,7 +13,7 @@
     "express": "*",
     "feed": "*",
     "hbs": "*",
-    "marked": "*",
+    "marked": "^0.3.2",
     "marked-metadata": "git://github.com/brandonb927/marked-metadata.git",
     "memory-cache": "*",
     "moment": "*",

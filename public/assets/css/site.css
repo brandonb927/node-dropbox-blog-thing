@@ -1331,6 +1331,18 @@ a {
 .post-article {
   margin-bottom: 3rem;
 }
+.post-content h1,
+.post-content h2,
+.post-content h3 {
+  margin-top: 2rem;
+}
+.post-image {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+.post-image a {
+  display: block;
+}
 .post-comments {
   margin-top: 3rem;
 }

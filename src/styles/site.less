@@ -206,7 +206,23 @@ a { transition: all 0.2s; }
   margin: 0 auto;
 }
 
-.post-article  { margin-bottom: (@base-rem-unit * 3); }
+.post-article { margin-bottom: (@base-rem-unit * 3); }
+
+.post-content {
+  h1,
+  h2,
+  h3 { margin-top: (@base-rem-unit * 2); }
+}
+
+.post-image {
+  .text-center;
+  margin: (@base-rem-unit * 1.5) 0;
+
+  a {
+    display: block;
+  }
+}
+
 .post-comments { margin-top: (@base-rem-unit * 3); }
 
 // If there is an error with an embed, style it a bit

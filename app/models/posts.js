@@ -5,17 +5,27 @@ var moment        = require('moment');
 var pagination    = require('pagination');
 var slugify       = require('slug');
 var shortcode     = require('shortcode-parser');
+var marked        = require('marked');
 var MMD           = require('marked-metadata');
+var renderer      = new marked.Renderer();
+
 
 var app           = require('../../server');
 var config        = require('../../config.json');
 
 
+// Wrap images in a div to center them
+renderer.image = function (src, title, text) {
+  return '<div class="post-image"><a href="'+src+'" target="_blank"><img src="'+src+'" alt="'+title+'" /></a></div>';
+};
+
+
 // Init the markdown parser options
 var markedOptions = {
-  gfm         : true,
-  tables      : true,
-  breaks      : true
+  renderer  : renderer,
+  gfm       : true,
+  tables    : true,
+  breaks    : true
 };
 
 // Return the HTML-safe content that will be rendered to the page
