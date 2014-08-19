@@ -2,7 +2,7 @@ var logger        = require('morgan');
 var favicon       = require('serve-favicon');
 var hbs           = require('hbs');
 var express       = require('express');
-var watchr        = require('watchr');
+var watch         = require('watch');
 
 var app = module.exports = express();
 
@@ -125,16 +125,17 @@ Posts.initCache(function () {
   });
 
   // Setup file-watching in posts folder to re-fill post cache when files are updated
-  watchr.watch({
-    paths: ['./posts'],
-    listeners: {
-      change: function (changeType, filePath, fileCurrentStat, filePreviousStat) {
-        // TODO
-        // Update only changed/update file using filePath in arguments
-        console.log(filePath + ' changed');
-        Posts.initCache();
-      }
-    }
+  watch.watchTree('./posts', function (f, curr, prev) {
+    // if (typeof f == "object" && prev === null && curr === null) {
+    //   // Finished walking the tree
+    // } else if (prev === null) {
+    //   // f is a new file
+    // } else if (curr.nlink === 0) {
+    //   // f was removed
+    // } else {
+    //   // f was changed
+    // }
+    Posts.initCache();
   });
 
   // Start this server!

@@ -40,13 +40,21 @@ function getPost (filePath, callback) {
     var slug = slugify(meta.title);
     slug = slug.toLowerCase();
 
+    var tags = [];
+    var title = (!Array.isArray(meta.title) ? meta.title : meta.title.join(', '));
+
+    if (typeof meta.tags !== 'undefined') {
+      tags = (Array.isArray(meta.tags) ? meta.tags : [meta.tags]);
+    }
+
     var post = {
       date    : moment(meta.date).format(config.site.settings.formatDate),
       dateObj : moment(meta.date).toDate(),
-      title   : (!Array.isArray(meta.title) ? meta.title : meta.title.join(', ')),
-      tags    : (Array.isArray(meta.tags) ? meta.tags : [meta.tags]) || [],
+      title   : title,
+      tags    : tags,
       slug    : slug,
-      url     : app.locals.baseUrl + '/' + slug
+      url     : app.locals.baseUrl + '/' + slug,
+      isPage  : (meta.type === 'page' ? true : false),
     };
 
     renderContent(content, function (err, renderedContent) {
@@ -56,6 +64,7 @@ function getPost (filePath, callback) {
       delete meta.title;
       delete meta.date;
       delete meta.tags;
+      delete meta.type;
       post.meta = meta;
 
       callback(null, post);
@@ -72,13 +81,11 @@ function getAllPosts (includePages, callback) {
     cachePosts.forEach(function (post, i) {
       var postData = post[Object.keys(post)[0]];
 
-      if (postData.meta.type !== 'undefined') {
-        if (includePages && postData.meta.type === 'page') {
-          postsArr.push(postData);
-        }
+      if (includePages && postData.isPage) {
+        postsArr.push(postData);
       }
 
-      if (postData.meta.type !== 'page') {
+      if (!postData.isPage) {
         postsArr.push(postData);
       }
     });
@@ -99,16 +106,11 @@ function getAllPosts (includePages, callback) {
     var filePath = 'posts/' + fileName;
 
     getPost(filePath, function (err, post) {
-      if (post.meta.type !== 'undefined') {
-        // type must contain the page attribute
-        if (includePages && post.meta.type === 'page') {
-          // we want to include pages into the posts array
-          posts.push(post);
-        }
+      if (includePages && post.isPage) {
+        posts.push(post);
       }
 
-      if (post.meta.type !== 'page') {
-        // Must be a post, just add it
+      if (!post.isPage) {
         posts.push(post);
       }
     });
@@ -145,7 +147,9 @@ exports.initCache = function (callback) {
     // console.log('[Cache] Posts cache size', cache.size());
     // console.log('[Cache] Posts cache memsize', cache.memsize());
 
-    callback();
+    if (typeof callback !== 'undefined') {
+      callback();
+    }
   });
 };
 
@@ -175,7 +179,7 @@ exports.getAllPages = function (callback) {
     var pagesArr = [];
 
     for (var i in posts) {
-      if (posts[i].meta.type !== 'undefined' && posts[i].meta.type === 'page') {
+      if (posts[i].isPage) {
         pagesArr.push(posts[i]);
       }
     }
@@ -186,8 +190,7 @@ exports.getAllPages = function (callback) {
 
 // Get post by it's slug
 exports.getBySlug = function (slug, callback) {
-  console.log('Getting post by slug');
-  getAllPosts(false, function (err, posts) {
+  getAllPosts(true, function (err, posts) {
     var post = posts.filter(function (p) { return p.slug === slug; })[0];
 
     if (err || !posts) {
@@ -248,7 +251,7 @@ exports.getByTag = function (tag, callback) {
     var postsArr = [];
 
     for (var i in posts) {
-      if (posts[i].tags !== 'undefined' && posts[i].tags.indexOf(tag) !== -1) {
+      if (posts[i].tags.indexOf(tag) !== -1) {
         postsArr.push(posts[i]);
       }
     }

@@ -1,6 +1,7 @@
 <div class="post-wrapper">
   <article class="post-article" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
     <h2 class="post-title" itemprop="name headline">{{title}}</h2>
+    {{#if post.isPage}}
     <div class="post-meta">
       <div class="meta-left">
         <p>
@@ -28,6 +29,7 @@
         {{/if}}
       </div>
     </div>
+    {{/if}}
 
     <div class="post-content" itemprop="text">
       {{content}}

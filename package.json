@@ -15,7 +15,7 @@
     "hbs": "*",
     "marked": "*",
     "marked-metadata": "git://github.com/brandonb927/marked-metadata.git",
-    "memory-cache": "0.0.5",
+    "memory-cache": "*",
     "moment": "*",
     "morgan": "*",
     "node-oembed-io": "*",
@@ -26,7 +26,7 @@
     "shortcode-parser": "*",
     "sitemap": "*",
     "slug": "*",
-    "watchr": "^2.4.11"
+    "watch": "*"
   },
   "private": true,
   "devDependencies": {
