@@ -177,7 +177,12 @@ Once you've completed the above, setup git push to deploy using the following st
     # Header
 
     This is some awesome content
+
+    ![An awesome image](image-filename.png)
     ```
+
+In order for images to load, they must be placed into a folder called `images` in the root of your posts folder in Dropbox. 
+ExpressJS will only serve them from there, as relative links to the root of the site. Example: `http://example.com/path-to-image.png`
 
 
 ## Global template variables
