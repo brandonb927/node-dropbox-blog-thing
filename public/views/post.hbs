@@ -38,6 +38,7 @@
     </div>
   </article>
 
+  {{#if isPage}}{{else}}
   {{#if disqus.shortname}}
   <hr />
   <div class="post-comments">
@@ -66,5 +67,6 @@
     });
   });
   </script>
+  {{/if}}
   {{/if}}
 </div>
