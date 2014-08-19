@@ -78,8 +78,10 @@
   </script>
   {{/if}}
 </head>
+
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="site-sidebar">
+
     <div class="site-bio">
       <img src="{{gravatar}}" class="site-avatar" />
       <p>{{site.description}}</p>
@@ -149,15 +151,13 @@
 
   <script>
   $(document).ready(function () {
-    var $body           = $('body');
-    var $overlay        = $('.overlay');
-    var $menuTrigger    = $('.menu-trigger');
+    var $body = $('body');
 
-    $menuTrigger.on('click', function () {
+    $('.menu-trigger').on('click', function () {
       $body.addClass('menu-open');
     });
 
-    $overlay.on('click', function () {
+    $('.overlay').on('click', function () {
       $body.removeClass('menu-open');
     });
 

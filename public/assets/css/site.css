@@ -1148,8 +1148,8 @@ a,
 ul,
 ol {
   opacity: 0;
-  -webkit-transition: opacity 0.4s ease-in;
-          transition: opacity 0.4s ease-in;
+  -webkit-transition: opacity 0.2s ease-in;
+          transition: opacity 0.2s ease-in;
 }
 .wf-active h1,
 .wf-active h2,

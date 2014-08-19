@@ -45,9 +45,7 @@ ol {
 }
 
 // Give all links a nice transition
-a {
-  transition: all 0.2s;
-}
+a { transition: all 0.2s; }
 
 .overlay {
   position: fixed;
@@ -101,14 +99,11 @@ a {
   padding: @base-rem-unit @base-rem-unit 0;
   .text-center;
 
-  .header-title {
-    margin-top: @base-rem-unit;
-  }
+  .header-title { margin-top: @base-rem-unit; }
 }
 
 .header-nav {
   .nav-menu {
-    // li { }
     a {
       display: block;
       padding: (@base-rem-unit / 2) 0;
@@ -152,9 +147,7 @@ a {
       transform: scale(1.5);
     }
 
-    i {
-      font-size: (@base-font-size * 2);
-    }
+    i { font-size: (@base-font-size * 2); }
   }
 }
 
@@ -169,13 +162,8 @@ a {
   padding: (@base-rem-unit * 2) 0;
   border-bottom: solid 1px @gray-lighter;
 
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
+  &:first-child { padding-top: 0; }
+  &:last-child  { border-bottom: none; }
 }
 
 // Posts metadata (byline, datetime, etc)
@@ -213,13 +201,8 @@ a {
   margin: 0 auto;
 }
 
-.post-article {
-  margin-bottom: (@base-rem-unit * 3);
-}
-
-.post-comments {
-  margin-top: (@base-rem-unit * 3);
-}
+.post-article  { margin-bottom: (@base-rem-unit * 3); }
+.post-comments { margin-top: (@base-rem-unit * 3); }
 
 // If there is an error with an embed, style it a bit
 .embed-error {

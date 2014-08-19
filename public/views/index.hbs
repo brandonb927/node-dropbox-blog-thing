@@ -24,16 +24,18 @@
           on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
         </p>
       </div>
+      {{#if this.tags}}
       <div class="meta-right">
-        {{#if this.tags}}
-        <span class="meta-label">Tags: </span>
-        <span class="meta-tags">
-        {{#each this.tags}}
-          <a href="/tag/{{this}}">{{this}}</a>
-        {{/each}}
-        </span>
-        {{/if}}
+        <p>
+          <span class="meta-label">Tags: </span>
+          <span class="meta-tags">
+          {{#each this.tags}}
+            <a href="/tag/{{this}}">{{this}}</a>
+          {{/each}}
+          </span>
+        </p>
       </div>
+      {{/if}}
     </div>
 
     <div class="post-content" itemprop="text">

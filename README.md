@@ -59,7 +59,7 @@ setup the Dropbox-cli client on the server.
 
 The only outstanding issue now is that if the server reboots or crashes for any reason, you'll have
 to SSH in and start the Dropbox daemon. This is not an ideal circumstance, but one that can be alleviated
-with a n `init.d` script!
+with an `init.d` script!
 
 Create a new file `/etc/init.d/dropbox` and put the contents of this Gist into it: https://gist.github.com/brandonb927/a0b33ecbe6fa8337b0b4
 
