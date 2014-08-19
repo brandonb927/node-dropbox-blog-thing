@@ -15,8 +15,7 @@ var config        = require('../../config.json');
 var markedOptions = {
   gfm         : true,
   tables      : true,
-  breaks      : true,
-  // smartypants : true
+  breaks      : true
 };
 
 // Return the HTML-safe content that will be rendered to the page
@@ -121,10 +120,6 @@ function getAllPosts (includePages, callback) {
 
   callback(null, posts);
 }
-
-// function getPages () {
-
-// }
 
 // Initialize the posts cache
 exports.initCache = function (callback) {

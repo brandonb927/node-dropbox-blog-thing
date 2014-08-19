@@ -10,17 +10,19 @@
     </h2>
     <div class="post-meta">
       <div class="meta-left">
-        Posted by
-        <span itemprop="author" itemscope itemptype="http://schema.org/Person">
-          {{#if site.social.googleplus}}
-          <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+        <p>
+          Posted by
+          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+            {{#if site.social.googleplus}}
+            <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+              <span itemprop="name">{{site.author.name}}</span>
+            </a>
+            {{else}}
             <span itemprop="name">{{site.author.name}}</span>
-          </a>
-          {{else}}
-          <span itemprop="name">{{site.author.name}}</span>
-          {{/if}}
-        </span>
-        on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
+            {{/if}}
+          </span>
+          on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
+        </p>
       </div>
       <div class="meta-right">
         {{#if this.tags}}

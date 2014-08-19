@@ -1137,13 +1137,33 @@ strong {
 /**
  * Main style classes
  */
-.wf-loading * {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+ul,
+ol {
   opacity: 0;
   -webkit-transition: opacity 0.4s ease-in;
           transition: opacity 0.4s ease-in;
 }
-.wf-active * {
-  opacity: 1;
+.wf-active h1,
+.wf-active h2,
+.wf-active h3,
+.wf-active h4,
+.wf-active h5,
+.wf-active h6,
+.wf-active p,
+.wf-active a,
+.wf-active span,
+.wf-active ul,
+.wf-active ol {
+  opacity: 1 !important;
 }
 a {
   -webkit-transition: all 0.2s;

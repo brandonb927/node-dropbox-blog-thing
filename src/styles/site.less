@@ -16,15 +16,34 @@
  * Main style classes
  */
 
-// Fix FOUT
-.wf-loading {
-  * {
-    opacity: 0;
-    transition: opacity 0.4s ease-in;
-  }
+// Fix FOUT, the rest is now loaded on   DOMReady
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+ul,
+ol {
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
 }
+
 .wf-active {
-  * { opacity: 1; }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  span,
+  ul,
+  ol { opacity: 1 !important; }
 }
 
 // Give all links a nisce transition
