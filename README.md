@@ -18,9 +18,18 @@ The basic overview of what we're accomplishing here is as follows:
 - [Installing the Dropbox-cli client](#dropbox-cli)
 - [Installing and configuring all the relevant packages to run the site](#nodejs--npm)
 - [Setting up git hooks for seemless push-to-deploy procedure](#git-push-to-deploy)
-- [Setting up the node.js app `config.json` with your information](#configuring-the-app)
+- [Setting up the NodeJS app `config.json` with your information](#configuring-the-app)
 - ???
 - [PROFIT](http://1.bp.blogspot.com/-OnJtmIOFb3w/UBroj-ycpYI/AAAAAAAAB_I/F9oSLxwAAxk/s1600/mayweather-money.gif)
+
+The whole thing is built on top of NodeJS and is completely self-contained. This means there is no database, or file storage 
+(other than your Dropbox folder). All post/page data is initialized into memory when the server is started up and on sebsequent restarts.
+This means when a page is requested there is no filesystem read making the whole page-load VERY fast. `watchr` is used to listen for 
+filesystem changes for when you update or add document to your Dropbox folder and will re-cache all post/page data again.
+
+TODO:
+- only re-cache updated/added files
+
 
 ## Setup
 

@@ -59,7 +59,7 @@ gulp.task('clean', function () {
 
 // Default task
 gulp.task('default', ['clean'], function () {
-  gulp.start('styles', 'lint', 'scripts');
+  gulp.start('lint', 'styles', 'scripts');
 });
 
 // Watch task
