@@ -82,22 +82,28 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="site-sidebar">
 
-    <div class="site-bio">
-      <img src="{{gravatar}}" class="site-avatar" />
-      <p>{{site.description}}</p>
-    </div>
+    <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+      <h1 class="header-title" itemprop="headline">
+        <a href="{{baseUrl}}">{{site.title}}</a>
+      </h1>
 
-    {{#if pages}}
-    <nav class="header-nav" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-      <ul class="nav-menu">
-        {{#each pages}}
-        <li itemprop="url">
-          <a href="{{ site.baseUrl }}{{ this.url }}" title="{{ this.title }}" itemprop="name">{{ this.title }}</a>
-        </li>
-        {{/each}}
-      </ul>
-    </nav>
-    {{/if}}
+      <div class="site-bio">
+        <img src="{{gravatar}}" class="site-avatar" />
+        <p>{{site.description}}</p>
+      </div>
+
+      {{#if pages}}
+      <nav class="header-nav" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+        <ul class="nav-menu">
+          {{#each pages}}
+          <li itemprop="url">
+            <a href="{{ site.baseUrl }}{{ this.url }}" title="{{ this.title }}" itemprop="name">{{ this.title }}</a>
+          </li>
+          {{/each}}
+        </ul>
+      </nav>
+      {{/if}}
+    </header>
 
     <ul class="social-icons">
       {{#if site.social.twitter}}
@@ -129,22 +135,18 @@
     </ul>
   </div>
 
-  <div class="site-container">
-    <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="menu-trigger button">Menu</div>
+  <div class="site-wrapper">
+    <div class="menu-trigger button">Menu</div>
 
-      <h1 class="header-title" itemprop="headline">
-        <a href="{{baseUrl}}">{{site.title}}</a>
-      </h1>
-    </header>
-
-    <main class="grid gutter" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
-      <div class="column full-width">
-        <div class="module">
-          {{{body}}}
+    <div class="site-container">
+      <main class="grid gutter" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+        <div class="column full-width">
+          <div class="module">
+            {{{body}}}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   </div>
 
   <div class="overlay"></div>

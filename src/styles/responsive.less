@@ -7,7 +7,7 @@
     height: 100%;
   }
 
-  .site-container {
+  .site-wrapper {
     width: 100%;
     padding-left: @sidebar-width + @base-rem-unit;
     float: right;
@@ -26,13 +26,16 @@
 
     &.menu-open {
       .site-sidebar   { left: 0; }
-      .site-container { left: @sidebar-width; }
+      .site-wrapper   { left: @sidebar-width; }
       .menu-trigger   { z-index: 20; }
       .overlay        { display: block; }
     }
   }
 
-  .site-container { padding-left: @base-rem-unit; }
+  .site-container {
+    padding-top: (@base-rem-unit * 3);
+    padding-left: @base-rem-unit;
+  }
 }
 
 @media (max-width: 30rem) { // iPhone size
