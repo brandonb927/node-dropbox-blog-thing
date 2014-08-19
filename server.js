@@ -3,7 +3,6 @@ var favicon       = require('serve-favicon');
 var hbs           = require('hbs');
 var express       = require('express');
 var watch         = require('watch');
-var mime          = require('mime');
 
 var app = module.exports = express();
 
