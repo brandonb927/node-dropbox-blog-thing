@@ -3,6 +3,7 @@ var favicon       = require('serve-favicon');
 var hbs           = require('hbs');
 var express       = require('express');
 var watch         = require('watch');
+var mime          = require('mime');
 
 var app = module.exports = express();
 
@@ -31,6 +32,7 @@ require('./config/shortcodes.js');
 
 // Setup to serve from the public folder
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Setup logging
@@ -126,16 +128,19 @@ Posts.initCache(function () {
 
   // Setup file-watching in posts folder to re-fill post cache when files are updated
   watch.watchTree('./posts', function (f, curr, prev) {
-    // if (typeof f == "object" && prev === null && curr === null) {
-    //   // Finished walking the tree
-    // } else if (prev === null) {
-    //   // f is a new file
-    // } else if (curr.nlink === 0) {
-    //   // f was removed
-    // } else {
-    //   // f was changed
-    // }
-    Posts.initCache();
+    if (typeof f == "object" && prev === null && curr === null) {
+      // Finished walking the tree
+    } else if (prev === null) {
+      // f is a new file
+      Posts.initCache();
+    } else if (curr.nlink === 0) {
+      // f was removed
+      Posts.initCache();
+    } else {
+      // f was changed
+      Posts.initCache();
+    }
+    // Posts.initCache();
   });
 
   // Start this server!
