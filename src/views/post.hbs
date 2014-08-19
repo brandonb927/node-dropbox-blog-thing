@@ -8,7 +8,7 @@
           Posted by
           <span itemprop="author" itemscope itemptype="http://schema.org/Person">
             {{#if site.social.googleplus}}
-            <a href="{{ site.social.googleplus }}?rel=author" target="_blank">
+            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
               <span itemprop="name">{{site.author.name}}</span>
             </a>
             {{else}}
@@ -51,6 +51,10 @@
   <script>
   $(document).ready(function () {
     $('.show-comments').on('click', function () {
+      {{#if googleAnalytics}}
+      ga('send', 'event', 'button', 'click', 'show-comments');
+      {{/if}}
+
       $(this).fadeOut('fast');
 
       // Delay the script loading so the button fades out
