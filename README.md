@@ -53,9 +53,9 @@ but for the sake up this project, these are the few ports you need for the serve
 Make sure you server is completely up to-date before you continue. Once you've done that, 
 setup the Dropbox-cli client on the server.
 
-    cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - ~/.dropbox-dist/dropboxd
-    # below is optional, but is used to control the daemon and is very helpful to have
-    wget https://www.dropbox.com/download?dl=packages/dropbox.py 
+    wget -O dropbox.py "https://www.dropbox.com/download?dl=packages/dropbox.py"
+    chmod +x dropbox.py
+    dropbox.py start
 
 The only outstanding issue now is that if the server reboots or crashes for any reason, you'll have
 to SSH in and start the Dropbox daemon. This is not an ideal circumstance, but one that can be alleviated

@@ -42,7 +42,6 @@ gulp.task('scripts', function () {
 // Images task
 gulp.task('images', function () {
   return gulp.src('src/images/**/*')
-    // .pipe(clean())
     .pipe(gulp.dest('public/images'));
 });
 
