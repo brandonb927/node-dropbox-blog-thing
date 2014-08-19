@@ -60,11 +60,12 @@
   </script>
 
   <!-- Highlight.js -->
-  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/tomorrow-night-eighties.min.css">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/tomorrow-night-eighties.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 
   <!-- Ugh, I guess include jQuery... -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/unveil/1.3.0/jquery.unveil.min.js"></script>
 
   <!-- Google Analytics -->
   {{#if googleAnalytics }}
@@ -154,6 +155,12 @@
   <script>
   $(document).ready(function () {
     var $body = $('body');
+
+    $("img").unveil(200, function() {
+      $(this).load(function() {
+        this.style.opacity = 1;
+      });
+    });
 
     $('.menu-trigger').on('click', function () {
       $body.addClass('menu-open');

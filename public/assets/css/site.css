@@ -1343,6 +1343,11 @@ a {
 .post-image a {
   display: block;
 }
+.post-image img {
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in;
+          transition: opacity 0.3s ease-in;
+}
 .post-comments {
   margin-top: 3rem;
 }

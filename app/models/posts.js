@@ -16,7 +16,7 @@ var config        = require('../../config.json');
 
 // Wrap images in a div to center them
 renderer.image = function (src, title, text) {
-  return '<div class="post-image"><a href="'+src+'" target="_blank"><img src="'+src+'" alt="'+title+'" /></a></div>';
+  return '<div class="post-image"><a href="'+src+'" target="_blank"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="'+src+'" alt="'+title+'" /></a><noscript><img src="'+src+'" alt="'+title+'" style="opacity:1;"/></noscript></div>';
 };
 
 
