@@ -19,7 +19,7 @@
     "moment": "*",
     "morgan": "*",
     "node-oembed-io": "*",
-    "nodejs-gravatar": "git://github.com/brandonb927/nodejs-gravatar.git",
+    "nodejs-gravatar": "*",
     "pagination": "*",
     "request-sync": "*",
     "serve-favicon": "*",
