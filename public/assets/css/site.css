@@ -1180,8 +1180,8 @@ a {
 .site-sidebar {
   position: fixed;
   top: 0;
-  left: -17rem;
-  width: 17rem;
+  left: -15rem;
+  width: 15rem;
   height: 100%;
   background: #222;
   z-index: 20;
@@ -1229,7 +1229,7 @@ a {
   color: #444444;
 }
 .site-bio {
-  padding: 1.5rem 2rem 2rem;
+  padding: 1.5rem 1rem 2rem;
   color: #dedede;
 }
 .site-bio p {
@@ -1374,7 +1374,7 @@ a {
   }
   .site-wrapper {
     width: 100%;
-    padding-left: 18rem;
+    padding-left: 16rem;
     float: right;
   }
   .site-sidebar {
@@ -1390,7 +1390,7 @@ a {
     left: 0;
   }
   body.menu-open .site-wrapper {
-    left: 17rem;
+    left: 15rem;
   }
   body.menu-open .menu-trigger {
     z-index: 20;
