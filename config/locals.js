@@ -15,7 +15,15 @@ for (var key in config) {
   // }
 }
 
-app.locals.gravatar = gravatar.imageUrl(config.site.author.email, { s: '256', d: '404' });
+// Setup gravatar options to get HTTP/HTTPS url to image
+var gravatarOptions = { s: '256', d: '404' }
+if (config.protocol === 'https') {
+  app.locals.gravatar = gravatar.imageUrl(config.site.author.email, gravatarOptions, true);
+}
+else {
+  app.locals.gravatar = gravatar.imageUrl(config.site.author.email, gravatarOptions);
+}
+
 
 // Set the baseUrl for use in templates and generating URLs to different pages/posts
 if (process.env.NODE_ENV !== 'production') {
