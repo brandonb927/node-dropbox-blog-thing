@@ -231,7 +231,7 @@ GET /sitemap.xml # Sitemap XML feed for search engines
 
 GET /tag/a-simple-tag # when you tag a post, you can then access a list of posts with that tag from this url
 > {
-    page        : Integer,    // the current pagination page number
+    tag         : String,     // the current tag as a string
     posts       : Array       // an array of post objects
   }
 ```
