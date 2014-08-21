@@ -1,4 +1,4 @@
-var gravatar = require('nodejs-gravatar');
+var gravatar = require('gravatar');
 var config   = require('../config.json');
 var app      = require('../server');
 
@@ -18,10 +18,10 @@ for (var key in config) {
 // Setup gravatar options to get HTTP/HTTPS url to image
 var gravatarOptions = { s: '256', d: '404' }
 if (config.protocol === 'https') {
-  app.locals.gravatar = gravatar.imageUrl(config.site.author.email, gravatarOptions, true);
+  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions, true);
 }
 else {
-  app.locals.gravatar = gravatar.imageUrl(config.site.author.email, gravatarOptions);
+  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions);
 }
 
 
