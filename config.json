@@ -23,6 +23,6 @@
     "shortname": "brandonbrownsblog"
   },
   "postFileExt": "md",
-  "protocol": "http",
+  "protocol": "https",
   "port": 3000
 }
