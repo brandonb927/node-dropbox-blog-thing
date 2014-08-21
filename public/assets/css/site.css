@@ -1186,6 +1186,7 @@ a {
   background: #222;
   z-index: 20;
   overflow: hidden;
+  overflow-y: auto;
   -webkit-transition: all 0.2s;
           transition: all 0.2s;
   text-align: center;
@@ -1235,11 +1236,7 @@ a {
   margin-top: 2rem;
 }
 .social-icons {
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
-  right: 0;
-  margin: 0;
+  margin: 3rem 0;
   padding: 0;
   list-style-type: none;
 }
