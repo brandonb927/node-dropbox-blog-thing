@@ -16,6 +16,10 @@
       "formatDate": "MMM Do YY",
       "postsPerPage": 10,
       "showPostExcerpt": true
+    },
+    "favicon": {
+      "ico": "https://dl.dropbox.com/u/3408044/brandonb.io/favicon.ico",
+      "png" : "https://dl.dropbox.com/u/3408044/brandonb.io/logo-144.png"
     }
   },
   "googleAnalytics": "UA-32422940-2",

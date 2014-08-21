@@ -33,18 +33,18 @@
   <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{baseURL}}/rss.xml">
 
   <!-- Favicons for all browsers and unfortunately IE8/9 -->
-  <link rel="icon" href="/path/to/favicon.png">
-  <!--[if IE]><link rel="shortcut icon" href="/path/to/favicon.ico" /><![endif]-->
-  <link rel="apple-touch-icon" sizes="144x144" href="/path/to/favicon.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/path/to/favicon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/path/to/favicon.png">
-  <link rel="apple-touch-icon" href="/path/to/favicon.png">
-  <link rel="apple-touch-icon-precomposed" href="/path/to/favicon.png">
+  <link rel="icon" href="{{site.favicon.png}}">
+  <!--[if IE]><link rel="shortcut icon" href="{{site.favicon.ico}}" /><![endif]-->
+  <link rel="apple-touch-icon" sizes="144x144" href="{{site.favicon.png}}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{{site.favicon.png}}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{{site.favicon.png}}">
+  <link rel="apple-touch-icon" href="{{site.favicon.png}}">
+  <link rel="apple-touch-icon-precomposed" href="{{site.favicon.png}}">
 
   <!-- Because IE10 ignores conditionals and doesn't support PNG for favicons, we use start screen tile icons!
      - http://www.jonathantneal.com/blog/understand-the-favicon/ -->
   <meta name="msapplication-TileColor" content="#D83434">
-  <meta name="msapplication-TileImage" content="/path/to/favicon.png">
+  <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
   <link href="/assets/css/site.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
