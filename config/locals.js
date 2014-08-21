@@ -17,17 +17,17 @@ for (var key in config) {
 
 // Setup gravatar options to get HTTP/HTTPS url to image
 var gravatarOptions = { s: '256', d: '404' }
-if (config.protocol === 'https') {
-  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions, true);
+if (config.protocol !== 'https' || process.env.NODE_ENV !== 'production') {
+  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions);
 }
 else {
-  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions);
+  app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions, true);
 }
 
 
 // Set the baseUrl for use in templates and generating URLs to different pages/posts
 if (process.env.NODE_ENV !== 'production') {
-  app.locals.baseUrl = config.protocol + '://localhost:' + config.port;
+  app.locals.baseUrl = 'http://localhost:' + config.port;
 } else {
   app.locals.baseUrl = config.protocol + '://' + config.site.domain;
 }
