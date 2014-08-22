@@ -10637,41 +10637,23 @@ if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) 
 
 })(jQuery, window, document);
 
-$(document).ready(function () {
-  var $htmlBody     = $('html, body');
-  var $body         = $('body');
-  var $bodyWrapper  = $('#body_wrapper');
-  var disqus_div    = $("#disqus_thread");
-
-  // init Fastclick on the body
-  FastClick.attach($body[0]);
-
-  $('.menu-trigger').on('click', function () {
-    $body.addClass('menu-open');
-  });
-
-  $('.overlay').on('click', function () {
-    $body.removeClass('menu-open');
-  });
-
-  $(document).keydown(function (e) {
-    if (e.keyCode == 27) { // esc pressed
-      $body.removeClass('menu-open');
-    }
-  });
-
-  $("img").unveil(500, function() {
-    $(this).load(function () {
-      this.style.opacity = 1;
-    });
-  });
-
+function highlightCode () {
   $('pre code').each(function (i, e) {
     $(e).addClass('hljs-code'); // to help with styling of `pre` block
     hljs.configure({ languages: [e.className] });
     hljs.highlightBlock(e);
   });
+}
 
+function initImageUnveil () {
+  $('img').unveil(500, function() {
+    $(this).load(function () {
+      this.style.opacity = 1;
+    });
+  });
+}
+
+function initDisqus (disqus_div) {
   if (disqus_div.size() > 0 ) {
     var ds_loaded   = false;
     var top         = disqus_div.offset().top;
@@ -10693,6 +10675,34 @@ $(document).ready(function () {
     $(window).scroll(check);
     check();
   }
+}
+
+$(document).ready(function () {
+  var $htmlBody     = $('html, body');
+  var $body         = $('body');
+  var $bodyWrapper  = $('#body_wrapper');
+  var disqus_div    = $('#disqus_thread');
+
+  // init Fastclick on the body
+  FastClick.attach($body[0]);
+
+  $('.menu-trigger').on('click', function () {
+    $body.addClass('menu-open');
+  });
+
+  $('.overlay').on('click', function () {
+    $body.removeClass('menu-open');
+  });
+
+  $(document).keydown(function (e) {
+    if (e.keyCode == 27) { // esc pressed
+      $body.removeClass('menu-open');
+    }
+  });
+
+  highlightCode();
+  initImageUnveil();
+  initDisqus(disqus_div);
 
   var content = $bodyWrapper.smoothState({
     onStart : {
@@ -10701,6 +10711,11 @@ $(document).ready(function () {
         content.toggleAnimationClass('is-exiting');
         $htmlBody.animate({ 'scrollTop': 0 });
       }
+    },
+    callback: function (url, $container, $content) {
+      highlightCode();
+      initImageUnveil();
+      initDisqus(disqus_div);
     }
   }).data('smoothState');
 });
