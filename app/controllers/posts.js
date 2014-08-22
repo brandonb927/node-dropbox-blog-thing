@@ -35,11 +35,11 @@ module.exports = {
       if(err || !post) return next(err);
 
       if (req.accepts('html')) {
-        return res.render('post', post);
+        return res.render('post', { post: post });
       }
 
       if (req.accepts('json')) {
-        return res.send(post);
+        return res.send({ post: post });
       }
     });
   },
