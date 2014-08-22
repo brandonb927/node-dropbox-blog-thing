@@ -10666,13 +10666,11 @@ $(document).ready(function () {
     });
   });
 
-  setTimeout(function () {
-    $('pre code').each(function (i, e) {
-      $(e).addClass('hljs-code'); // to help with styling of `pre` block
-      hljs.configure({ languages: [e.className] });
-      hljs.highlightBlock(e);
-    });
-  }, 800);
+  $('pre code').each(function (i, e) {
+    $(e).addClass('hljs-code'); // to help with styling of `pre` block
+    hljs.configure({ languages: [e.className] });
+    hljs.highlightBlock(e);
+  });
 
   if (disqus_div.size() > 0 ) {
     var ds_loaded   = false;
