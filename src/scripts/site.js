@@ -15,27 +15,29 @@ function initImageUnveil () {
 }
 
 function initDisqus (disqus_div) {
-  if (disqus_div.size() > 0 ) {
-    var ds_loaded   = false;
-    var top         = disqus_div.offset().top;
-    var disqus_data = disqus_div.data();
+  setTimeout(function () {
+    if (disqus_div.size() > 0 ) {
+      var ds_loaded   = false;
+      var top         = disqus_div.offset().top;
+      var disqus_data = disqus_div.data();
 
-    var check = function () {
-      if ( !ds_loaded && $(window).scrollTop() + $(window).height() > top ) {
-        ds_loaded = true;
-        for (var key in disqus_data) {
-          if (key.substr(0,6) == 'disqus') {
-            window['disqus_' + key.replace('disqus','').toLowerCase()] = disqus_data[key];
+      var check = function () {
+        if ( !ds_loaded && $(window).scrollTop() + $(window).height() > top ) {
+          ds_loaded = true;
+          for (var key in disqus_data) {
+            if (key.substr(0,6) == 'disqus') {
+              window['disqus_' + key.replace('disqus','').toLowerCase()] = disqus_data[key];
+            }
           }
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true; dsq.src = '//' + window.disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true; dsq.src = '//' + window.disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }
-    };
+      };
 
-    $(window).scroll(check);
-    check();
-  }
+      $(window).scroll(check);
+      check();
+    }
+  }, 800);
 }
 
 $(document).ready(function () {
