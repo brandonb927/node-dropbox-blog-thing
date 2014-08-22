@@ -10683,7 +10683,7 @@ $(document).ready(function () {
       duration: 250,
       render: function () {
         content.toggleAnimationClass('is-exiting');
-        // $htmlBody.animate({ 'scrollTop': 0 });
+        $htmlBody.animate({ 'scrollTop': 0 });
       }
     },
     callback: function (url, $container, $content) {
