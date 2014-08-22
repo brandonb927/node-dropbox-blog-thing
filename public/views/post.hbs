@@ -42,10 +42,30 @@
   {{#if disqus.shortname}}
   <hr />
   <div class="post-comments">
-    {{!-- <div class="text-center">
+    <div class="text-center">
       <button class="button show-comments">Load Comments</button>
-    </div> --}}
+    </div>
     <div id="disqus_thread" data-disqus-shortname="{{disqus.shortname}}" data-disqus-url="{{url}}"></div>
+    <script>
+    $('.show-comments').on('click', function () {
+      {{#if googleAnalytics}}
+      ga('send', 'event', 'button', 'click', 'show-comments');
+      {{/if}}
+
+      $(this).fadeOut('fast');
+
+      // Delay the script loading so the button fades out
+      // before the disqus loader takes it's place
+      setTimeout(function () {
+        $.ajax({
+          type      : "GET",
+          url       : "//{{disqus.shortname}}.disqus.com/embed.js",
+          dataType  : "script",
+          cache     : true
+        })
+      }, 200);
+    });
+    </script>
   </div>
   {{/if}}
   {{/if}}
