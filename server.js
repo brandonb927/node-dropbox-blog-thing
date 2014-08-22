@@ -16,7 +16,7 @@ var Posts         = require('./app/models/posts');
 // and setup the views folder
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'hbs');
-// app.use(require('./config/hbs_helpers'));
+require('./config/hbs_helpers');
 // hbs.registerPartials(__dirname + 'public/views/partials');
 
 // Setup some variables to be used in the site

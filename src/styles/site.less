@@ -11,38 +11,108 @@
 @import 'modules/typography.less';
 @import 'modules/buttons.less';
 
+// 3rd-party
+@import 'bower_components/fontawesome/less/font-awesome.less';
+@import 'tomorrow-night-eighties.min.css';
+// @import 'bower_components/';
+
+
+/*
+ * Keyframes
+ */
+
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 60%, 0);
+    // transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(60%, 0, 0);
+    // transform: translate3d(100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Basic styles for an animated element
+.animated_elem {
+  animation-duration: 0.6s;
+  transition-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+// An element that fades in
+.animated_elem--fadein {
+  animation-name: fadeIn;
+}
+
+// An element that fades in and slides up
+.animated_elem--fadeinup {
+  animation-name: fadeInUp;
+}
+
+// An element that fades in and slides from the right
+.animated_elem--fadeinright {
+  animation-name: fadeInRight;
+}
+
+/** Reverse "exit" animations */
+.is-exiting {
+  .animated_elem {
+    animation-direction: alternate-reverse;
+  }
+}
+
 
 /**
  * Main style classes
  */
 
 // Fix FOUT, the rest is now loaded on   DOMReady
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-a,
-ul,
-ol {
-  opacity: 0;
-  transition: opacity 0.2s ease-in;
-}
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6,
+// p,
+// a,
+// ul,
+// ol {
+//   opacity: 0;
+//   transition: opacity 0.2s ease-in;
+// }
 
-.wf-active {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  a,
-  ul,
-  ol { opacity: 1 !important; }
-}
+// .wf-active {
+//   h1,
+//   h2,
+//   h3,
+//   h4,
+//   h5,
+//   h6,
+//   p,
+//   a,
+//   ul,
+//   ol { opacity: 1 !important; }
+// }
 
 // Give all links a nice transition
 a { transition: all 0.2s; }

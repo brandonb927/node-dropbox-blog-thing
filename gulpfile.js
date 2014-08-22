@@ -12,7 +12,18 @@ var rename        = require('gulp-rename');
 
 
 // Styles task
-gulp.task('styles', function () {
+gulp.task('vendor_styles', function () {
+  return gulp.src([
+      'bower_components/highlightjs/styles/tomorrow-night-eighties.css'
+    ])
+    // .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+    .pipe(gulp.dest('public/assets/css'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(minifycss())
+    .pipe(gulp.dest('public/assets/css'));
+});
+
+gulp.task('styles', ['vendor_styles'], function () {
   return gulp.src('src/styles/site.less')
     .pipe(less())
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
@@ -29,10 +40,25 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter(stylish));
 });
 
-// Scripts task
-gulp.task('scripts', function () {
-  return gulp.src('src/scripts/**/*.js')
-    .pipe(concat('site.js'))
+// Scripts tasks
+gulp.task('vendor_scripts', function () {
+  return gulp.src([
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/fastclick/lib/fastclick.js',
+      'bower_components/highlightjs/lib/highlight.pack.js',
+      'bower_components/jquery-unveil/jquery.unveil.js',
+      'bower_components/smoothstate/jquery.smoothState.js'
+    ])
+    .pipe(concat('vendor-pack.js'))
+    .pipe(gulp.dest('src/scripts'));
+});
+
+gulp.task('scripts', ['vendor_scripts'], function () {
+  return gulp.src([
+      'src/scripts/vendor-pack.js',
+      'src/scripts/site.js'
+    ])
+    .pipe(concat('site-pack.js'))
     .pipe(gulp.dest('public/assets/js'))
     .pipe(rename({ suffix: '.min' }))
     .pipe(uglify())
@@ -68,7 +94,7 @@ gulp.task('watch', function () {
     'gulpfile.js',
     'app/**/*.js',
     'config/*.js',
-    // 'src/scripts/**/*.js',
+    'src/scripts/**/*.js',
     // 'test/**/*.js'
   ], ['lint']);
 

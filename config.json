@@ -2,7 +2,7 @@
   "site": {
     "domain": "brandonb.io",
     "title": "Brandons Blog",
-    "description": "Canadian, passion for open source, tech, and web development.<br />This site was built with all ten of my fingers.<br />Check out my new <a href=\"http://links.brandonb.io/\" target=\"_blank\">link blog</a>, powered by <a href=\"http://goo.gl/ZZrMFP\" target=\"_blank\">Evernote</a>.",
+    "description": "Canadian, passion for open source, tech, and web development. This is where I dump my ideas, thoughts, and tech-related bits & pieces that I find interesting.",
     "author": {
       "name": "Brandon Brown",
       "email": "brandon@brandonb.io"
@@ -14,8 +14,7 @@
     },
     "settings": {
       "formatDate": "MMM Do YY",
-      "postsPerPage": 10,
-      "showPostExcerpt": true
+      "postsPerPage": 10
     },
     "favicon": {
       "ico": "https://dl.dropbox.com/u/3408044/brandonb.io/favicon.ico",
