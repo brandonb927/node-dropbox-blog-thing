@@ -19,4 +19,7 @@ router.get('/page/:num',      controllers.posts.pagination);
 // Tag list page
 router.get('/tag/:tag',       controllers.posts.tag);
 
+// Get by search term
+router.post('/search/:term',  controllers.posts.search);
+
 module.exports = router;
