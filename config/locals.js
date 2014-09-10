@@ -24,6 +24,7 @@ else {
   app.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions, true);
 }
 
+app.locals.debug = (process.env.NODE_ENV !== 'production' ? true : false);
 
 // Set the baseUrl for use in templates and generating URLs to different pages/posts
 if (process.env.NODE_ENV !== 'production') {
