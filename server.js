@@ -29,7 +29,7 @@ require('./config/helpers.js');
 // Add shortcode parsing
 require('./config/shortcodes.js');
 
-// Setup to serve from the public folder
+// Setup to serve from these folders
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
@@ -44,22 +44,39 @@ app.use(routes);
 app.use(function (req, res, next) {
   res.status(404);
 
-  var title = '404: Not Found';
-  var error = 'Looks like that content has gone missing!';
-  var url   = app.locals.baseUrl + req.url;
+  var title           = '404: Not Found';
+  var error           = 'Looks like that content has gone missing!';
+  var url             = app.locals.baseUrl + req.url;
+  var fuzzyMatchSlug  = req.url.replace('/','')
 
-  // Respond with an HTML page
-  if (req.accepts('html')) {
-    return res.render('error', { title: title, error: error, url: url });
-  }
+  var errorData = {
+    title:  title,
+    error:  error,
+    url:    url
+  };
 
-  // Respond with JSON
-  if (req.accepts('json')) {
-    return res.send({ code: 404, error: error, url: url });
-  }
+  var jsonErrorData = {
+    code:   404,
+    error:  error,
+    url:    url
+  };
 
-  // default to plain-text. send()
-  res.type('txt').send('Not found');
+  Posts.searchBySlug(fuzzyMatchSlug, function (err, matches) {
+    if (!err && matches) {
+      errorData.postMatches      = matches;
+      jsonErrorData.postMatches  = matches;
+    }
+
+    // Respond with an HTML page
+    if (req.accepts('html')) {
+      return res.render('error', errorData);
+    }
+
+    // Respond with JSON
+    if (req.accepts('json')) {
+      return res.send(jsonErrorData);
+    }
+  });
 });
 
 // Everything else
