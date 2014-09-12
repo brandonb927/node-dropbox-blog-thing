@@ -15,15 +15,7 @@ var stylish       = require('jshint-stylish');
 
 
 // Styles tasks
-gulp.task('vendor_css', function () {
-  return gulp.src([
-      'bower_components/highlightjs/styles/tomorrow-night-eighties.css',
-      'bower_components/fontawesome/css/font-awesome.css'
-    ])
-    .pipe(gulp.dest('public/assets/css'));
-});
-
-gulp.task('vendor_fonts', ['vendor_css'], function () {
+gulp.task('vendor_fonts', function () {
   return gulp.src([
       'bower_components/fontawesome/fonts/*'
     ])
@@ -31,7 +23,9 @@ gulp.task('vendor_fonts', ['vendor_css'], function () {
 });
 
 gulp.task('styles_compile', ['vendor_fonts'], function () {
-  return gulp.src('src/styles/site.less')
+  return gulp.src([
+      'src/styles/site.less'
+    ])
     // .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(autoprefixer())
@@ -41,9 +35,8 @@ gulp.task('styles_compile', ['vendor_fonts'], function () {
 
 gulp.task('styles', ['styles_compile'], function () {
   return gulp.src([
-      'public/assets/css/*.css'
+      'public/assets/css/site.css'
     ])
-    .pipe(concat('site-pack.css'))
     .pipe(minifycss())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('public/assets/css'));

@@ -1,3 +1,4 @@
+@import 'bower_components/highlightjs/styles/tomorrow-night-eighties.css';
 /* Clearfix to contain floats */
 .cf:before,
 .cf:after {
