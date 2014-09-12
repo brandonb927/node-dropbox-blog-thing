@@ -1,56 +1,8 @@
-<div class="feed">
-  {{#if tag}}
-  <p>Showing posts found with tag: <strong>{{tag}}</strong></p>
-  <hr />
-  {{/if}}
-  {{#each posts}}
-  <article class="feed-post animated_elem animated_elem--fadeinright" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
-    <h2 class="post-title" itemprop="name headline">
-      <a href="{{this.url}}">{{this.title}}</a>
-    </h2>
-    <div class="post-meta">
-      <div class="meta-left">
-        <p>
-          Posted by
-          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
-            {{#if site.social.googleplus}}
-            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
-              <span itemprop="name">{{site.author.name}}</span>
-            </a>
-            {{else}}
-            <span itemprop="name">{{site.author.name}}</span>
-            {{/if}}
-          </span>
-          on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
-        </p>
-      </div>
-      {{#if this.tags}}
-      <div class="meta-right">
-        <p>
-          <span class="meta-label">Tags: </span>
-          <span class="meta-tags">
-          {{#each this.tags}}
-            <a href="/tag/{{this}}">{{this}}</a>
-          {{/each}}
-          </span>
-        </p>
-      </div>
-      {{/if}}
-    </div>
-
-    <div class="post-content" itemprop="text">
-      {{this.content}}
-    </div>
-  </article>
-  {{else}}
-  {{#if tag}}
-  <p>No posts found with tag <strong>{{tag}}</strong> :(</p>
-  {{else}}
-  <h3>No posts found :(</h3>
-  {{/if}}
-  {{/each}}
+<div id="posts_list" class="feed">
+  {{> posts}}
 </div>
 
+{{#if term}}{{else}}
 {{#if pagination}}
 <nav class="pagination" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement" >
   {{#if pagination.prev}}
@@ -60,4 +12,5 @@
   <a href="/page/{{pagination.next}}" rel="next" itemprop="name" title="Older Posts" class="pagination-next">Older posts &rarr;</a>
   {{/if}}
 </nav>
+{{/if}}
 {{/if}}

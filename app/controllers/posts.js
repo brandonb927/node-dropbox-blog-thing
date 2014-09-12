@@ -1,5 +1,6 @@
 var app       = require('../../server');
 var sm        = require('sitemap');
+var qs        = require('querystring');
 var Feed      = require('feed');
 
 var config    = require('../../config.json');
@@ -12,7 +13,9 @@ module.exports = {
 
   index: function (req, res, next) {
     Posts.getByPagination(1, function (err, data) {
-      if(err || !data) return next(err);
+      if(err || !data) {
+        return next(err);
+      }
 
       var pageData = {
         page        : data.pageNum,
@@ -32,7 +35,9 @@ module.exports = {
 
   post: function (req, res, next) {
     Posts.getBySlug(req.params.slug, function (err, post) {
-      if(err || !post) return next(err);
+      if(err || !post) {
+        return next(err);
+      }
 
       if (req.accepts('html')) {
         return res.render('post', { post: post });
@@ -46,7 +51,9 @@ module.exports = {
 
   pagination: function (req, res, next) {
     Posts.getByPagination(req.params.num, function (err, data) {
-      if(err || !data) return next(err);
+      if(err || !data) {
+        return next(err);
+      }
 
       var pageData = {
         page        : data.pageNum,
@@ -66,7 +73,9 @@ module.exports = {
 
   tag: function (req, res, next) {
     Posts.getByTag(req.params.tag, function (err, data) {
-      if(err || !data) return next(err);
+      if(err || !data) {
+        return next(err);
+      }
 
       var pageData = {
         tag   : data.tag,
@@ -83,10 +92,37 @@ module.exports = {
     });
   },
 
+  search: function (req, res, next) {
+    var searchStringTerm = qs.unescape(req.query.q);
+    Posts.searchByTerm(searchStringTerm, function (err, posts) {
+      if(err || !posts) {
+        return next(err);
+      }
+
+      var pageData = {
+        // disable the layout because we use jQuery to hit the /search
+        // endpoint and inject the response into the DOM
+        layout: false,
+        term: searchStringTerm,
+        posts : posts
+      };
+
+      if (req.accepts('html')) {
+        return res.render('posts', pageData);
+      }
+
+      if (req.accepts('json')) {
+        return res.send(pageData);
+      }
+    });
+  },
+
   // The RSS feed for the site
   rss: function (req, res, next) {
     Posts.getAll(function (err, posts) {
-      if(err || !posts) return next(err);
+      if(err || !posts) {
+        return next(err);
+      }
 
       // Initializing feed object
       var feed = new Feed({
@@ -118,7 +154,9 @@ module.exports = {
   // Generate the sitemap.xml page
   sitemap: function (req, res, next) {
     Posts.getAll(true, function (err, posts) {
-      if(err || !posts) return next(err);
+      if(err || !posts) {
+        return next(err);
+      }
 
       var sitemap = sm.createSitemap ({
         hostname  : config.site.base_url,

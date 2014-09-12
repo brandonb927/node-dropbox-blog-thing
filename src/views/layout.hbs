@@ -46,14 +46,21 @@
     <meta name="msapplication-TileColor" content="#D83434">
     <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
+    {{#if debug}}
     <link href="/assets/css/site.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    {{else}}
+    <link href="/assets/css/site.min.css" rel="stylesheet">
+    {{/if}}
 
     <!-- Highlight.js -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/tomorrow-night-eighties.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 
+    {{#if debug}}
+    <script src="/assets/js/site-pack.js"></script>
+    {{else}}
     <script src="/assets/js/site-pack.min.js"></script>
+    {{/if}}
 
     <!-- Google Analytics -->
     {{#if googleAnalytics}}
@@ -94,6 +101,14 @@
             </ul>
           </nav>
           {{/if}}
+
+          <div class="site-search">
+            <input type="search" id="input_search" class="search-input" placeholder="Search for anything!" />
+
+            <button type="button" id="button_search" class="search-button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
         </header>
 
         <ul class="social-icons">

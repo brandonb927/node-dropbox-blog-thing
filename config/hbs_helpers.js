@@ -1,9 +1,8 @@
 var hbs = require('hbs');
 
-// Setup the handlebars helpers
-// hbs.registerHelper('socialLinks', function() {
-//   console.log(app.locals);
-// });
+/**
+ * Setup the handlebars helpers
+ */
 
 // Strip HTML tags
 hbs.registerHelper('striptags', function (txt) {

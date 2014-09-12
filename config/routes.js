@@ -8,18 +8,12 @@ var controllers = require('../app/controllers');
 // Handle main routes in controllers
 router.get('/',               controllers.posts.index);
 
-// because we do slug-lookups, we have to put the /rss  and /sitemap routes first
-router.get('/rss.xml',        controllers.posts.rss);
-router.get('/sitemap.xml',    controllers.posts.sitemap);
-router.get('/:slug',          controllers.posts.post);
-
-// used for pagination
-router.get('/page/:num',      controllers.posts.pagination);
-
-// Tag list page
-router.get('/tag/:tag',       controllers.posts.tag);
-
-// Get by search term
-router.post('/search/:term',  controllers.posts.search);
+// because we do slug-lookups, we have to put /rss, /sitemap, and /search routes first
+router.get('/rss.xml',          controllers.posts.rss);
+router.get('/sitemap.xml',      controllers.posts.sitemap);
+router.get('/search',           controllers.posts.search);      // Search by string
+router.get('/:slug',            controllers.posts.post);        // Posts slug page
+router.get('/page/:num',        controllers.posts.pagination);  // Used for pagination
+router.get('/tag/:tag',         controllers.posts.tag);         // Tag list page
 
 module.exports = router;

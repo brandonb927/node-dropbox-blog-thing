@@ -10,11 +10,11 @@
 @import 'modules/tables.less';
 @import 'modules/typography.less';
 @import 'modules/buttons.less';
+@import 'modules/forms.less';
 
 // 3rd-party
+@fa-font-path: "/bower_components/fontawesome/fonts";
 @import 'bower_components/fontawesome/less/font-awesome.less';
-@import 'tomorrow-night-eighties.min.css';
-// @import 'bower_components/';
 
 
 /*
@@ -179,6 +179,8 @@ a { transition: all 0.2s; }
 }
 
 .header-nav {
+  margin-bottom: (@base-rem-unit * 3);
+
   .nav-menu {
     a {
       display: block;
@@ -193,17 +195,54 @@ a { transition: all 0.2s; }
   }
 }
 
-.site-bio {
+.site-bio,
+.site-search {
   padding: (@base-rem-unit * 1.5) (@base-rem-unit) (@base-rem-unit * 2);
+}
+
+.site-bio {
   color: @gray-light;
 
   p { margin-top: (@base-rem-unit * 2); }
 }
 
+.site-search {
+  // margin-bottom: (@base-rem-unit * 3);
+  display: flex;
+
+  .search-input {
+    flex: 1;
+    width: 80%;
+    font-size: @input-font-size;
+    border: solid 1px @white;
+  }
+
+  .search-button {
+    width: 20%;
+    border-top: solid 1px @white;
+    border-right: solid 1px @white;
+    border-bottom: solid 1px @white;
+    border-left: none;
+    background: transparent;
+    color: @white;
+    transition: all .2s ease;
+
+    i {
+      line-height: @input-line-height;
+    }
+
+    &:hover,
+    &:focus {
+      color: @base-link-color;
+      background: @white;
+    }
+  }
+}
+
 .social-icons {
   margin: (@base-rem-unit * 3) 0;
   padding: 0;
-  list-style-type: none;
+  .list-unstyled;
 
   li {
     display: inline-block;
@@ -305,6 +344,12 @@ a { transition: all 0.2s; }
 }
 
 .error-page { .text-center; }
+
+.related-posts {
+  margin-top: (@base-rem-unit * 3);
+
+  ul { padding: 0; }
+}
 
 // Fix Github gists
 .highlight {

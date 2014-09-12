@@ -2,7 +2,9 @@ var logger        = require('morgan');
 var favicon       = require('serve-favicon');
 var hbs           = require('hbs');
 var express       = require('express');
+// var bodyParser    = require('body-parser')
 var watch         = require('watch');
+var fs            = require('fs');
 
 var app = module.exports = express();
 
@@ -17,7 +19,8 @@ var Posts         = require('./app/models/posts');
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'hbs');
 require('./config/hbs_helpers');
-// hbs.registerPartials(__dirname + 'public/views/partials');
+hbs.registerPartial('posts', fs.readFileSync(__dirname + '/public/views/posts.hbs', 'utf8'));
+// hbs.registerPartials(__dirname + '/public/views/partials');
 
 // Setup some variables to be used in the site
 // and allow locals to be used in views
@@ -33,6 +36,8 @@ require('./config/shortcodes.js');
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 
 // Setup logging
 app.use(logger('dev'));
