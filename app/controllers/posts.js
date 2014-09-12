@@ -102,9 +102,9 @@ module.exports = {
       var pageData = {
         // disable the layout because we use jQuery to hit the /search
         // endpoint and inject the response into the DOM
-        layout: false,
-        term: searchStringTerm,
-        posts : posts
+        layout      : false,
+        term        : searchStringTerm,
+        posts       : posts
       };
 
       if (req.accepts('html')) {

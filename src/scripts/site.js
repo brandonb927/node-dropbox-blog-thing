@@ -11,6 +11,7 @@
     var $buttonSearch = $('#button_search');
     var $inputSearch  = $('#input_search');
     var $postsList    = $('#posts_list')
+    var $pagination   = $('.pagination');
 
     var smoothStateSettings = {
       onStart : {
@@ -51,6 +52,7 @@
           function () {
             highlightCode();
             initImageUnveil();
+            $pagination.hide();
           }
         );
       }

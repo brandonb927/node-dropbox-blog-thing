@@ -2,7 +2,6 @@
   {{> posts}}
 </div>
 
-{{#if term}}{{else}}
 {{#if pagination}}
 <nav class="pagination" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement" >
   {{#if pagination.prev}}
@@ -12,5 +11,4 @@
   <a href="/page/{{pagination.next}}" rel="next" itemprop="name" title="Older Posts" class="pagination-next">Older posts &rarr;</a>
   {{/if}}
 </nav>
-{{/if}}
 {{/if}}

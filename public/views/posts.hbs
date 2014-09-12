@@ -1,54 +1,58 @@
-{{#if tag}}
-<h4>Showing posts found with tag: {{tag}}</h4>
-<hr />
-{{/if}}
-{{#if term}}
-<h4>Showing posts found using term: {{term}}</h4>
-<hr />
-{{/if}}
-{{#if posts}}
-{{#each posts}}
-<article class="feed-post animated_elem animated_elem--fadeinright" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
-  <h2 class="post-title" itemprop="name headline">
-    <a href="{{this.url}}">{{this.title}}</a>
-  </h2>
+<div class="animated_elem animated_elem--fadeinright">
 
-  <div class="post-meta">
-    <div class="meta-left">
-      <p>
-        Posted by
-        <span itemprop="author" itemscope itemptype="http://schema.org/Person">
-          {{#if site.social.googleplus}}
-          <a href="{{site.social.googleplus}}?rel=author" target="_blank">
+  {{#if tag}}
+  <h4>Showing posts found with tag: {{tag}}</h4>
+  <hr />
+  {{/if}}
+  {{#if term}}
+  <h4>Showing posts found using term: {{term}}</h4>
+  <hr />
+  {{/if}}
+  {{#if posts}}
+  {{#each posts}}
+  <article class="feed-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+    <h2 class="post-title" itemprop="name headline">
+      <a href="{{this.url}}">{{this.title}}</a>
+    </h2>
+
+    <div class="post-meta">
+      <div class="meta-left">
+        <p>
+          Posted by
+          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+            {{#if site.social.googleplus}}
+            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
+              <span itemprop="name">{{site.author.name}}</span>
+            </a>
+            {{else}}
             <span itemprop="name">{{site.author.name}}</span>
-          </a>
-          {{else}}
-          <span itemprop="name">{{site.author.name}}</span>
-          {{/if}}
-        </span>
-        on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
-      </p>
+            {{/if}}
+          </span>
+          on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
+        </p>
+      </div>
+
+      {{#if this.tags}}
+      <div class="meta-right">
+        <p>
+          <span class="meta-label">Tags: </span>
+          <span class="meta-tags">
+          {{#each this.tags}}
+            <a href="/tag/{{this}}">{{this}}</a>
+          {{/each}}
+          </span>
+        </p>
+      </div>
+      {{/if}}
     </div>
 
-    {{#if this.tags}}
-    <div class="meta-right">
-      <p>
-        <span class="meta-label">Tags: </span>
-        <span class="meta-tags">
-        {{#each this.tags}}
-          <a href="/tag/{{this}}">{{this}}</a>
-        {{/each}}
-        </span>
-      </p>
+    <div class="post-content" itemprop="text">
+      {{this.content}}
     </div>
-    {{/if}}
-  </div>
+  </article>
+  {{/each}}
+  {{else}}
+  <h3>No posts found :(</h3>
+  {{/if}}
 
-  <div class="post-content" itemprop="text">
-    {{this.content}}
-  </div>
-</article>
-{{/each}}
-{{else}}
-<h3>No posts found :(</h3>
-{{/if}}
+</div>

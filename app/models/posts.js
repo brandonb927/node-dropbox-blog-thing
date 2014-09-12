@@ -152,7 +152,6 @@ var Posts = {
       var searchIndex = lunr(function () {
         this.field('title', { boost: 10 });
         this.field('tags', { boost: 100 });
-        this.field('content', { boost: 10000 });
         this.ref('slug');
       });
 

@@ -1,4 +1,4 @@
-@import 'bower_components/highlightjs/styles/tomorrow-night-eighties.css';
+@import 'tomorrow-night-eighties.css';
 /* Clearfix to contain floats */
 .cf:before,
 .cf:after {
@@ -3235,7 +3235,8 @@ a {
   display: inline-block;
 }
 .pagination {
-  margin-top: 2rem;
+  max-width: 47.9375rem;
+  margin: 2rem auto 0;
 }
 .pagination:before,
 .pagination:after {
