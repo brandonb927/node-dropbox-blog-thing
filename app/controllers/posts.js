@@ -100,15 +100,13 @@ module.exports = {
       }
 
       var pageData = {
-        // disable the layout because we use jQuery to hit the /search
-        // endpoint and inject the response into the DOM
-        layout      : false,
+        posts       : posts,
         term        : searchStringTerm,
-        posts       : posts
+        pagination  : false
       };
 
       if (req.accepts('html')) {
-        return res.render('posts', pageData);
+        return res.render('index', pageData);
       }
 
       if (req.accepts('json')) {

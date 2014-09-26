@@ -82,11 +82,13 @@ gulp.task('scripts', ['vendor_scripts'], function () {
 // Images task
 gulp.task('images', function () {
   return gulp.src('src/images/**/*')
-    .pipe(imagemin({
+    .pipe(
+      imagemin({
         progressive: true,
         svgoPlugins: [{ removeViewBox: false }],
         use: [ pngcrush() ]
-    }))
+      })
+    )
     .pipe(gulp.dest('public/images'));
 });
 
@@ -122,6 +124,7 @@ gulp.task('build', function () {
   return gulp.start(['templates', 'images', 'styles', 'scripts']);
 });
 
+
 // Watch task
 // gulp.task('watch', ['clean_build'], function () {
 gulp.task('watch', function () {
@@ -136,17 +139,17 @@ gulp.task('watch', function () {
   ], ['lint', 'scripts']);
 
   // Copy templates from the src directory to the public dir
-  gulp.watch(['src/views/*.hbs'], ['templates']);
+  gulp.watch('src/views/*.hbs', ['templates']);
 
   // Copy images from src to public dir
-  gulp.watch(['src/images/**/*.{png,gif,jpg,jpeg,ico}'], ['images']);
+  gulp.watch('src/images/**/*.{png,gif,jpg,jpeg,ico}', ['images']);
 
   // Watch .less files
-  gulp.watch(['src/styles/**/*.less'], ['styles']);
+  gulp.watch('src/styles/**/*.less', ['styles']);
 });
 
 // Run the server
-gulp.task('server', function () {
+gulp.task('server', ['watch'], function () {
   // gulp.start(['lint', 'templates', 'images', 'styles', 'scripts'])
   nodemon({
     script: 'server.js',

@@ -2,7 +2,6 @@ var logger        = require('morgan');
 var favicon       = require('serve-favicon');
 var hbs           = require('hbs');
 var express       = require('express');
-// var bodyParser    = require('body-parser')
 var watch         = require('watch');
 var fs            = require('fs');
 

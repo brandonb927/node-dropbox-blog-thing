@@ -219,6 +219,7 @@ a { transition: all 0.2s; }
   }
 
   .search-button {
+    display: block;
     width: 20%;
     border-top: solid 1px @white;
     border-right: solid 1px @white;
@@ -229,7 +230,8 @@ a { transition: all 0.2s; }
     transition: all .2s ease;
 
     i {
-      line-height: @input-line-height;
+      font-size: (@base-font-size * 1.25);
+      line-height: (@base-line-height * 1.25);
     }
 
     &:hover,

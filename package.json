@@ -38,6 +38,7 @@
     "gulp-imagemin": "*",
     "gulp-jshint": "*",
     "gulp-less": "*",
+    "gulp-livereload": "*",
     "gulp-minify-css": "*",
     "gulp-nodemon": "*",
     "gulp-rename": "*",

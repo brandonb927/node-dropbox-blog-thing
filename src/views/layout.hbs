@@ -65,13 +65,48 @@
     <!-- Google Analytics -->
     {{#if googleAnalytics}}
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', '{{googleAnalytics}}', '{{site.domain}}');
-      ga('require', 'displayfeatures');
-      ga('send', 'pageview');
+      /**
+       * Detect if localStorage exists in the browser
+       */
+      var hasLocalStorage = (function () {
+        try {
+          localStorage.setItem(mod, mod);
+          localStorage.removeItem(mod);
+          return true;
+        }
+        catch (exception) {
+          return false;
+        }
+      }());
+
+      if (hasLocalStorage) {
+        /**
+         * Use localstorage to store the Google tracking cookie
+         * so it's not sent to the server on every request
+         *
+         * See: https://github.com/h5bp/html5-boilerplate/issues/1444
+         */
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create', '{{googleAnalytics}}', '{{site.domain}}', {'storage': 'none','clientId':localStorage.getItem('gaClientId')});
+        ga(function(t){localStorage.setItem('gaClientId',t.get('clientId'));});
+        ga('require', 'displayfeatures');
+        ga('send','pageview');
+      } else {
+        /**
+         * Use the regular GoogleAnalytics code
+         */
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', '{{googleAnalytics}}', '{{site.domain}}');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
+      }
     </script>
     {{/if}}
   </head>
@@ -105,9 +140,9 @@
           <div class="site-search">
             <input type="search" id="input_search" class="search-input" placeholder="Search for anything!" />
 
-            <button type="button" id="button_search" class="search-button">
+            <a href="#" id="button_search" class="search-button">
               <i class="fa fa-search"></i>
-            </button>
+            </a>
           </div>
         </header>
 
@@ -139,6 +174,9 @@
             </a>
           </li>
         </ul>
+        <a href="http://forthebadge.com/">
+          <img src="http://forthebadge.com/badges/fuck-it-ship-it.svg" alt="Fuck It, Ship It.">
+        </a>
       </div>
 
       <div class="site-wrapper">

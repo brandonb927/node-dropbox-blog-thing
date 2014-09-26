@@ -5,27 +5,13 @@
   'use strict';
 
   $(document).ready(function () {
-    var $htmlBody     = $('html, body');
-    var $body         = $('body');
-    var $bodyWrapper  = $('#body_wrapper');
-    var $buttonSearch = $('#button_search');
-    var $inputSearch  = $('#input_search');
-    var $postsList    = $('#posts_list')
-    var $pagination   = $('.pagination');
-
-    var smoothStateSettings = {
-      onStart : {
-        duration: 250,
-        render: function () {
-          content.toggleAnimationClass('is-exiting');
-          $htmlBody.animate({ 'scrollTop': 0 });
-        }
-      },
-      callback: function (url, $container, $content) {
-        highlightCode();
-        initImageUnveil();
-      }
-    };
+    var $htmlBody      = $('html, body');
+    var $body          = $('body');
+    var $bodyWrapper   = $('#body_wrapper');
+    var $menuTrigger   = $('.menu-trigger');
+    var $overlay       = $('.overlay');
+    var buttonSearchId = '#button_search';
+    var inputSearchId  = '#input_search';
 
     function highlightCode () {
       $('pre code').each(function (i, e) {
@@ -43,53 +29,67 @@
       });
     }
 
-    function doSearch () {
-      var inputSearchVal = $inputSearch.val().trim().toLowerCase();
+    function doSearch (content) {
+      var inputSearchVal = $(inputSearchId).val().trim().toLowerCase();
 
       if (inputSearchVal !== '') {
-        $postsList.load(
-          '/search?q=' + encodeURIComponent(inputSearchVal),
-          function () {
-            highlightCode();
-            initImageUnveil();
-            $pagination.hide();
-          }
-        );
+        content.load('search?q=' + encodeURIComponent(inputSearchVal));
       }
     }
 
-    // init Fastclick on the body
-    FastClick.attach($body[0]);
+    // This is a hack to get smoothState to recognize things when it reloads
+    function initSite (content) {
+      highlightCode();
+      initImageUnveil();
 
-    $('.menu-trigger').on('click', function () {
+      $bodyWrapper
+        .on('click', buttonSearchId, function (e) {
+          e.preventDefault();
+          doSearch(content);
+        })
+        .on('keypress', inputSearchId, function (e) {
+          if(e.which === 13) {
+            e.preventDefault();
+            doSearch(content);
+          }
+        });
+    }
+
+    // Menu trigger click handler
+    $menuTrigger.on('click', function () {
       $body.addClass('menu-open');
     });
 
-    $('.overlay').on('click', function () {
+    // overlay click handler when menu is open
+    $overlay.on('click', function () {
       $body.removeClass('menu-open');
     });
 
-    $buttonSearch.on('click', function (e) {
-      e.preventDefault();
-      doSearch();
-    });
-
-    $inputSearch.keypress(function (e) {
-      if(e.which == 13) {
-        doSearch();
-      }
-    });
-
+    // Esc-key handler when menu is open
     $(document).keydown(function (e) {
       if (e.keyCode === 27) { // esc pressed
         $body.removeClass('menu-open');
       }
     });
 
-    highlightCode();
-    initImageUnveil();
+    var content = $bodyWrapper.smoothState({
+      prefetch:      true,
+      development:   true,
+      pageCacheSize: 4,
+      onStart: {
+        duration: 250,
+        render: function () {
+          content.toggleAnimationClass('is-exiting');
+          $htmlBody.animate({ 'scrollTop': 0 });
+        }
+      },
+      callback: function (url, $container, $content) {
+        initSite(content);
+      }
+    }).data('smoothState');
 
-    var content = $bodyWrapper.smoothState(smoothStateSettings).data('smoothState');
+    initSite(content);
+
   });
 
 })(window, document, jQuery);
