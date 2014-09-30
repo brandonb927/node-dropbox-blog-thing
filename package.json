@@ -22,6 +22,7 @@
     "moment": "*",
     "morgan": "*",
     "node-oembed-io": "*",
+    "nunjucks": "^1.0.7",
     "pagination": "*",
     "request-sync": "*",
     "serve-favicon": "*",

@@ -54,19 +54,24 @@ function getPost (filePath, callback) {
     var slug    = slugify(meta.title).toLowerCase();
     var title   = (!Array.isArray(meta.title) ? meta.title : meta.title.join(', '));
 
-    if (typeof meta.tags !== 'undefined') {
+    if (typeof(meta.tags) !== 'undefined') {
       tags = (Array.isArray(meta.tags) ? meta.tags : [meta.tags]);
+    }
+
+    if (tags[0] === '') {
+      tags = [];
     }
 
     var post = {
       date    : moment(meta.date).format(config.site.settings.formatDate),
       dateObj : moment(meta.date).toDate(),
       title   : title,
-      tags    : tags,
       slug    : slug,
+      tags    : tags,
       url     : app.locals.baseUrl + '/' + slug,
       isPage  : (meta.type === 'page' ? true : false),
     };
+
 
     renderContent(content, function (err, renderedContent) {
       post.content = renderedContent;

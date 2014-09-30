@@ -94,7 +94,7 @@ gulp.task('images', function () {
 
 // View templates task
 gulp.task('templates', function () {
-  return gulp.src('src/views/**/*.hbs')
+  return gulp.src('src/views/**/*.html')
     .pipe(gulp.dest('public/views'));
 });
 
@@ -139,7 +139,7 @@ gulp.task('watch', function () {
   ], ['lint', 'scripts']);
 
   // Copy templates from the src directory to the public dir
-  gulp.watch('src/views/*.hbs', ['templates']);
+  gulp.watch('src/views/*.html', ['templates']);
 
   // Copy images from src to public dir
   gulp.watch('src/images/**/*.{png,gif,jpg,jpeg,ico}', ['images']);

@@ -1,6 +1,7 @@
 var logger        = require('morgan');
 var favicon       = require('serve-favicon');
-var hbs           = require('hbs');
+// var hbs           = require('hbs');
+var nunjucks      = require('nunjucks');
 var express       = require('express');
 var watch         = require('watch');
 var fs            = require('fs');
@@ -16,10 +17,14 @@ var Posts         = require('./app/models/posts');
 // Use Handlebars rather than Jade
 // and setup the views folder
 app.set('views', __dirname + '/public/views');
-app.set('view engine', 'hbs');
-require('./config/hbs_helpers');
-hbs.registerPartial('posts', fs.readFileSync(__dirname + '/public/views/posts.hbs', 'utf8'));
-// hbs.registerPartials(__dirname + '/public/views/partials');
+app.set('view engine', 'nunjucks');
+
+var env = nunjucks.configure(__dirname + '/public/views', {
+  autoescape: true,
+  express:    app
+});
+
+require('./config/nunjucks_helpers')(env);
 
 // Setup some variables to be used in the site
 // and allow locals to be used in views
@@ -35,8 +40,6 @@ require('./config/shortcodes.js');
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
 
 // Setup logging
 app.use(logger('dev'));
@@ -73,7 +76,7 @@ app.use(function (req, res, next) {
 
     // Respond with an HTML page
     if (req.accepts('html')) {
-      return res.render('error', errorData);
+      return res.render('error.html', errorData);
     }
 
     // Respond with JSON
@@ -116,7 +119,7 @@ app.use(function (err, req, res, next) {
 
   // Respond with an HTML page
   if (req.accepts('html')) {
-    return res.render('error', {
+    return res.render('error.html', {
       title:  title,
       error:  error.toString(),
       url:    url

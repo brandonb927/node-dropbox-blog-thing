@@ -24,7 +24,7 @@ module.exports = {
       };
 
       if (req.accepts('html')) {
-        return res.render('index', pageData);
+        return res.render('index.html', pageData);
       }
 
       if (req.accepts('json')) {
@@ -40,7 +40,7 @@ module.exports = {
       }
 
       if (req.accepts('html')) {
-        return res.render('post', { post: post });
+        return res.render('post.html', { post: post });
       }
 
       if (req.accepts('json')) {
@@ -62,7 +62,7 @@ module.exports = {
       };
 
       if (req.accepts('html')) {
-        return res.render('index', pageData);
+        return res.render('index.html', pageData);
       }
 
       if (req.accepts('json')) {
@@ -83,7 +83,7 @@ module.exports = {
       };
 
       if (req.accepts('html')) {
-        return res.render('index', pageData);
+        return res.render('index.html', pageData);
       }
 
       if (req.accepts('json')) {
@@ -106,7 +106,7 @@ module.exports = {
       };
 
       if (req.accepts('html')) {
-        return res.render('index', pageData);
+        return res.render('index.html', pageData);
       }
 
       if (req.accepts('json')) {

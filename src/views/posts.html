@@ -1,18 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
 <div class="animated_elem animated_elem--fadeinright">
 
-  {{#if tag}}
+  {% if tag %}
   <h4>Showing posts found with tag: {{tag}}</h4>
   <hr />
-  {{/if}}
-  {{#if term}}
+  {% endif %}
+  {% if term %}
   <h4>Showing posts found using term: {{term}}</h4>
   <hr />
-  {{/if}}
-  {{#if posts}}
-  {{#each posts}}
+  {% endif %}
+  {% if posts %}
+  {% for post in posts %}
   <article class="feed-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
     <h2 class="post-title" itemprop="name headline">
-      <a href="{{this.url}}">{{this.title}}</a>
+      <a href="{{post.url}}">{{this.title}}</a>
     </h2>
 
     <div class="post-meta">
@@ -20,39 +24,40 @@
         <p>
           Posted by
           <span itemprop="author" itemscope itemptype="http://schema.org/Person">
-            {{#if site.social.googleplus}}
+            {% if site.social.googleplus}}
             <a href="{{site.social.googleplus}}?rel=author" target="_blank">
               <span itemprop="name">{{site.author.name}}</span>
             </a>
-            {{else}}
+            {% else %}
             <span itemprop="name">{{site.author.name}}</span>
-            {{/if}}
+            {% endif %}
           </span>
-          on <time datetime="{{this.dateObj}}" itemprop="datePublished">{{this.date}}</time>
+          on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>
         </p>
       </div>
 
-      {{#if this.tags}}
+      {% if post.tags %}
       <div class="meta-right">
         <p>
           <span class="meta-label">Tags: </span>
           <span class="meta-tags">
-          {{#each this.tags}}
-            <a href="/tag/{{this}}">{{this}}</a>
-          {{/each}}
+          {% for tag in post.tags %}
+            <a href="/tag/{{tag}}">{{tag}}</a>
+          {% endfor %}
           </span>
         </p>
       </div>
-      {{/if}}
+      {% endif %}
     </div>
 
     <div class="post-content" itemprop="text">
-      {{this.content}}
+      {{post.content}}
     </div>
   </article>
-  {{/each}}
-  {{else}}
+  {% endfor %}
+  {% else %}
   <h3>No posts found :(</h3>
-  {{/if}}
-
+  {% endif %}
 </div>
+
+{% endblock %}

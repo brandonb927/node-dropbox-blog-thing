@@ -2,14 +2,14 @@
 <html prefix="og: http://ogp.me/ns#" xmlns:og="http://ogp.me/ns#" class="no-js">
   <head>
     <meta charset="utf-8">
-    <title>{{site.title}} | {{#if post}}{{post.title}}{{else}}{{striptags site.description}}{{/if}}</title>
+    <title>{{site.title}} | {% if post %}{{post.title}}{% else %}{{site.description|striptags}}{% endif %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="author" content="{{site.author.name}}">
-    <meta name="description" content="{{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}">
+    <meta name="description" content="{% if post %}{{post.title}}{% else %}{{site.description}}{% endif %}">
 
     <base href="{{baseUrl}}/">
 
@@ -19,16 +19,16 @@
     <meta property="og:image" content="{{gravatar}}">
     <meta property="og:title" content="{{site.title}}">
     <meta property="og:url" content="{{baseUrl}}">
-    <meta property="og:description" content="{{#if post}}{{post.title}}{{else}}{{site.description}}{{/if}}">
+    <meta property="og:description" content="{% if post %}{{post.title}}{% else %}{{site.description}}{% endif %}">
 
-    {{#if site.social.twitter}}
+    {% if site.social.twitter %}
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@{{site.social.twitter}}">
     <meta name="twitter:creator" content="@{{site.social.twitter}}">
     <meta name="twitter:image:src" content="{{gravatar}}">
     <meta name="twitter:domain" content="{{baseUrl}}">
-    {{/if}}
+    {% endif %}
 
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{baseURL}}/rss.xml">
 
@@ -46,24 +46,24 @@
     <meta name="msapplication-TileColor" content="#D83434">
     <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
-    {{#if debug}}
+    {% if debug %}
     <link href="/assets/css/site.css" rel="stylesheet">
-    {{else}}
+    {% else %}
     <link href="/assets/css/site.min.css" rel="stylesheet">
-    {{/if}}
+    {% endif %}
 
     <!-- Highlight.js -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/tomorrow-night-eighties.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 
-    {{#if debug}}
+    {% if debug %}
     <script src="/assets/js/site-pack.js"></script>
-    {{else}}
+    {% else %}
     <script src="/assets/js/site-pack.min.js"></script>
-    {{/if}}
+    {% endif %}
 
     <!-- Google Analytics -->
-    {{#if googleAnalytics}}
+    {% if googleAnalytics %}
     <script>
       /**
        * Detect if localStorage exists in the browser
@@ -108,7 +108,7 @@
         ga('send', 'pageview');
       }
     </script>
-    {{/if}}
+    {% endif %}
   </head>
 
   <body itemscope itemtype="http://schema.org/WebPage">
@@ -122,20 +122,20 @@
 
           <div class="site-bio">
             <img src="{{gravatar}}" class="site-avatar" />
-            <p>{{{site.description}}}</p>
+            <p>{{site.description}}</p>
           </div>
 
-          {{#if pages}}
+          {% if pages %}
           <nav class="header-nav" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
             <ul class="nav-menu">
-              {{#each pages}}
+              {% for page in pages %}
               <li itemprop="url">
-                <a href="{{site.baseUrl}}{{this.url}}" title="{{this.title}}" itemprop="name">{{this.title}}</a>
+                <a href="{{site.baseUrl}}{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
               </li>
-              {{/each}}
+              {% endfor %}
             </ul>
           </nav>
-          {{/if}}
+          {% endif %}
 
           <div class="site-search">
             <input type="search" id="input_search" class="search-input" placeholder="Search for anything!" />
@@ -147,27 +147,27 @@
         </header>
 
         <ul class="social-icons">
-          {{#if site.social.twitter}}
+          {% if site.social.twitter %}
           <li>
             <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
               <i class="fa fa-twitter-square"></i>
             </a>
           </li>
-          {{/if}}
-          {{#if site.social.github}}
+          {% endif %}
+          {% if site.social.github %}
           <li>
             <a href="https://github.com/{{site.social.github}}" title="Github">
               <i class="fa fa-github-square"></i>
             </a>
           </li>
-          {{/if}}
-          {{#if site.social.googleplus}}
+          {% endif %}
+          {% if site.social.googleplus %}
           <li>
             <a href="{{site.social.googleplus}}?rel=author" title="Google+">
               <i class="fa fa-google-plus-square"></i>
             </a>
           </li>
-          {{/if}}
+          {% endif %}
           <li>
             <a href="{{baseUrl}}/rss.xml" title="RSS">
               <i class="fa fa-rss-square"></i>
@@ -186,7 +186,7 @@
           <main class="grid gutter" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
             <div class="column full-width">
               <div class="module">
-                {{{body}}}
+                {% block body %}{% endblock %}
               </div>
             </div>
           </main>
