@@ -17,28 +17,21 @@ var stylish       = require('jshint-stylish');
 // Styles tasks
 gulp.task('vendor_fonts', function () {
   return gulp.src([
-      'bower_components/fontawesome/fonts/*'
+      'bower_components/font-awesome/fonts/*'
     ])
     .pipe(gulp.dest('public/assets/fonts'));
 });
 
-gulp.task('styles_compile', ['vendor_fonts'], function () {
+gulp.task('styles', ['vendor_fonts'], function () {
   return gulp.src([
       'src/styles/site.less'
     ])
-    // .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(autoprefixer())
-    // .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/assets/css'));
-});
-
-gulp.task('styles', ['styles_compile'], function () {
-  return gulp.src([
-      'public/assets/css/site.css'
-    ])
     .pipe(minifycss())
     .pipe(rename({ suffix: '.min' }))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/assets/css'));
 });
 
@@ -72,10 +65,10 @@ gulp.task('scripts', ['vendor_scripts'], function () {
     ])
     .pipe(sourcemaps.init())
     .pipe(concat('site-pack.js'))
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/assets/js'))
     .pipe(uglify())
     .pipe(rename({ suffix: '.min' }))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/assets/js'));
 });
 
@@ -135,7 +128,6 @@ gulp.task('watch', function () {
     'config/*.js',
     'src/scripts/site.js',
     '!src/scripts/vendor-pack.js',
-    // 'test/**/*.js'
   ], ['lint', 'scripts']);
 
   // Copy templates from the src directory to the public dir
