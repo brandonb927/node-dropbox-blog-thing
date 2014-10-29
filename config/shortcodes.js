@@ -15,7 +15,7 @@ function getEmbedCode (url) {
     var embed = JSON.parse(res.getBody().toString('utf-8')).html;
   }
   catch (e) {
-    console.error(e);
+    console.error('Error with embed:', e);
     embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s and issue with this embed!</p><p>' + url + '</p></div>';
   }
   return embed;
