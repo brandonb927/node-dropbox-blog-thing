@@ -1,3 +1,4 @@
+var clean         = require('del');
 var gulp          = require('gulp');
 var autoprefixer  = require('gulp-autoprefixer');
 var concat        = require('gulp-concat');
@@ -7,7 +8,6 @@ var less          = require('gulp-less');
 var minifycss     = require('gulp-minify-css');
 var nodemon       = require('gulp-nodemon');
 var rename        = require('gulp-rename');
-var clean         = require('gulp-rimraf');
 var sourcemaps    = require('gulp-sourcemaps');
 var uglify        = require('gulp-uglify');
 var pngcrush      = require('imagemin-pngcrush');

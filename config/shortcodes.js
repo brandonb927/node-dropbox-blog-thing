@@ -1,23 +1,23 @@
-var shortcode     = require('shortcode-parser');
-var requestSync   = require('request-sync');
+var shortcode = require('shortcode-parser');
+var request   = require('sync-request');
 
 
 /**
- * We use httpsync in getEmbedCode because we need to return the result of the http
+ * We use sync-request in getEmbedCode because we need to return the result of the http
  * call directly, not through a callback. If `shortcode-parser` allowed
  * async functions, we'd use something like `request` here (which was initially
  * used) but it proved impossible to use in this situation
  */
 function getEmbedCode (url) {
-  // console.log(url);
   if (typeof url === 'undefined') return;
-  var res = requestSync(url);
-  var embed = JSON.parse(res.body.toString('utf-8')).html;
-  // console.log(embed);
-  if (!embed) {
+  try {
+    var res = request('GET', url);
+    var embed = JSON.parse(res.getBody().toString('utf-8')).html;
+  }
+  catch (e) {
+    console.error(e);
     embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s and issue with this embed!</p><p>' + url + '</p></div>';
   }
-
   return embed;
 };
 
