@@ -46,21 +46,13 @@
     <meta name="msapplication-TileColor" content="#D83434">
     <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
-    {% if debug %}
-    <link href="/assets/css/site.css" rel="stylesheet">
-    {% else %}
     <link href="/assets/css/site.min.css" rel="stylesheet">
-    {% endif %}
 
     <!-- Highlight.js -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/tomorrow-night-eighties.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 
-    {% if debug %}
-    <script src="/assets/js/site-pack.js"></script>
-    {% else %}
     <script src="/assets/js/site-pack.min.js"></script>
-    {% endif %}
 
     <!-- Google Analytics -->
     {% if googleAnalytics %}
