@@ -50,7 +50,7 @@ gulp.task('vendor_scripts', function () {
   return gulp.src([
       'bower_components/jquery/dist/jquery.js',
       'bower_components/fastclick/lib/fastclick.js',
-      'bower_components/highlightjs/lib/highlight.pack.js',
+      'bower_components/highlightjs/highlight.pack.js',
       'bower_components/jquery-unveil/jquery.unveil.js',
       'bower_components/smoothstate/jquery.smoothstate.js'
     ])
