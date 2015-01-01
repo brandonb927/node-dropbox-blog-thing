@@ -6,6 +6,9 @@ var express       = require('express');
 var watch         = require('watch');
 var fs            = require('fs');
 
+var productionLogString = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"';
+var loggingString = ((process.env.NODE_ENV === 'production') ? productionLogString : 'dev')
+
 var app = module.exports = express();
 
 var config        = require('./config.json');
@@ -42,7 +45,7 @@ app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Setup logging
-app.use(logger('dev'));
+app.use(logger(loggingString));
 
 // Routes & Middleware
 app.use(routes);
