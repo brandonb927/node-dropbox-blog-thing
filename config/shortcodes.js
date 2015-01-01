@@ -30,22 +30,49 @@ shortcode.add('codepen', function (str, opts) {
   return getEmbedCode('http://codepen.io/api/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
 });
 
+shortcode.add('instagram', function (str, opts) {
+  return getEmbedCode('http://api.instagram.com/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+});
+
+shortcode.add('slideshare', function (str, opts) {
+  return getEmbedCode('http://www.slideshare.net/api/oembed/2?url=' + encodeURIComponent(opts.url) + '&format=json');
+});
+
+shortcode.add('soundcloud', function (str, opts) {
+  return getEmbedCode('http://soundcloud.com/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+});
+
 shortcode.add('twitter', function (str, opts) {
   return getEmbedCode('https://api.twitter.com/1/statuses/oembed.json?url=' + encodeURIComponent(opts.url));
 });
 
-// The rest of the embeds use the oembed.io api
+shortcode.add('vimeo', function (str, opts) {
+  return getEmbedCode('https://vimeo.com/oembed.json?url=' + encodeURIComponent(opts.url));
+});
+
+shortcode.add('vine', function (str, opts) {
+  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url));
+});
+
+shortcode.add('youtube', function (str, opts) {
+  return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url));
+});
+
+
+/**
+ * The rest of the embeds use the oembed.io api
+ */
 var embeds = [
-  'instagram',
-  'slideshare',
-  'soundcloud',
-  'vimeo',
-  'vine',
-  'youtube'
+  // Add the name of a shortcode you want to have
+  // that doesn't have their own oembed endpoint
 ];
 
 embeds.forEach(function (embed, index) {
   shortcode.add(embed, function (str, opts) {
-    return getEmbedCode('http://oembed.io/api?url=' + encodeURIComponent(opts.url));
+    if (config.hasOwnProperty(embedKit)) {
+      return getEmbedCode('https://embedkit.com/api/v1/embed?api_key=' + config.embedKit + '&url=' + encodeURIComponent(opts.url));
+    } else {
+      return getEmbedCode('http://oembed.io/api?url=' + encodeURIComponent(opts.url));
+    }
   });
 });
