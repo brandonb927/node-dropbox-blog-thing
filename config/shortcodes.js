@@ -1,3 +1,4 @@
+var winston   = require('winston');
 var shortcode = require('shortcode-parser');
 var request   = require('sync-request');
 
@@ -15,8 +16,8 @@ function getEmbedCode (url) {
     var embed = JSON.parse(res.getBody().toString('utf-8')).html;
   }
   catch (e) {
-    console.error('Error with embed:', e);
-    embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s and issue with this embed!</p><p>' + url + '</p></div>';
+    winston.error('Error with embed "' + url + '":', e.statusCode);
+    embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s an issue with this embed!</p><p>' + url + '</p></div>';
   }
   return embed;
 };
@@ -47,7 +48,7 @@ shortcode.add('twitter', function (str, opts) {
 });
 
 shortcode.add('vimeo', function (str, opts) {
-  return getEmbedCode('https://vimeo.com/oembed.json?url=' + encodeURIComponent(opts.url));
+  return getEmbedCode('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('vine', function (str, opts) {
