@@ -9,15 +9,28 @@ var request   = require('sync-request');
  * async functions, we'd use something like `request` here (which was initially
  * used) but it proved impossible to use in this situation
  */
-function getEmbedCode (url, responsive) {
+function getEmbedCode (url, options) {
   if (typeof url === 'undefined') return;
-  if (typeof responsive === 'undefined') responsive = false;
+
+  var secure      = false;
+  var responsive  = false;
+
+  if (typeof options !== 'undefined') {
+    if (options.hasOwnProperty('secure')) secure = options.secure;
+    if (options.hasOwnProperty('responsive')) responsive = options.responsive;
+  }
 
   try {
-    var res = request('GET', url);
-    var embed = JSON.parse(res.getBody().toString('utf-8')).html;
     if (process.env.NODE_ENV !== 'production') {
       winston.info('[Shortcode] Getting embed for ' + url + '');
+    }
+
+    var httpResp  = request('GET', url);
+    var res       = JSON.parse(httpResp.getBody().toString('utf-8'));
+    var embed     = res.html;
+
+    if (secure) {
+      embed = embed.replace(/^http:\/\//i, 'https://'); // Youtube hasn't added HTTPS support to oembed yet :(
     }
   }
   catch (e) {
@@ -58,15 +71,22 @@ shortcode.add('twitter', function (str, opts) {
 });
 
 shortcode.add('vimeo', function (str, opts) {
-  return getEmbedCode('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent(opts.url), true);
+  return getEmbedCode('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent(opts.url), {
+    responsive: true
+  });
 });
 
 shortcode.add('vine', function (str, opts) {
-  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url), true);
+  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url), {
+    responsive: true
+  });
 });
 
 shortcode.add('youtube', function (str, opts) {
-  return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url), true);
+  return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url), {
+    responsive: true,
+    secure: true
+  });
 });
 
 
