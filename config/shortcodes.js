@@ -9,8 +9,10 @@ var request   = require('sync-request');
  * async functions, we'd use something like `request` here (which was initially
  * used) but it proved impossible to use in this situation
  */
-function getEmbedCode (url) {
+function getEmbedCode (url, responsive) {
   if (typeof url === 'undefined') return;
+  if (typeof responsive === 'undefined') responsive = false;
+
   try {
     var res = request('GET', url);
     var embed = JSON.parse(res.getBody().toString('utf-8')).html;
@@ -22,6 +24,11 @@ function getEmbedCode (url) {
     winston.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
     embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s an issue with this embed!</p><p>' + url + '</p></div>';
   }
+
+  if (responsive) {
+    return '<div class="embed-container">' + embed + '</div>';
+  }
+
   return embed;
 };
 
@@ -51,15 +58,15 @@ shortcode.add('twitter', function (str, opts) {
 });
 
 shortcode.add('vimeo', function (str, opts) {
-  return getEmbedCode('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent(opts.url));
+  return getEmbedCode('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent(opts.url), true);
 });
 
 shortcode.add('vine', function (str, opts) {
-  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url));
+  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url), true);
 });
 
 shortcode.add('youtube', function (str, opts) {
-  return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url));
+  return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url), true);
 });
 
 
