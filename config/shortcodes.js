@@ -77,9 +77,7 @@ shortcode.add('vimeo', function (str, opts) {
 });
 
 shortcode.add('vine', function (str, opts) {
-  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url), {
-    responsive: true
-  });
+  return getEmbedCode('https://vine.co/oembed.json?url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('youtube', function (str, opts) {
