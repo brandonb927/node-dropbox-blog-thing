@@ -14,9 +14,12 @@ function getEmbedCode (url) {
   try {
     var res = request('GET', url);
     var embed = JSON.parse(res.getBody().toString('utf-8')).html;
+    if (process.env.NODE_ENV !== 'production') {
+      winston.info('[Shortcode] Getting embed for ' + url + '');
+    }
   }
   catch (e) {
-    winston.error('Error with embed "' + url + '":', e.statusCode);
+    winston.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
     embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s an issue with this embed!</p><p>' + url + '</p></div>';
   }
   return embed;
@@ -28,19 +31,19 @@ shortcode.add('gist', function(str, opts) {
 });
 
 shortcode.add('codepen', function (str, opts) {
-  return getEmbedCode('http://codepen.io/api/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+  return getEmbedCode('https://codepen.io/api/oembed?format=json&url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('instagram', function (str, opts) {
-  return getEmbedCode('http://api.instagram.com/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+  return getEmbedCode('https://api.instagram.com/oembed?format=json&url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('slideshare', function (str, opts) {
-  return getEmbedCode('http://www.slideshare.net/api/oembed/2?url=' + encodeURIComponent(opts.url) + '&format=json');
+  return getEmbedCode('https://www.slideshare.net/api/oembed/2?format=json&url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('soundcloud', function (str, opts) {
-  return getEmbedCode('http://soundcloud.com/oembed?url=' + encodeURIComponent(opts.url) + '&format=json');
+  return getEmbedCode('http://soundcloud.com/oembed?format=json&url=' + encodeURIComponent(opts.url));
 });
 
 shortcode.add('twitter', function (str, opts) {
@@ -60,9 +63,7 @@ shortcode.add('youtube', function (str, opts) {
 });
 
 
-/**
- * The rest of the embeds use the oembed.io api
- */
+// The rest of the embeds use the oembed.io api
 var embeds = [
   // Add the name of a shortcode you want to have
   // that doesn't have their own oembed endpoint

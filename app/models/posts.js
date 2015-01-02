@@ -73,7 +73,6 @@ function getPost (filePath, callback) {
       isPage  : (meta.type === 'page' ? true : false),
     };
 
-
     renderContent(content, function (err, renderedContent) {
       post.content = renderedContent;
       post.text    = htmlToText.fromString(content);
