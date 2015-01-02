@@ -32,7 +32,6 @@ function getEmbedCode (url, options) {
     if (secure) {
       embed = embed.replace(/http:\/\//i, 'https://'); // Youtube hasn't added HTTPS support to oembed yet :(
     }
-    console.log(embed);
   }
   catch (e) {
     winston.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
