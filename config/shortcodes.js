@@ -30,8 +30,9 @@ function getEmbedCode (url, options) {
     var embed     = res.html;
 
     if (secure) {
-      embed = embed.replace(/^http:\/\//i, 'https://'); // Youtube hasn't added HTTPS support to oembed yet :(
+      embed = embed.replace(/http:\/\//i, 'https://'); // Youtube hasn't added HTTPS support to oembed yet :(
     }
+    console.log(embed);
   }
   catch (e) {
     winston.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
