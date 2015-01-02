@@ -29,8 +29,9 @@
     "shortcode-parser": "*",
     "sitemap": "*",
     "slug": "*",
-    "sync-request": "^1.0.1",
-    "watch": "*"
+    "sync-request": "*",
+    "watch": "*",
+    "winston": "*"
   },
   "private": true,
   "devDependencies": {

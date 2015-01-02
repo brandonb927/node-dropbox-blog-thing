@@ -1,3 +1,4 @@
+var winston       = require('winston');
 var fs            = require('fs');
 var cache         = require('memory-cache');
 var lunr          = require('lunr');
@@ -107,7 +108,7 @@ function getAllPosts (includePages, callback) {
       }
     });
 
-    // console.log('[Cache] Getting all posts from cache');
+    // winston.info('[Cache] Getting all posts from cache');
     return callback(null, postsArr);
   }
 
@@ -167,15 +168,18 @@ var Posts = {
         searchIndex.add(posts[i]);
       }
 
-      console.log('[Cache] Adding posts to cache');
+      winston.info('[Cache] Adding posts to cache');
       cache.put('posts', postsAssoc);
-      // console.log('[Cache] Posts cache size', cache.size());
-      // console.log('[Cache] Posts cache memsize', cache.memsize());
 
-      console.log('[Cache] Adding posts to search index');
+      if (process.env.NODE_ENV !== 'production') {
+        winston.info('[Cache] Posts cache size', cache.size());
+        winston.info('[Cache] Posts cache memsize', cache.memsize());
+      }
+
+      winston.info('[Cache] Adding posts to search index');
       cache.put('searchIndex', searchIndex);
 
-      console.log('[Cache] %d posts indexed and added to cache', posts.length);
+      winston.info('[Cache] %d posts indexed and added to cache', posts.length);
 
       if (typeof callback !== 'undefined') {
         callback();

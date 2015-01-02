@@ -1,20 +1,20 @@
 var logger        = require('morgan');
+var winston       = require('winston');
 var favicon       = require('serve-favicon');
-// var hbs           = require('hbs');
 var nunjucks      = require('nunjucks');
 var express       = require('express');
 var watch         = require('watch');
 var fs            = require('fs');
 
-var productionLogString = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"';
-var loggingString = ((process.env.NODE_ENV === 'production') ? productionLogString : 'dev')
-
-var app = module.exports = express();
+var app           = module.exports = express();
 
 var config        = require('./config.json');
 var routes        = require('./config/routes');
 var port          = process.env.PORT || config.port;
 var Posts         = require('./app/models/posts');
+
+var productionLogString = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"';
+var loggingString       = ((process.env.NODE_ENV === 'production') ? productionLogString : 'dev');
 
 
 // Use Handlebars rather than Jade
@@ -113,7 +113,7 @@ app.use(function (err, req, res, next) {
   res.status(statusCode);
 
   if (process.env.NODE_ENV !== 'production') {
-    console.log(errorDetail);
+    winston.error(errorDetail);
   }
 
   var title = statusCode + ': ' + statusText;
@@ -166,13 +166,12 @@ Posts.initCache(function () {
       // f was changed
       Posts.initCache();
     }
-    // Posts.initCache();
   });
 
   // Start this server!
   app.listen(port);
 
-  console.log('All systems ready to go! The magic happens on port ' + port);
+  winston.info('All systems ready to go! The magic happens on port ' + port);
 });
 
 module.exports = app;
