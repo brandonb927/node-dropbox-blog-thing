@@ -84,7 +84,6 @@ shortcode.add('vine', function (str, opts) {
 
 shortcode.add('youtube', function (str, opts) {
   return getEmbedCode('https://youtube.com/oembed?url=' + encodeURIComponent(opts.url), {
-    responsive: true,
     secure: true
   });
 });
