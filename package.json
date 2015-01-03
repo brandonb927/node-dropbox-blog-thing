@@ -31,7 +31,8 @@
     "slug": "*",
     "sync-request": "*",
     "watch": "*",
-    "winston": "*"
+    "winston": "*",
+    "winston-papertrail": "*"
   },
   "private": true,
   "devDependencies": {

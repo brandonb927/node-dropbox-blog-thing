@@ -1,5 +1,4 @@
-var logger        = require('morgan');
-var winston       = require('winston');
+var morgan        = require('morgan');
 var favicon       = require('serve-favicon');
 var nunjucks      = require('nunjucks');
 var express       = require('express');
@@ -10,14 +9,13 @@ var app           = module.exports = express();
 
 var config        = require('./config.json');
 var routes        = require('./config/routes');
+var logger        = require('./config/logger');
 var port          = process.env.PORT || config.port;
 var Posts         = require('./app/models/posts');
 
-var productionLogString = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"';
-var loggingString       = ((process.env.NODE_ENV === 'production') ? productionLogString : 'dev');
+var loggingString = ((process.env.NODE_ENV === 'production') ? config.logging.morgan : 'dev');
 
-
-// Use Handlebars rather than Jade
+// Use Nunjucks rather than Jade
 // and setup the views folder
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'nunjucks');
@@ -27,6 +25,7 @@ var env = nunjucks.configure(__dirname + '/public/views', {
   express:    app
 });
 
+// Setup some nunjucks helpers
 require('./config/nunjucks_helpers')(env);
 
 // Setup some variables to be used in the site
@@ -45,7 +44,7 @@ app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Setup logging
-app.use(logger(loggingString));
+app.use(morgan(loggingString, { 'stream': logger.stream }));
 
 // Routes & Middleware
 app.use(routes);
@@ -113,7 +112,7 @@ app.use(function (err, req, res, next) {
   res.status(statusCode);
 
   if (process.env.NODE_ENV !== 'production') {
-    winston.error(errorDetail);
+    logger.error(errorDetail);
   }
 
   var title = statusCode + ': ' + statusText;
@@ -171,7 +170,7 @@ Posts.initCache(function () {
   // Start this server!
   app.listen(port);
 
-  winston.info('All systems ready to go! The magic happens on port ' + port);
+  logger.info('All systems ready to go! The magic happens on port ' + port);
 });
 
 module.exports = app;

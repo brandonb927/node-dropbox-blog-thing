@@ -1,6 +1,8 @@
-var winston   = require('winston');
 var shortcode = require('shortcode-parser');
 var request   = require('sync-request');
+
+var logger    = require('./logger');
+var config    = require('../config.json');
 
 
 /**
@@ -22,7 +24,7 @@ function getEmbedCode (url, options) {
 
   try {
     if (process.env.NODE_ENV !== 'production') {
-      winston.info('[Shortcode] Getting embed for ' + url + '');
+      logger.info('[Shortcode] Getting embed for ' + url + '');
     }
 
     var httpResp  = request('GET', url);
@@ -34,7 +36,7 @@ function getEmbedCode (url, options) {
     }
   }
   catch (e) {
-    winston.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
+    logger.error('[Shortcode] Error with embed "' + url + '":', e.statusCode);
     embed = '<div class="embed-error"><p><strong>Error</strong>: There\'s an issue with this embed!</p><p>' + url + '</p></div>';
   }
 
