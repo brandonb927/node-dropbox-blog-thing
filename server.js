@@ -1,17 +1,17 @@
-var morgan        = require('morgan');
-var favicon       = require('serve-favicon');
-var nunjucks      = require('nunjucks');
-var express       = require('express');
-var watch         = require('watch');
-var fs            = require('fs');
+var morgan    = require('morgan');
+var favicon   = require('serve-favicon');
+var nunjucks  = require('nunjucks');
+var express   = require('express');
+var chokidar  = require('chokidar');
+var fs        = require('fs');
 
-var app           = module.exports = express();
+var app       = module.exports = express();
 
-var config        = require('./config.json');
-var routes        = require('./config/routes');
-var logger        = require('./config/logger');
-var port          = process.env.PORT || config.port;
-var Posts         = require('./app/models/posts');
+var config    = require('./config.json');
+var routes    = require('./config/routes');
+var logger    = require('./config/logger');
+var port      = process.env.PORT || config.port;
+var Posts     = require('./app/models/posts');
 
 var loggingString = ((process.env.NODE_ENV === 'production') ? config.logging.morgan : 'dev');
 
@@ -145,32 +145,34 @@ app.use(function (err, req, res, next) {
 
 // Setup the posts cache
 Posts.initCache(function () {
-
-  // Add pages for use in navigation
-  Posts.getAllPages(function (err, pages) {
-    app.locals.pages = pages;
+  // Setup file-watching in posts folder
+  // to re-fill post cache when files are updated
+  var watcher = chokidar.watch(__dirname + '/posts', {
+    ignored: function (_path) {
+      if (_path.match(/\./) || _path.match(/Icon/)) {
+        return !_path.match(/\.(md|markdown|txt)$/);
+      }
+    },
+    persistent: true,
+    ignoreInitial: true
   });
 
-  // Setup file-watching in posts folder to re-fill post cache when files are updated
-  watch.watchTree('./posts', function (f, curr, prev) {
-    if (typeof f == "object" && prev === null && curr === null) {
-      // Finished walking the tree
-    } else if (prev === null) {
-      // f is a new file
-      Posts.initCache();
-    } else if (curr.nlink === 0) {
-      // f was removed
-      Posts.initCache();
-    } else {
-      // f was changed
-      Posts.initCache();
-    }
+  watcher.on('add', function (filename) {
+    logger.debug('[ADDED]', filename);
+    Posts.initCache();
+  })
+  .on('change', function (filename) {
+    logger.debug('[CHANGED]', filename);
+    Posts.initCache();
+  })
+  .on('unlink', function (filename) {
+    logger.debug('[REMOVED]', filename);
+    Posts.initCache();
+  })
+  .on('ready', function () {
+    app.listen(port);
+    logger.info('All systems ready to go! The magic happens on port ' + port);
   });
-
-  // Start this server!
-  app.listen(port);
-
-  logger.info('All systems ready to go! The magic happens on port ' + port);
 });
 
 module.exports = app;

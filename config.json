@@ -21,8 +21,8 @@
       "png" : "https://dl.dropbox.com/u/3408044/brandonb.io/logo-144.png"
     }
   },
-  "embedKit": "s_547fedbc4e6c5547fedbc4e74f547fedbc4e7df",
-  "googleAnalytics": "UA-32422940-2",
+  "embedKit": "",
+  "googleAnalytics": "",
   "disqus": {
     "shortname": "brandonbrownsblog"
   },
@@ -32,8 +32,8 @@
   "logging": {
     "morgan": "[:date[web]] :remote-addr - :method :url :status (:response-time ms) \":referrer\" \":user-agent\"",
     "papertrail": {
-      "host": "logs2.papertrailapp.com",
-      "port": 43286
+      "host": "",
+      "port": 12345
     }
   }
 }

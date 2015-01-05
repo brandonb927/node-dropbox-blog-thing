@@ -1,11 +1,12 @@
 var fs            = require('fs');
-var cache         = require('memory-cache');
 var lunr          = require('lunr');
-var hbs           = require('hbs');
+var cache         = require('memory-cache');
+var nunjucks      = require('nunjucks');
 var htmlToText    = require('html-to-text');
 var marked        = require('marked');
 var moment        = require('moment');
 var pagination    = require('pagination');
+var path          = require('path');
 var slugify       = require('slug');
 var shortcode     = require('shortcode-parser');
 
@@ -15,6 +16,7 @@ var renderer      = new marked.Renderer();
 var app           = require('../../server');
 var config        = require('../../config.json');
 var logger        = require('../../config/logger');
+
 
 
 // Wrap images in a div to center them
@@ -32,7 +34,7 @@ var markedOptions = {
 
 // Return the HTML-safe content that will be rendered to the page
 function renderContent (content, callback) {
-  callback(null, new hbs.handlebars.SafeString(content));
+  callback(null, new nunjucks.runtime.SafeString(content));
 }
 
 // Render the shortcodes on the page
@@ -140,51 +142,8 @@ function getAllPosts (includePages, callback) {
   callback(null, posts);
 }
 
+
 var Posts = {
-  // Initialize the posts cache
-  initCache: function (callback) {
-    // Clear the current posts cache
-    cache.del('posts');
-
-    // Get all the posts
-    getAllPosts(true, function (err, posts) {
-      if (err || !posts) {
-        return callback(Error('Posts not found :('));
-      }
-
-      var postsAssoc = [];
-
-      var searchIndex = lunr(function () {
-        this.field('title', { boost: 10 });
-        this.field('tags', { boost: 100 });
-        this.ref('slug');
-      });
-
-      for (var i in posts) {
-        var postObj = {};
-        postObj[posts[i].slug] = posts[i];
-        postsAssoc.push(postObj);
-        searchIndex.add(posts[i]);
-      }
-
-      logger.info('[Cache] Adding posts to cache');
-      cache.put('posts', postsAssoc);
-
-      if (process.env.NODE_ENV !== 'production') {
-        logger.info('[Cache] Posts cache size', cache.size());
-        logger.info('[Cache] Posts cache memsize', cache.memsize());
-      }
-
-      logger.info('[Cache] Adding posts to search index');
-      cache.put('searchIndex', searchIndex);
-
-      logger.info('[Cache] %d posts indexed and added to cache', posts.length);
-
-      if (typeof callback !== 'undefined') {
-        callback();
-      }
-    });
-  },
 
   // Get all posts
   getAll: function (includePages, callback) {
@@ -338,7 +297,58 @@ var Posts = {
 
       callback(null, resultsArray);
     });
+  },
+
+  // Initialize the posts cache
+  initCache: function (callback) {
+    // Clear the current posts cache
+    cache.del('posts');
+
+    // Get all the posts
+    getAllPosts(true, function (err, posts) {
+      if (err || !posts) {
+        return callback(Error('Posts not found :('));
+      }
+
+      var postsAssoc = [];
+
+      var searchIndex = lunr(function () {
+        this.field('title', { boost: 10 });
+        this.field('tags', { boost: 100 });
+        this.ref('slug');
+      });
+
+      posts.forEach(function (post, i) {
+        var postObj = {};
+        postObj[post.slug] = post;
+        postsAssoc.push(postObj);
+        searchIndex.add(post);
+      });
+
+      logger.info('[Cache] Adding posts to cache');
+      cache.put('posts', postsAssoc);
+
+      if (process.env.NODE_ENV !== 'production') {
+        logger.info('[Cache] Posts cache size', cache.size());
+        logger.info('[Cache] Posts cache memsize', cache.memsize());
+      }
+
+      logger.info('[Cache] Adding posts to search index');
+      cache.put('searchIndex', searchIndex);
+
+      logger.info('[Cache] %d posts indexed and added to cache', posts.length);
+
+      // Add pages for use in navigation
+      Posts.getAllPages(function (err, pages) {
+        app.locals.pages = pages;
+      });
+
+      if (typeof callback !== 'undefined') {
+        callback();
+      }
+    });
   }
+
 };
 
 module.exports = Posts;

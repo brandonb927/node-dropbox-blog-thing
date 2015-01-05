@@ -10,11 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "async": "*",
+    "chokidar": "*",
     "del": "*",
     "express": "*",
     "feed": "*",
     "gravatar": "*",
-    "hbs": "*",
     "html-to-text": "*",
     "lunr": "*",
     "marked": "*",
@@ -22,7 +22,6 @@
     "memory-cache": "*",
     "moment": "*",
     "morgan": "*",
-    "node-oembed-io": "*",
     "nunjucks": "*",
     "pagination": "*",
     "serve-favicon": "*",
@@ -30,7 +29,6 @@
     "sitemap": "*",
     "slug": "*",
     "sync-request": "*",
-    "watch": "*",
     "winston": "*",
     "winston-papertrail": "*"
   },
