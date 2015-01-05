@@ -4,7 +4,6 @@
 var winston = require('winston');
 var config  = require('../config.json');
 
-require('winston-papertrail').Papertrail;
 
 var logger = new winston.Logger({
   colors: {
@@ -30,17 +29,21 @@ var logger = new winston.Logger({
 });
 
 if (config.logging.papertrail.host && config.logging.papertrail.port) {
-  logger.transports.papertrail = new winston.transports.Papertrail({
-    host: config.logging.papertrail.host,
-    port: config.logging.papertrail.port,
-    logFormat: function (level, message) {
-      return '[' + level + '] ' + message;
-    },
-    level:            'info',
-    json:             true,
-    colorize:         false,
-    handleExceptions: true
-  });
+  require('winston-papertrail').Papertrail;
+  logger.add(
+    winston.transports.Papertrail,
+    {
+      host: config.logging.papertrail.host,
+      port: config.logging.papertrail.port,
+      logFormat: function (level, message) {
+        return '[' + level + '] ' + message;
+      },
+      level:            'info',
+      json:             true,
+      colorize:         false,
+      handleExceptions: true
+    }
+  );
 }
 
 module.exports = logger;
