@@ -23,9 +23,9 @@
       <div class="meta-left">
         <p>
           Posted by
-          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
             {% if site.social.googleplus}}
-            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
+            <a href="{{site.social.googleplus}}?rel=author" target="_blank" itemprop="url">
               <span itemprop="name">{{site.author.name}}</span>
             </a>
             {% else %}

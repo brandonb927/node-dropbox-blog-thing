@@ -23,9 +23,9 @@
       <div class="meta-left">
         <p>
           Posted by
-          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
             {% if site.social.googleplus %}
-            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
+            <a href="{{site.social.googleplus}}?rel=author" target="_blank" itemprop="url">
               <span itemprop="name">{{site.author.name}}</span>
             </a>
             {% else %}
@@ -62,12 +62,18 @@
 
 {% if pagination %}
 <nav class="pagination" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-  {% if pagination.prev %}
-  <a href="/page/{{pagination.prev}}" rel="prev" itemprop="name" title="Newer Posts" class="pagination-prev">&larr; Newer posts</a>
-  {% endif %}
-  {% if pagination.next %}
-  <a href="/page/{{pagination.next}}" rel="next" itemprop="name" title="Older Posts" class="pagination-next">Older posts &rarr;</a>
-  {% endif %}
+  <ul class="nav-menu">
+    {% if pagination.prev %}
+    <li itemprop="url">
+      <a href="/page/{{pagination.prev}}" rel="prev" itemprop="name" title="Newer Posts" class="pagination-prev">&larr; Newer posts</a>
+    </li>
+    {% endif %}
+    {% if pagination.next %}
+    <li itemprop="url">
+      <a href="/page/{{pagination.next}}" rel="next" itemprop="name" title="Older Posts" class="pagination-next">Older posts &rarr;</a>
+    </li>
+    {% endif %}
+  </ul>
 </nav>
 {% endif %}
 

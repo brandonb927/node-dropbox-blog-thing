@@ -170,10 +170,12 @@
         <div class="menu-trigger button">Menu</div>
 
         <div class="site-container">
-          <main class="grid gutter" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+          <main class="grid gutter" role="main" itemprop="mainContentOfPage">
             <div class="column full-width">
               <div class="module">
-                {% block body %}{% endblock %}
+                <section itemscope itemtype="http://schema.org/Blog">
+                  {% block body %}{% endblock %}
+                </section>
               </div>
             </div>
           </main>

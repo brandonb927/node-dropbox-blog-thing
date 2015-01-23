@@ -3,16 +3,16 @@
 {% block body %}
 
 <div class="post-wrapper animated_elem animated_elem--fadeinup">
-  <article class="post-article" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+  <article class="post-article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
     <h2 class="post-title" itemprop="name headline">{{post.title}}</h2>
     {% if not post.isPage %}
     <div class="post-meta">
       <div class="meta-left">
         <p>
           Posted by
-          <span itemprop="author" itemscope itemptype="http://schema.org/Person">
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
             {% if site.social.googleplus %}
-            <a href="{{site.social.googleplus}}?rel=author" target="_blank">
+            <a href="{{site.social.googleplus}}?rel=author" target="_blank" itemprop="url">
               <span itemprop="name">{{site.author.name}}</span>
             </a>
             {% else %}
