@@ -4,6 +4,7 @@ var nunjucks  = require('nunjucks');
 var express   = require('express');
 var chokidar  = require('chokidar');
 var fs        = require('fs');
+var robots    = require('robots.txt')
 
 var app       = module.exports = express();
 
@@ -42,6 +43,9 @@ require('./config/shortcodes.js');
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/posts/images'));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
+
+// Pass in the absolute path to your robots.txt file
+app.use(robots(__dirname + '/robots.txt'))
 
 // Setup logging
 app.use(morgan(loggingString, { 'stream': logger.stream }));

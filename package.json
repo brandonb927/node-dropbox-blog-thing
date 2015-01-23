@@ -24,6 +24,7 @@
     "morgan": "*",
     "nunjucks": "*",
     "pagination": "*",
+    "robots.txt": "^1.1.0",
     "serve-favicon": "*",
     "shortcode-parser": "*",
     "sitemap": "*",
