@@ -1,115 +1,89 @@
-var clean         = require('del');
-var gulp          = require('gulp');
-var autoprefixer  = require('gulp-autoprefixer');
-var concat        = require('gulp-concat');
-var imagemin      = require('gulp-imagemin');
-var jshint        = require('gulp-jshint');
-var less          = require('gulp-less');
-var minifycss     = require('gulp-minify-css');
-var nodemon       = require('gulp-nodemon');
-var rename        = require('gulp-rename');
-var sourcemaps    = require('gulp-sourcemaps');
-var uglify        = require('gulp-uglify');
-var pngcrush      = require('imagemin-pngcrush');
-var stylish       = require('jshint-stylish');
+// Configuration paths and data - change to suit your needs
+var config      = require('./gulp/config.json')
+
+// Init Gulp and lazyload the gulp plugins
+var gulp        = require('gulp');
+var plugins     = require('gulp-load-plugins')(config.plugins);
+
+// Load non-gulp plugins seperately
+var del         = require('del');
+var nodemon     = require('gulp-nodemon');
+var pngcrush    = require('imagemin-pngcrush');
 
 
 // Styles tasks
 gulp.task('vendor_fonts', function () {
-  return gulp.src([
-      'bower_components/font-awesome/fonts/*'
-    ])
-    .pipe(gulp.dest('public/assets/fonts'));
+  return gulp.src(config.paths.vendor.fonts)
+             .pipe(gulp.dest(config.paths.fonts.dest));
 });
 
 gulp.task('styles', ['vendor_fonts'], function () {
-  return gulp.src([
-      'src/styles/site.less'
-    ])
-    .pipe(sourcemaps.init())
-    .pipe(less())
-    .pipe(autoprefixer())
-    .pipe(minifycss())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/assets/css'));
+  return gulp.src(config.paths.styles.src)
+             .pipe(plugins.sourcemaps.init())
+             .pipe(plugins.less())
+             .pipe(plugins.autoprefixer())
+             .pipe(plugins.cssmin())
+             .pipe(plugins.rename({ suffix: '.min' }))
+             .pipe(plugins.sourcemaps.write())
+             .pipe(gulp.dest(config.paths.styles.dest));
 });
 
-// Linting task
-gulp.task('lint', function () {
-  return gulp.src([
-      'app/**/*.js',
-      'src/scripts/site.js',
-    ])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter(stylish));
+// hinting task
+gulp.task('hint', function () {
+  return gulp.src(config.paths.scripts.src)
+             .pipe(plugins.jshint('.jshintrc'))
+             .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
 // Scripts tasks
 gulp.task('vendor_scripts', function () {
-  return gulp.src([
-      'bower_components/jquery/dist/jquery.js',
-      'bower_components/fastclick/lib/fastclick.js',
-      'bower_components/highlightjs/highlight.pack.js',
-      'bower_components/jquery-unveil/jquery.unveil.js',
-      'bower_components/smoothstate/jquery.smoothstate.js'
-    ])
-    .pipe(concat('vendor-pack.js'))
-    .pipe(gulp.dest('src/scripts'));
+  return gulp.src(config.paths.vendor.scripts)
+             .pipe(plugins.concat(config.vars.vendor_pack))
+             .pipe(gulp.dest(config.paths.src.scripts));
 });
 
 gulp.task('scripts', ['vendor_scripts'], function () {
   return gulp.src([
-      'src/scripts/vendor-pack.js',
-      'src/scripts/site.js'
-    ])
-    .pipe(sourcemaps.init())
-    .pipe(concat('site-pack.js'))
-    .pipe(gulp.dest('public/assets/js'))
-    .pipe(uglify())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/assets/js'));
+               config.paths.src.scripts + '/' + config.vars.vendor_pack,
+               config.paths.src.scripts + '/' + config.vars.site_js
+             ])
+             .pipe(plugins.sourcemaps.init({loadMaps:true}))
+             .pipe(plugins.concat(config.vars.site_pack))
+             .pipe(plugins.uglify())
+             .pipe(plugins.rename({ suffix: '.min' }))
+             .pipe(plugins.sourcemaps.write())
+             .pipe(gulp.dest(config.paths.scripts.dest));
 });
 
 // Images task
 gulp.task('images', function () {
-  return gulp.src('src/images/**/*')
-    .pipe(
-      imagemin({
-        progressive: true,
-        svgoPlugins: [{ removeViewBox: false }],
-        use: [ pngcrush() ]
-      })
-    )
-    .pipe(gulp.dest('public/images'));
+  return gulp.src(config.paths.images.src)
+             .pipe(
+               plugins.imagemin({
+                 progressive: true,
+                 svgoPlugins: [{ removeViewBox: false }],
+                 use: [ pngcrush() ]
+               })
+             )
+             .pipe(gulp.dest(config.paths.images.dest));
 });
 
 // View templates task
 gulp.task('templates', function () {
-  return gulp.src('src/views/**/*.html')
-    .pipe(gulp.dest('public/views'));
+  return gulp.src(config.paths.templates.src)
+             .pipe(gulp.dest(config.paths.templates.dest));
 });
 
 // Clean the assets folder
 gulp.task('clean', function () {
-  return gulp.src([
-    'public/images',
-    'public/assets',
-    'public/views'
-  ], { read: false })
-    .pipe(clean());
+  return gulp.src('public/{images,assets,views}', { read: false })
+             .pipe(del());
 });
 
 // Use the tasks below for running on the command line
 // Default task
 gulp.task('default', function () {
-  gulp.start(['lint', 'templates', 'images', 'styles', 'scripts', 'watch']);
-});
-
-// Clean the public folder
-gulp.task('clean_build', ['clean'], function () {
-  return gulp.start(['lint', 'templates', 'images', 'styles', 'scripts']);
+  gulp.start(['templates', 'images', 'styles', 'hint', 'scripts', 'watch']);
 });
 
 // Run assets build
@@ -119,43 +93,43 @@ gulp.task('build', function () {
 
 
 // Watch task
-// gulp.task('watch', ['clean_build'], function () {
 gulp.task('watch', function () {
   // Watch .js files everywhere in the app
   gulp.watch([
-    'gulpfile.js',
     'app/**/*.js',
     'config/*.js',
     'src/scripts/site.js',
+    '!gulpfile.js',
     '!src/scripts/vendor-pack.js',
-  ], ['lint', 'scripts']);
+  ], ['hint', 'scripts']);
 
   // Copy templates from the src directory to the public dir
-  gulp.watch('src/views/*.html', ['templates']);
+  gulp.watch(config.paths.templates.src, ['templates']);
 
   // Copy images from src to public dir
-  gulp.watch('src/images/**/*.{png,gif,jpg,jpeg,ico}', ['images']);
+  gulp.watch(config.paths.images.src, ['images']);
 
   // Watch .less files
-  gulp.watch('src/styles/**/*.less', ['styles']);
+  gulp.watch(config.paths.styles.src, ['styles']);
 });
 
 // Run the server
 gulp.task('server', ['watch'], function () {
-  // gulp.start(['lint', 'templates', 'images', 'styles', 'scripts'])
+  // gulp.start(['hint', 'templates', 'images', 'styles', 'scripts'])
   nodemon({
     script: 'server.js',
     ext: 'js',
     env: { 'NODE_ENV': 'development' },
     // env: { 'NODE_ENV': 'production' },
     ignore: [
-      'node_modules/**'
+      'node_modules/**',
+      'gulpfile.js'
     ]
   })
   .on('start', ['watch'])
   .on('change', ['watch'])
   .on('error', process.exit.bind(process, 1))
   .on('restart', function () {
-    console.log('restarted!');
+    console.log('Server restarted!');
   });
 });
