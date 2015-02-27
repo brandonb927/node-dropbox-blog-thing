@@ -27,12 +27,6 @@
       });
     }
 
-    // This is a hack to get smoothState to recognize things when it reloads
-    function initSite (content) {
-      highlightCode();
-      initImageUnveil();
-    }
-
     // Menu trigger click handler
     $menuTrigger.on('click', function () {
       $body.addClass('menu-open');
@@ -50,23 +44,8 @@
       }
     });
 
-    var content = $bodyWrapper.smoothState({
-      prefetch:      true,
-      development:   true,
-      pageCacheSize: 4,
-      onStart: {
-        duration: 250,
-        render: function () {
-          content.toggleAnimationClass('is-exiting');
-          $htmlBody.animate({ 'scrollTop': 0 });
-        }
-      },
-      callback: function (url, $container, $content) {
-        initSite(content);
-      }
-    }).data('smoothState');
-
-    initSite(content);
+    highlightCode();
+    initImageUnveil();
 
   });
 

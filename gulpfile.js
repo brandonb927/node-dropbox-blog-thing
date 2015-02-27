@@ -15,7 +15,7 @@ var nodemon     = require('nodemon');
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
 
-var reloadDelay = 6500;
+var reloadDelay = 2000;
 
 
 // Error handler
@@ -93,7 +93,7 @@ gulp.task('watch', function () {
 
 gulp.task('browser-sync', function () {
   browserSync.init({
-    // files:       'public/**/*',
+    files:       'public/**/*',
     proxy:       'localhost:' + app_config.port,
     notify:      false,
     open:        false,
@@ -113,6 +113,7 @@ gulp.task('nodemon', function (cb) {
     ext: '.js',
     ignore: [
       'gulpfile.js',
+      'gulp/*',
       'bower_components/*',
       'node_modules/*'
     ],
@@ -146,7 +147,7 @@ gulp.task('nodemon', function (cb) {
 
 gulp.task('serve', function () {
   runSequence(
-    'nodemon',
+    ['watch', 'nodemon'],
     'browser-sync'
   );
 });
