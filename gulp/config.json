@@ -1,0 +1,59 @@
+{
+  "vars": {
+    "site_js":      "site.js",
+    "site_min_js":  "site.min.js",
+    "site_pack":    "site-pack.js",
+    "site_css":     "site.css",
+    "site_min_css": "site.min.css",
+    "vendor_pack":  "vendor-pack.js"
+  },
+  "paths": {
+    "src": {
+      "scripts": "src/scripts",
+      "styles": "src/styles",
+      "images": "src/images"
+    },
+    "templates": {
+      "src": [
+        "src/views/**/*.html"
+      ],
+      "dest": "public/views"
+    },
+    "fonts": {
+      "src": [
+        "src/fonts/**/*"
+      ],
+      "dest": "public/assets/fonts"
+    },
+    "images": {
+      "src": [
+        "src/images/**/*"
+      ],
+      "dest": "public/images"
+    },
+    "styles": {
+      "src": [
+        "src/styles/site.less"
+      ],
+      "dest": "public/assets/css"
+    },
+    "scripts": {
+      "src": [
+        "src/scripts/site.js"
+      ],
+      "dest": "public/assets/js"
+    },
+    "vendor": {
+      "scripts": [
+        "bower_components/jquery/dist/jquery.js",
+        "bower_components/fastclick/lib/fastclick.js",
+        "bower_components/highlightjs/highlight.pack.js",
+        "bower_components/jquery-unveil/jquery.unveil.js",
+        "bower_components/smoothstate/jquery.smoothstate.js"
+      ],
+      "fonts": [
+        "bower_components/font-awesome/fonts/*"
+      ]
+    }
+  }
+}

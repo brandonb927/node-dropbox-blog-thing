@@ -10,8 +10,6 @@
     var $bodyWrapper   = $('#body_wrapper');
     var $menuTrigger   = $('.menu-trigger');
     var $overlay       = $('.overlay');
-    var buttonSearchId = '#button_search';
-    var inputSearchId  = '#input_search';
 
     function highlightCode () {
       $('pre code').each(function (i, e) {
@@ -29,30 +27,10 @@
       });
     }
 
-    function doSearch (content) {
-      var inputSearchVal = $(inputSearchId).val().trim().toLowerCase();
-
-      if (inputSearchVal !== '') {
-        content.load('search?q=' + encodeURIComponent(inputSearchVal));
-      }
-    }
-
     // This is a hack to get smoothState to recognize things when it reloads
     function initSite (content) {
       highlightCode();
       initImageUnveil();
-
-      $bodyWrapper
-        .on('click', buttonSearchId, function (e) {
-          e.preventDefault();
-          doSearch(content);
-        })
-        .on('keypress', inputSearchId, function (e) {
-          if(e.which === 13) {
-            e.preventDefault();
-            doSearch(content);
-          }
-        });
     }
 
     // Menu trigger click handler

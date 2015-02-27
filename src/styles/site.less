@@ -13,9 +13,11 @@
 @import 'modules/forms.less';
 
 // 3rd-party
-@fa-font-path: "/bower_components/font-awesome/fonts";
-@import 'bower_components/font-awesome/less/font-awesome.less';
-@import (less) 'bower_components/highlightjs/styles/tomorrow-night-eighties.css';
+@bower: "bower_components";
+@fa-font-path: "/@{bower}/font-awesome/fonts";
+@import "@{bower}/font-awesome/less/font-awesome.less";
+@import (less) "@{bower}/highlightjs/styles/tomorrow-night-eighties.css";
+@import (less) "@{bower}/skeleton/css/skeleton.css";
 
 
 /*
@@ -86,6 +88,10 @@
 /**
  * Main style classes
  */
+
+html { font-size: 100%; }
+
+body { font-size: 1rem; }
 
 // Give all links a nice transition
 a { transition: all 0.2s; }

@@ -1,9 +1,10 @@
+var Q         = require('q');
 var morgan    = require('morgan');
 var favicon   = require('serve-favicon');
 var nunjucks  = require('nunjucks');
 var express   = require('express');
 var chokidar  = require('chokidar');
-var fs        = require('fs');
+var fs        = require('graceful-fs');
 var robots    = require('robots.txt')
 
 var app       = module.exports = express();
@@ -15,6 +16,7 @@ var port      = process.env.PORT || config.port;
 var Posts     = require('./app/models/posts');
 
 var loggingString = ((process.env.NODE_ENV === 'production') ? config.logging.morgan : 'dev');
+
 
 // Use Nunjucks rather than Jade
 // and setup the views folder
@@ -35,9 +37,6 @@ require('./config/locals');
 
 // Add some prototype helpers
 require('./config/helpers.js');
-
-// Add shortcode parsing
-require('./config/shortcodes.js');
 
 // Setup to serve from these folders
 app.use(express.static(__dirname + '/public'));
@@ -74,22 +73,15 @@ app.use(function (req, res, next) {
     url:    url
   };
 
-  Posts.searchBySlug(fuzzyMatchSlug, function (err, matches) {
-    if (!err && matches) {
-      errorData.postMatches      = matches;
-      jsonErrorData.postMatches  = matches;
-    }
+  // Respond with an HTML page
+  if (req.accepts('html')) {
+    return res.render('error.html', errorData);
+  }
 
-    // Respond with an HTML page
-    if (req.accepts('html')) {
-      return res.render('error.html', errorData);
-    }
-
-    // Respond with JSON
-    if (req.accepts('json')) {
-      return res.send(jsonErrorData);
-    }
-  });
+  // Respond with JSON
+  if (req.accepts('json')) {
+    return res.send(jsonErrorData);
+  }
 });
 
 // Everything else
@@ -142,41 +134,54 @@ app.use(function (err, req, res, next) {
   }
 
   // default to plain-text. send()
-  res.type('txt').send('Not found');
+  return res.type('txt').send('Not found');
 });
 
-// require('./config/middleware');
+// Add shortcode parsing
+var shortcodes = require('./config/shortcodes.js').shortcodes;
+shortcodes().then(function (blarg) {
+  logger.info('Shortcodes are all added');
+  logger.info(blarg);
+});
 
 // Setup the posts cache
-Posts.initCache(function () {
-  // Setup file-watching in posts folder
-  // to re-fill post cache when files are updated
-  var watcher = chokidar.watch(__dirname + '/posts', {
-    ignored: function (_path) {
-      if (_path.match(/\./) || _path.match(/Icon/)) {
-        return !_path.match(/\.(md|markdown|txt)$/);
-      }
-    },
-    persistent: true,
-    ignoreInitial: true
-  });
+Posts.initCache()
+  .then(function () {
+    var deferred = Q.defer();
 
-  watcher.on('add', function (filename) {
-    logger.debug('[ADDED]', filename);
-    Posts.initCache();
+    // Setup file-watching in posts folder
+    // to re-fill post cache when files are updated
+    var watcher = chokidar.watch(__dirname + '/posts/*.md', {
+      persistent: true,
+      ignoreInitial: true
+    });
+
+    watcher.on('add', function (filename) {
+      logger.info('[ADDED]', filename);
+      return Posts.initCache()
+        .then(function () {
+          return deferred.resolve();
+        })
+    })
+    .on('change', function (filename) {
+      logger.info('[CHANGED]', filename);
+      return Posts.initCache()
+        .then(function () {
+          return deferred.resolve();
+        })
+    })
+    .on('unlink', function (filename) {
+      logger.info('[REMOVED]', filename);
+      return Posts.initCache()
+        .then(function () {
+          return deferred.resolve();
+        })
+    })
+    .close();
   })
-  .on('change', function (filename) {
-    logger.debug('[CHANGED]', filename);
-    Posts.initCache();
-  })
-  .on('unlink', function (filename) {
-    logger.debug('[REMOVED]', filename);
-    Posts.initCache();
-  })
-  .on('ready', function () {
-    app.listen(port);
+  .then(function () {
     logger.info('All systems ready to go! The magic happens on port ' + port);
+    app.listen(port);
   });
-});
 
 module.exports = app;

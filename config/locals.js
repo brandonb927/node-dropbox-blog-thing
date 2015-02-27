@@ -32,3 +32,5 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   app.locals.baseUrl = config.protocol + '://' + config.site.domain;
 }
+
+app.locals.basePath = process.env.PWD;

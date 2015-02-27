@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('graceful-fs')
 
 /*
  * Modules are automatically loaded once they are declared

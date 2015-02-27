@@ -5,16 +5,6 @@
 <div class="error-page">
   {% if title %}<h2>{{title}}</h2>{% endif %}
   <p>{{error}}</p>
-  {% if postMatches %}
-  <div class="related-posts">
-    <h4>Didn't find what you wanted? <br />Try some of these posts!</h4>
-    <ul class="list-unstyled">
-      {% for post in postMatches %}
-      <li><a href="{{post.url}}">{{post.title}}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
 </div>
 
 {% endblock %}
