@@ -15,6 +15,7 @@ var nodemon     = require('nodemon');
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
 
+var isWatching  = false;
 var reloadDelay = 2000;
 
 
@@ -24,16 +25,6 @@ config.errorHandler = function (err) {
   logger.error(gutil.colors.red('✗') + ' Error: ' + err.message);
   this.emit('end');
 };
-
-// Hack to keep build task from hanging
-// var isWatching = false;
-// gulp.on('stop', function () {
-//   if (!isWatching) {
-//     process.nextTick(function () {
-//       process.exit(0);
-//     });
-//   }
-// });
 
 // View templates task
 gulp.task('templates', function () {
@@ -69,6 +60,8 @@ gulp.task('default', function () {
 
 // Watch task
 gulp.task('watch', function () {
+  isWatching = true;
+
   // Watch .js files everywhere in the app
   gulp.watch([
     'app/**/*.js',
@@ -146,8 +139,18 @@ gulp.task('nodemon', function (cb) {
 });
 
 gulp.task('serve', function () {
+  isWatching = true;
   runSequence(
     ['watch', 'nodemon'],
     'browser-sync'
   );
+});
+
+// Hack to keep build task from hanging
+gulp.on('stop', function () {
+  if (!isWatching) {
+    process.nextTick(function () {
+      process.exit(0);
+    });
+  }
 });
