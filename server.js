@@ -16,7 +16,7 @@ var Posts     = require('./app/models/posts');
 
 var morganString    = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) \":referrer\" \":user-agent\"';
 var loggingString   = ((process.env.NODE_ENV === 'production') ? morganString : 'dev');
-var port             = process.env.PORT || 3000;
+var port            = process.env.PORT || 3000;
 
 config.port = port;
 
