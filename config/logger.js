@@ -28,13 +28,13 @@ var logger = new winston.Logger({
   ]
 });
 
-if (config.logging.papertrail.host && config.logging.papertrail.port) {
+if (process.env.PAPERTRAIL_HOST && process.env.PAPERTRAIL_PORT) {
   require('winston-papertrail').Papertrail;
   logger.add(
     winston.transports.Papertrail,
     {
-      host: config.logging.papertrail.host,
-      port: config.logging.papertrail.port,
+      host: process.env.PAPERTRAIL_HOST,
+      port: process.env.PAPERTRAIL_PORT,
       logFormat: function (level, message) {
         return '[' + level + '] ' + message;
       },

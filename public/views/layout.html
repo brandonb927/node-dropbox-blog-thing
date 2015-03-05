@@ -115,7 +115,7 @@
             <ul class="nav-menu">
               {% for page in pages %}
               <li itemprop="url">
-                <a href="{{site.baseUrl}}{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+                <a href="{{baseUrl}}{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
               </li>
               {% endfor %}
             </ul>
@@ -126,21 +126,21 @@
         <ul class="social-icons">
           {% if site.social.twitter %}
           <li>
-            <a href="{{site.social.twitter}}" title="Twitter">
+            <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
               <i class="fa fa-twitter-square"></i>
             </a>
           </li>
           {% endif %}
           {% if site.social.github %}
           <li>
-            <a href="{{site.social.github}}" title="Github">
+            <a href="https://github.com/{{site.social.github}}" title="Github">
               <i class="fa fa-github-square"></i>
             </a>
           </li>
           {% endif %}
           {% if site.social.googleplus %}
           <li>
-            <a href="{{site.social.googleplus}}?rel=author" title="Google+">
+            <a href="https://plus.google.com/+{{site.social.googleplus}}?rel=author" title="Google+">
               <i class="fa fa-google-plus-square"></i>
             </a>
           </li>

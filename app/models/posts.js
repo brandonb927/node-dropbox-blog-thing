@@ -11,10 +11,10 @@ var slugify    = require('slug');
 var shortcode  = require('shortcode-parser');
 var MMD        = require('marked-metadata');
 
-var app           = require('../../server');
-var config        = require('../../config.json');
-var logger        = require('../../config/logger');
-var p             = require('../../config/promise');
+var app        = require('../../server');
+var config     = require('../../config.json');
+var logger     = require('../../config/logger');
+var p          = require('../../config/promise');
 
 
 // Wrap images in a div to center them
@@ -30,20 +30,21 @@ function getPost (filePath) {
 
   // Render the shortcodes on the page
   p.fs.readFile(filePath, { encoding: 'utf8' })
-    .then(function (fileContent) {
-      return shortcode.parse(fileContent)
-    })
-    .then(function (parsedContent) {
-      var tags     = [];
-      var md       = new MMD(parsedContent);
-      var meta     = md.metadata();
-      var content  = md.markdown({
-                        renderer  : renderer,
-                        gfm       : true,
-                        tables    : true,
-                        breaks    : true
-                      });
-
+    // .then(function (fileContent) {
+    //   return p.shortcode.parse(fileContent);
+    // })
+    .done(function (fileContent) {
+      var tags    = [];
+      var options = {
+        renderer  : renderer,
+        gfm       : true,
+        tables    : true,
+        breaks    : true
+      };
+      var parsedContent = shortcode.parse(fileContent);
+      var md      = new MMD(parsedContent);
+      var meta    = md.metadata();
+      var content = md.markdown(options);
       var slug    = slugify(meta.title).toLowerCase();
       var title   = (!Array.isArray(meta.title) ? meta.title : meta.title.join(', '));
 
@@ -66,9 +67,9 @@ function getPost (filePath) {
       };
 
       // Return the HTML-safe content that will be rendered to the page
-      content = new nunjucks.runtime.SafeString(content);
+      // post.content = new nunjucks.runtime.SafeString(content); // This is commented in favour of turning autoescape off app-wide
       post.content = content;
-      post.text    = htmlToText.fromString(content);
+      post.text    = htmlToText.fromString(post.content);
 
       // remove these duplicates from the meta
       delete meta.title;
@@ -290,8 +291,8 @@ var Posts = {
     cache.del('posts');
 
     // Get all the posts
-    getAllPosts(true)
-      .then(function (posts) {
+    Q.when(getAllPosts(true))
+      .done(function (posts) {
         if (!posts) {
           return deferred.reject(Error('Posts not found :('));
         }
@@ -315,8 +316,8 @@ var Posts = {
         logger.info('[Cache] %d posts indexed and added to cache', posts.length);
 
         // Add pages for use in navigation
-        Posts.getAllPages()
-          .then(function (pages) {
+        Q.when(Posts.getAllPages())
+          .done(function (pages) {
             app.locals.pages = pages;
             deferred.resolve();
           });

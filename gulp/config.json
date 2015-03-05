@@ -9,6 +9,7 @@
   },
   "paths": {
     "src": {
+      "fonts": "src/fonts",
       "scripts": "src/scripts",
       "styles": "src/styles",
       "images": "src/images"
@@ -35,6 +36,7 @@
       "src": [
         "src/styles/site.less"
       ],
+      "src_all": "src/styles/**/*",
       "dest": "public/assets/css"
     },
     "scripts": {

@@ -1,8 +1,7 @@
 var Q         = require('q');
 var fs        = require('graceful-fs')
 var request   = require('request');
-var shortcode = require('shortcode-parser');
-var logger    = require('./logger');
+// var logger    = require('./logger');
 
 exports.fs = {
   readFile: function (fileName, options) {
@@ -41,15 +40,3 @@ exports.request = {
     return deferred.promise;
   }
 };
-
-exports.shortcode = {
-  add: function (code) {
-    var deferred = Q.defer();
-
-    shortcode.add(code, function (str, opts) {
-      deferred.resolve(str, opts)
-    });
-
-    return deferred.promise;
-  }
-}

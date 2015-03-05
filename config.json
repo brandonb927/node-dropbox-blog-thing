@@ -8,9 +8,9 @@
       "email": "brandon@brandonb.io"
     },
     "social": {
-      "twitter": "https://twitter.com/brandonb927",
-      "googleplus": "https://plus.google.com/+brandonbrown927",
-      "github": "https://github.com/brandonb927"
+      "twitter": "brandonb927",
+      "github": "brandonb927",
+      "googleplus": "brandonbrown927"
     },
     "settings": {
       "formatDate": "MMM Do YY",
@@ -21,19 +21,9 @@
       "png" : "https://dl.dropbox.com/u/3408044/brandonb.io/logo-144.png"
     }
   },
-  "embedKit": "",
-  "googleAnalytics": "",
+  "googleAnalytics": "UA-32422940-2",
   "disqus": {
     "shortname": "brandonbrownsblog"
   },
-  "postFileExt": "md",
-  "protocol": "https",
-  "port": 3000,
-  "logging": {
-    "morgan": "[:date[web]] :remote-addr - :method :url :status (:response-time ms) \":referrer\" \":user-agent\"",
-    "papertrail": {
-      "host": "",
-      "port": 12345
-    }
-  }
+  "postFileExt": "md"
 }

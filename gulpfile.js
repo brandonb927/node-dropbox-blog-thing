@@ -5,7 +5,6 @@ function getTask (task, cb) {
 
 // Configuration paths and data - change to suit your needs
 var logger      = require('./config/logger');
-var app_config  = require('./config.json');
 var config      = require('./gulp/config.json');
 var del         = require('del');
 var runSequence = require('run-sequence');
@@ -78,7 +77,7 @@ gulp.task('watch', function () {
   gulp.watch(config.paths.images.src, ['images', reload]);
 
   // Watch .less files
-  gulp.watch(config.paths.styles.src, ['styles', reload]);
+  gulp.watch(config.paths.styles.src_all, ['styles', reload]);
 
   // Watch for font files
   gulp.watch(config.paths.fonts.src, ['fonts', reload]);
@@ -86,11 +85,9 @@ gulp.task('watch', function () {
 
 gulp.task('browser-sync', function () {
   browserSync.init({
-    files:       'public/**/*',
-    proxy:       'localhost:' + app_config.port,
+    proxy:       'localhost:3000',
     notify:      false,
     open:        false,
-    reloadDelay: reloadDelay,
     browser:     ['google chrome'],
     ui: {
       port: 9001
@@ -141,7 +138,8 @@ gulp.task('nodemon', function (cb) {
 gulp.task('serve', function () {
   isWatching = true;
   runSequence(
-    ['watch', 'nodemon'],
+    'watch',
+    'nodemon',
     'browser-sync'
   );
 });

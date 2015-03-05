@@ -12,10 +12,13 @@ var app       = module.exports = express();
 var config    = require('./config.json');
 var routes    = require('./config/routes');
 var logger    = require('./config/logger');
-var port      = process.env.PORT || config.port;
 var Posts     = require('./app/models/posts');
 
-var loggingString = ((process.env.NODE_ENV === 'production') ? config.logging.morgan : 'dev');
+var morganString    = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) \":referrer\" \":user-agent\"';
+var loggingString   = ((process.env.NODE_ENV === 'production') ? morganString : 'dev');
+var port             = process.env.PORT || 3000;
+
+config.port = port;
 
 
 // Use Nunjucks rather than Jade
@@ -24,7 +27,7 @@ app.set('views', __dirname + '/public/views');
 app.set('view engine', 'nunjucks');
 
 var env = nunjucks.configure(__dirname + '/public/views', {
-  autoescape: true,
+  autoescape: false,
   express:    app
 });
 
@@ -56,31 +59,26 @@ app.use(routes);
 app.use(function (req, res, next) {
   res.status(404);
 
-  var title           = '404: Not Found';
-  var error           = 'Looks like that content has gone missing!';
-  var url             = app.locals.baseUrl + req.url;
-  var fuzzyMatchSlug  = req.url.replace('/','')
-
-  var errorData = {
-    title:  title,
-    error:  error,
-    url:    url
-  };
-
-  var jsonErrorData = {
-    code:   404,
-    error:  error,
-    url:    url
-  };
+  var title = '404: Not Found';
+  var error = 'Looks like that content has gone missing!';
+  var url   = app.locals.baseUrl + req.url;
 
   // Respond with an HTML page
   if (req.accepts('html')) {
-    return res.render('error.html', errorData);
+    return res.render('error.html', {
+      title:  title,
+      error:  error,
+      url:    url
+    });
   }
 
   // Respond with JSON
   if (req.accepts('json')) {
-    return res.send(jsonErrorData);
+    return res.send({
+      code:   404,
+      error:  error,
+      url:    url
+    });
   }
 });
 
@@ -138,10 +136,8 @@ app.use(function (err, req, res, next) {
 });
 
 // Add shortcode parsing
-var shortcodes = require('./config/shortcodes.js').shortcodes;
-shortcodes().then(function (blarg) {
-  logger.info('Shortcodes are all added');
-  logger.info(blarg);
+require('./config/shortcodes.js')().then(function () {
+  logger.info('[Shortcodes] All shortcodes added and ready to parse');
 });
 
 // Setup the posts cache
@@ -180,8 +176,9 @@ Posts.initCache()
     .close();
   })
   .then(function () {
-    logger.info('All systems ready to go! The magic happens on port ' + port);
+    logger.info('[Server] All systems ready to go! The magic happens on port ' + port);
     app.listen(port);
   });
+
 
 module.exports = app;
