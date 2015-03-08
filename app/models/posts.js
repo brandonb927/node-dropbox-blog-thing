@@ -305,15 +305,15 @@ var Posts = {
           postsAssoc.push(postObj);
         });
 
-        logger.info('[Cache] Adding posts to cache');
+        logger.debug('[Cache] Adding posts to cache');
         cache.put('posts', postsAssoc);
 
         if (process.env.NODE_ENV !== 'production') {
-          logger.info('[Cache] Posts cache size', cache.size());
-          logger.info('[Cache] Posts cache memsize', cache.memsize());
+          logger.debug('[Cache] Posts cache size', cache.size());
+          logger.debug('[Cache] Posts cache memsize', cache.memsize());
         }
 
-        logger.info('[Cache] %d posts indexed and added to cache', posts.length);
+        logger.debug('[Cache] %d posts indexed and added to cache', posts.length);
 
         // Add pages for use in navigation
         Q.when(Posts.getAllPages())
