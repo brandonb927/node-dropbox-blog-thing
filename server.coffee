@@ -14,7 +14,7 @@ locals        = require('./config/locals')
 Posts         = require('./app/models/posts')
 
 morganString  = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"'
-loggingString = if process.env.NODE_ENV is 'production' then morganString else 'development'
+loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
 port          = config.port = process.env.PORT or 3000
 
 config.basePath = process.env.PWD
@@ -37,7 +37,7 @@ require('./config/nunjucks_helpers')(env)
 app.use(locals)
 
 # Add some prototype helpers
-# require('./config/helpers')
+require('./config/helpers')
 
 # Setup to serve from these folders
 app.use(express.static("#{__dirname}/public"))
@@ -52,12 +52,6 @@ app.use(morgan(loggingString, { 'stream': logger.stream }))
 
 # Routes & Middleware
 app.use(routes)
-
-# Set the current url for the view of the request
-app.use (req, res, next) ->
-  console.log req
-  # console.log res
-  # res.app.url = "#{app.locals.baseUrl}/#{slug}"
 
 # 404
 app.use (req, res, next) ->

@@ -11,6 +11,9 @@ PostsController = {
       .done (data) ->
         return next() if not data
 
+        for post in data.posts
+          post.url = "#{res.locals.baseUrl}/#{post.slug}"
+
         pageData = {
           page: data.pageNum
           posts: data.posts
@@ -28,6 +31,9 @@ PostsController = {
       .done (post) ->
         return next() if not post
 
+        # Set the current url for the view of the request
+        res.locals.url = "#{res.locals.baseUrl}/#{post.slug}"
+
         if req.accepts('html')
           return res.render('post.html', { post: post })
 
@@ -38,6 +44,9 @@ PostsController = {
     PostsModel.getByPagination(req.params.num)
       .done (data) ->
         return next() if not data
+
+        for post in data.posts
+          post.url = "#{res.locals.baseUrl}/#{post.slug}"
 
         pageData = {
           page:       data.pageNum
@@ -55,6 +64,9 @@ PostsController = {
     PostsModel.getByTag(req.params.tag)
       .done (data) ->
         return next() if not data
+
+        for post in data.posts
+          post.url = "#{res.locals.baseUrl}/#{post.slug}"
 
         pageData = {
           tag: data.tag
@@ -76,8 +88,8 @@ PostsController = {
         feed = new Feed({
           title:        config.site.title
           description:  config.site.description
-          link:         req.app.locals.baseUrl
-          image:        req.app.locals.gravatar
+          link:         res.locals.baseUrl
+          image:        res.locals.gravatar
           author: {
             name:       config.site.author.name
             email:      config.site.author.email
@@ -85,12 +97,12 @@ PostsController = {
         })
 
         # Add the posts to the feed
-        for key of posts
+        for post in posts
           feed.addItem({
-            title:       posts[key].title
-            date:        posts[key].dateObj
-            link:        posts[key].url
-            description: posts[key].description
+            title:       post.title
+            date:        post.dateObj
+            link:        "#{res.locals.baseUrl}/#{post.slug}"
+            description: post.description
           })
 
         # Render the feed
@@ -107,8 +119,8 @@ PostsController = {
         })
 
         # Add the posts to the feed
-        for key of posts
-          sitemap.add({ url: posts[key].url })
+        for post in posts
+          sitemap.add({ url: "#{res.locals.baseUrl}/#{post.slug}" })
 
         # Set the content type to xml and send the response back
         res.header('Content-Type', 'application/xml')
