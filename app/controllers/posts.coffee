@@ -101,12 +101,12 @@ PostsController = {
           feed.addItem {
             title:       post.title
             date:        post.dateObj
-            link:        "/#{post.slug}"
+            link:        "#{res.locals.baseUrl}/#{post.slug}"
             description: post.description
           }
 
         # Render the feed
-        return res.send feed.render 'atom-1.0'
+        res.send feed.render 'atom-1.0'
 
   sitemap: (req, res, next) ->
     PostsModel.getAll(true)
@@ -120,7 +120,7 @@ PostsController = {
 
         # Add the posts to the feed
         for post in posts
-          sitemap.add { url: "/#{post.slug}" }
+          sitemap.add { url: "#{res.locals.baseUrl}/#{post.slug}" }
 
         # Set the content type to xml and send the response back
         res.header 'Content-Type', 'application/xml'

@@ -4,13 +4,14 @@
 
 router          = require('express').Router()
 PostsController = require '../app/controllers/posts'
+config          = require '../config.json'
 
 # Handle main routes in PostsController
 router.get '/', PostsController.index
 
 # Some 301 redirects first
 router.get /^\/feed(?:\.xml)?$/, (req, res, next) ->
-  return res.redirect 301, req.protocol + '://' + req.hostname + '/rss'
+  return res.redirect 301, "#{req.protocol}://#{req.hostname}#{(if process.env.PORT then '' else ":#{config.port}")}/rss"
 
 # Because we do slug-lookups, we have to put /rss and /sitemap routes first
 router.get /^\/rss(?:\.xml)?$/, PostsController.rss

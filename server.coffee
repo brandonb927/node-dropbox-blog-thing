@@ -118,7 +118,8 @@ app.use (err, req, res, next) ->
 # Setup the posts cache
 Posts.initCache returnPages = true
   .then (pages) ->
-    # console.log pages
+    for page in pages
+      page.url = "/#{page.slug}"
     app.locals.pages = pages
 
 # Setup file-watching in posts folder
