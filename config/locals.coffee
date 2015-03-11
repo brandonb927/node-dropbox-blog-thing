@@ -1,5 +1,5 @@
-gravatar  = require('gravatar')
-config    = require('../config.json')
+gravatar  = require 'gravatar'
+config    = require '../config.json'
 protocol  = if process.env.NODE_ENV isnt 'production' then 'http' else 'https'
 
 ###
@@ -17,17 +17,17 @@ locals = (req, res, next) ->
   }
 
   if process.env.NODE_ENV isnt 'production'
-    res.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions)
+    res.locals.gravatar = gravatar.url config.site.author.email, gravatarOptions
   else
-    res.locals.gravatar = gravatar.url(config.site.author.email, gravatarOptions, true)
+    res.locals.gravatar = gravatar.url config.site.author.email, gravatarOptions, true
 
   res.locals.debug = if process.env.NODE_ENV isnt 'production' then true else false
 
   # Set the baseUrl for use in templates and generating URLs to different pages/posts
   if process.env.NODE_ENV isnt 'production'
-    res.locals.baseUrl = 'http://localhost:' + config.port
+    res.locals.baseUrl = "http://localhost:#{config.port}"
   else
-    res.locals.baseUrl = protocol + '://' + config.site.domain
+    res.locals.baseUrl = "#{protocol}://#{config.site.domain}"
 
   next()
 
