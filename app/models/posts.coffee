@@ -194,7 +194,7 @@ PostsModel = {
 
         postsArr = []
         for post in posts
-          postsArr.push post if post.tags.indexOf tag isnt -1
+          postsArr.push post if tag in post.tags
 
         deferred.resolve {
           tag: tag

@@ -11,6 +11,14 @@
 
 
 /**
+ * Test utilities
+ */
+.text-center { text-align: center; }
+.text-left   { text-align: left;   }
+.text-right  { text-align: right;  }
+
+
+/**
  * Main style classes
  */
 html {
@@ -117,21 +125,21 @@ img {
 
   .nav-menu {
     list-style-type: none;
+  }
 
-    li {
-      padding: 0;
-    }
+  .nav-menu li {
+    padding: 0;
+  }
 
-    a {
-      display: block;
-      padding: (@base-rem-unit / 2) 0;
-      vertical-align: middle;
-    }
+  .nav-menu a {
+    display: block;
+    padding: (@base-rem-unit / 2) 0;
+    vertical-align: middle;
+  }
 
-    a:hover {
-      background: @gray-light;
-      color: @base-font-color;
-    }
+  .nav-menu a:hover {
+    background: @gray-light;
+    color: @base-font-color;
   }
 }
 
@@ -143,7 +151,9 @@ img {
 .site-bio {
   color: @gray-light;
 
-  p { margin-top: (@base-rem-unit * 2); }
+  p {
+    margin-top: (@base-rem-unit * 2);
+  }
 }
 
 .social-icons {
@@ -166,7 +176,9 @@ img {
     transform: scale(1.5);
   }
 
-  a i { font-size: (@base-font-size * 2); }
+  a i {
+    font-size: (@base-font-size * 2);
+  }
 }
 
 // Posts feed on homepage
@@ -180,13 +192,23 @@ img {
   padding: (@base-rem-unit * 5) 0;
   border-bottom: solid 1px @gray-lighter;
 
-  &:first-child { padding-top: 0; }
-  &:last-child  { border-bottom: none; }
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .post-title {
-  a { text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 // Posts metadata (byline, datetime, etc)
@@ -196,14 +218,22 @@ img {
   .cf;
 
   .meta-left,
-  .meta-right { width: 49.9%; }
-  .meta-left  { float: left;  }
+  .meta-right {
+    width: 49.9%;
+  }
+
+  .meta-left  {
+    float: left;
+  }
+
   .meta-right {
     float: right;
     text-align: right;
   }
 
-  .meta-label { display: inline-block; }
+  .meta-label {
+    display: inline-block;
+  }
 }
 
 // Posts pagination in homepage feed
@@ -218,9 +248,14 @@ img {
 
   a {
     text-decoration: none;
+  }
 
-    &.pagination-prev { float: left;  }
-    &.pagination-next { float: right; }
+  a.pagination-prev {
+    float: left;
+  }
+
+  a.pagination-next {
+    float: right;
   }
 }
 
@@ -236,7 +271,9 @@ img {
 .post-content {
   h1,
   h2,
-  h3 { margin-top: (@base-rem-unit * 2); }
+  h3 {
+    margin-top: (@base-rem-unit * 2);
+  }
 }
 
 .post-image {
@@ -253,7 +290,9 @@ img {
   }
 }
 
-.post-comments { margin-top: (@base-rem-unit * 3); }
+.post-comments {
+  margin: (@base-rem-unit * 3) 0;
+}
 
 // If there is an error with an embed, style it a bit
 .embed-error {
@@ -262,23 +301,25 @@ img {
   background: @gray-light;
 }
 
-.error-page { text-align: center; }
+.error-page {
+  text-align: center;
+}
 
 .related-posts {
   margin-top: (@base-rem-unit * 3);
 
-  ul { padding: 0; }
+  ul {
+    padding: 0;
+  }
 }
 
 // Fix Github gists
 .highlight {
   margin: 0;
 
-  .line-data {
-    .line-pre {
-      color: inherit;
-      box-shadow: none;
-    }
+  .line-data .line-pre {
+    color: inherit;
+    box-shadow: none;
   }
 }
 

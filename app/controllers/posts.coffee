@@ -12,7 +12,7 @@ PostsController = {
         return next() if not data
 
         for post in data.posts
-          post.url = "#{res.locals.baseUrl}/#{post.slug}"
+          post.url = "/#{post.slug}"
 
         pageData = {
           page: data.pageNum
@@ -32,7 +32,7 @@ PostsController = {
         return next() if not post
 
         # Set the current url for the view of the request
-        res.locals.url = "#{res.locals.baseUrl}/#{post.slug}"
+        res.locals.url = "/#{post.slug}"
 
         if req.accepts 'html'
           return res.render 'post.html', { post: post }
@@ -46,7 +46,7 @@ PostsController = {
         return next() if not data
 
         for post in data.posts
-          post.url = "#{res.locals.baseUrl}/#{post.slug}"
+          post.url = "/#{post.slug}"
 
         pageData = {
           page:       data.pageNum
@@ -66,7 +66,7 @@ PostsController = {
         return next() if not data
 
         for post in data.posts
-          post.url = "#{res.locals.baseUrl}/#{post.slug}"
+          post.url = "/#{post.slug}"
 
         pageData = {
           tag: data.tag
@@ -101,7 +101,7 @@ PostsController = {
           feed.addItem {
             title:       post.title
             date:        post.dateObj
-            link:        "#{res.locals.baseUrl}/#{post.slug}"
+            link:        "/#{post.slug}"
             description: post.description
           }
 
@@ -120,7 +120,7 @@ PostsController = {
 
         # Add the posts to the feed
         for post in posts
-          sitemap.add { url: "#{res.locals.baseUrl}/#{post.slug}" }
+          sitemap.add { url: "/#{post.slug}" }
 
         # Set the content type to xml and send the response back
         res.header 'Content-Type', 'application/xml'

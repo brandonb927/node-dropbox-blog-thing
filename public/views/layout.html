@@ -47,7 +47,8 @@
     <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
     <link href="/assets/css/site.min.css" rel="stylesheet">
-    <script src="/assets/js/site-pack.min.js"></script>
+    <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+    <script async src="/assets/js/site-pack.min.js"></script>
 
     {% if googleAnalytics %}
     <!-- Google Analytics -->
@@ -102,7 +103,7 @@
 
         <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
           <h1 class="header-title" itemprop="headline">
-            <a href="{{baseUrl}}">{{site.title}}</a>
+            <a href="/">{{site.title}}</a>
           </h1>
 
           <div class="site-bio">
@@ -115,7 +116,7 @@
             <ul class="nav-menu">
               {% for page in pages %}
               <li itemprop="url">
-                <a href="{{baseUrl}}{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+                <a href="/{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
               </li>
               {% endfor %}
             </ul>
@@ -146,7 +147,7 @@
           </li>
           {% endif %}
           <li>
-            <a href="{{baseUrl}}/rss.xml" title="RSS">
+            <a href="/rss.xml" title="RSS">
               <i class="fa fa-rss-square"></i>
             </a>
           </li>

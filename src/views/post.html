@@ -52,24 +52,23 @@
     </div>
     <div id="disqus_thread" data-disqus-shortname="{{disqus.shortname}}" data-disqus-url="{{post.url}}"></div>
     <script>
-    $('.show-comments').on('click', function () {
-      {% if googleAnalytics %}
-      ga('send', 'event', 'button', 'click', 'show-comments');
-      {% endif %}
+      var commentsButton = document.querySelector('.show-comments');
+      commentsButton.addEventListener('click', function () {
+        {% if googleAnalytics %}
+        ga('send', 'event', 'button', 'click', 'show-comments');
+        {% endif %}
 
-      $(this).fadeOut('fast');
+        this.style.display = 'none';
 
-      // Delay the script loading so the button fades out
-      // before the disqus loader takes it's place
-      setTimeout(function () {
-        $.ajax({
-          type      : "GET",
-          url       : "//{{disqus.shortname}}.disqus.com/embed.js",
-          dataType  : "script",
-          cache     : true
-        })
-      }, 200);
-    });
+        // Delay the script loading so the button fades out
+        // before the disqus loader takes it's place
+        setTimeout(function () {
+          var script = document.createElement('script');
+          script.setAttribute('type','text/javascript');
+          script.setAttribute('src', '//{{disqus.shortname}}.disqus.com/embed.js');
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }, 200);
+      });
     </script>
   </div>
   {% endif %}

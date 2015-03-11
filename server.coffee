@@ -58,7 +58,7 @@ app.use (req, res, next) ->
   res.status 404
   title = '404: Not Found'
   error = 'Looks like that content has gone missing!'
-  url   = "#{app.locals.baseUrl}#{req.url}"
+  url   = "/#{req.url}"
 
   # Respond with an HTML page
   return res.render 'error.html',{
@@ -96,7 +96,7 @@ app.use (err, req, res, next) ->
 
   title = "#{statusCode}: #{statusText}"
   error = errorDetail
-  url   = "#{app.locals.baseUrl}#{req.url}"
+  url   = "/#{req.url}"
 
   # Respond with an HTML page
   return res.render 'error.html', {
@@ -121,33 +121,27 @@ Posts.initCache returnPages = true
     # console.log pages
     app.locals.pages = pages
 
-    deferred = Q.defer()
+# Setup file-watching in posts folder
+# to re-fill post cache when files are updated
+watcher = chokidar.watch "#{process.env.HOME}/Dropbox/posts/**/*", {
+  ignored: /[\/\\]\./
+  persistent: true
+  ignoreInitial: true
+}
 
-    # Setup file-watching in posts folder
-    # to re-fill post cache when files are updated
-    watcher = chokidar.watch "#{__dirname}/posts/*.md", {
-      persistent: true
-      ignoreInitial: true
-    }
+watcher
+  .on 'add', (filename) ->
+    logger.info '[ADDED]', filename
+    Posts.initCache()
+  .on 'change', (filename) ->
+    logger.info '[CHANGED]', filename
+    Posts.initCache()
+  .on 'unlink', (filename) ->
+    logger.info '[REMOVED]', filename
+    Posts.initCache()
+  .close()
 
-    watcher.on 'add', (filename) ->
-      logger.info '[ADDED]', filename
-      Posts.initCache()
-        .then () ->
-          deferred.resolve()
-    .on 'change', (filename) ->
-      logger.info '[CHANGED]', filename
-      Posts.initCache()
-        .then () ->
-          deferred.resolve()
-    .on 'unlink', (filename) ->
-      logger.info '[REMOVED]', filename
-      Posts.initCache()
-        .then ->
-          deferred.resolve()
-    .close()
-  .then () ->
-    logger.info "[Server] All systems ready to go! The magic happens on port #{port}"
-    app.listen port
+logger.info "[Server] All systems ready to go! The magic happens on port #{port}"
+app.listen port
 
 module.exports = app

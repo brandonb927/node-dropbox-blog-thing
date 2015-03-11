@@ -1,6 +1,6 @@
 {
   "vars": {
-    "site_js":      "site.js",
+    "site_coffee":  "site.coffee",
     "site_min_js":  "site.min.js",
     "site_pack":    "site-pack.js",
     "site_css":     "site.css",
@@ -41,7 +41,7 @@
     },
     "scripts": {
       "src": [
-        "src/scripts/site.js"
+        "src/scripts/site.coffee"
       ],
       "dest": "public/assets/js"
     },
@@ -50,8 +50,7 @@
         "bower_components/jquery/dist/jquery.js",
         "bower_components/fastclick/lib/fastclick.js",
         "bower_components/highlightjs/highlight.pack.js",
-        "bower_components/jquery-unveil/jquery.unveil.js",
-        "bower_components/smoothstate/jquery.smoothstate.js"
+        "bower_components/jquery-unveil/jquery.unveil.js"
       ],
       "fonts": [
         "bower_components/font-awesome/fonts/*"
