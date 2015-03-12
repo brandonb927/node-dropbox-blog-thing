@@ -106,12 +106,12 @@ gulp.task 'scripts', ['lint'], () ->
       .on 'end', "#{gutil.log.bind gutil, gutil.colors.green '✓'} Rebuilding JS..."
       .on 'error', "#{gutil.log.bind gutil, gutil.colors.red '✗'} Error rebuilding JS..."
       .pipe source config.vars.site_coffee
-      # .pipe buffer()
-      # .pipe gulp.dest config.paths.scripts.dest
-      # .pipe sourcemaps.init { loadMaps: true }
-      # .pipe coffee { bare: true }
-      # # .pipe uglify()
-      # .pipe sourcemaps.write()
+      .pipe buffer()
+      .pipe gulp.dest config.paths.scripts.dest
+      .pipe sourcemaps.init { loadMaps: true }
+      .pipe coffee { bare: true }
+      .pipe uglify()
+      .pipe sourcemaps.write()
       .pipe concat config.vars.site_min_js
       .pipe gulp.dest config.paths.scripts.dest
       .pipe reload { stream: true }
@@ -211,15 +211,15 @@ gulp.task 'nodemon', (cb) ->
       , reloadDelay
 
   .on 'restart', (files) ->
-      logger.info 'Files that changed: ', files if files
+    logger.info 'Files that changed: ', files if files
 
-      # Reload connected browsers after a slight delay.
-      # Tweak the timeout value for restarting browsersync after nodemon
-      setTimeout () ->
-        reload stream: false
-      , reloadDelay
+    # Reload connected browsers after a slight delay.
+    # Tweak the timeout value for restarting browsersync after nodemon
+    setTimeout () ->
+      reload stream: false
+    , reloadDelay
 
-      logger.warn '[nodemon] Server restarted!'
+    logger.warn '[nodemon] Server restarted!'
 
 gulp.task 'serve', () ->
   isWatching = true

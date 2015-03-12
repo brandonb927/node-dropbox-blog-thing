@@ -2,12 +2,11 @@
 
 {% block body %}
 
-<article class="post-article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
   <h2 class="post-title" itemprop="name headline">{{post.title}}</h2>
 
-  {% if not post.isPage %}
   <div class="post-meta">
-    <div class="meta-left">
+    <div class="post-meta-left">
       <p>
         Posted by
         <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -22,11 +21,12 @@
         on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>
       </p>
     </div>
+
     {% if post.tags|length %}
-    <div class="meta-right">
+    <div class="post-meta-right">
       <p>
-        <span class="meta-label">Tags: </span>
-        <span class="meta-tags">
+        <span class="post-meta-label">Tags: </span>
+        <span class="post-meta-tags">
         {% for tag in post.tags %}
           <a href="/tag/{{tag}}">{{tag}}</a>
         {% endfor %}
@@ -35,7 +35,6 @@
     </div>
     {% endif %}
   </div>
-  {% endif %}
 
   <div class="post-content" itemprop="text">
     {{post.content}}

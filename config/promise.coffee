@@ -1,9 +1,8 @@
 Q         = require 'q'
 fs        = require 'graceful-fs'
 request   = require 'request'
-# logger  = require './logger'
 
-exports.fs = {
+exports.fs =
   readFile: (fileName, options) ->
     deferred = Q.defer()
 
@@ -21,9 +20,8 @@ exports.fs = {
       deferred.resolve data
 
     return deferred.promise
-}
 
-exports.request = {
+exports.request =
   get: (url) ->
     deferred = Q.defer()
 
@@ -32,4 +30,3 @@ exports.request = {
       deferred.resolve res, body
 
     return deferred.promise
-}

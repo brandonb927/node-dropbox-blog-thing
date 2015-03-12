@@ -5,7 +5,7 @@ config      = require '../../config.json'
 PostsModel  = require '../models/posts'
 
 
-PostsController = {
+module.exports =
   index: (req, res, next) ->
     PostsModel.getByPagination 1
       .then (data) ->
@@ -14,17 +14,13 @@ PostsController = {
         for post in data.posts
           post.url = "/#{post.slug}"
 
-        pageData = {
+        pageData =
           page: data.pageNum
           posts: data.posts
           pagination: data.pagination
-        }
 
-        if req.accepts 'html'
-          return res.render 'index.html', pageData
-
-        if req.accepts 'json'
-          return res.send pageData
+        return res.render 'index.html', pageData if req.accepts 'html'
+        return res.send pageData if req.accepts 'json'
 
   post: (req, res, next) ->
     PostsModel.getBySlug req.params.slug
@@ -34,11 +30,8 @@ PostsController = {
         # Set the current url for the view of the request
         res.locals.url = "/#{post.slug}"
 
-        if req.accepts 'html'
-          return res.render 'post.html', { post: post }
-
-        if req.accepts 'json'
-          return res.send { post: post }
+        return res.render 'post.html', { post: post } if req.accepts 'html'
+        return res.send { post: post } if req.accepts 'json'
 
   pagination: (req, res, next) ->
     PostsModel.getByPagination req.params.num
@@ -48,17 +41,13 @@ PostsController = {
         for post in data.posts
           post.url = "/#{post.slug}"
 
-        pageData = {
+        pageData =
           page:       data.pageNum
           posts:      data.posts
           pagination: data.pagination
-        }
 
-        if req.accepts 'html'
-          return res.render 'index.html', pageData
-
-        if req.accepts 'json'
-          return res.send pageData
+        return res.render 'index.html', pageData if req.accepts 'html'
+        return res.send pageData if req.accepts 'json'
 
   tag: (req, res, next) ->
     PostsModel.getByTag req.params.tag
@@ -68,16 +57,12 @@ PostsController = {
         for post in data.posts
           post.url = "/#{post.slug}"
 
-        pageData = {
+        pageData =
           tag: data.tag
           posts: data.posts
-        }
 
-        if req.accepts 'html'
-          return res.render 'index.html', pageData
-
-        if req.accepts 'json'
-          return res.send pageData
+        return res.render 'index.html', pageData if req.accepts 'html'
+        return res.send pageData if req.accepts 'json'
 
   rss: (req, res, next) ->
     PostsModel.getAll()
@@ -85,46 +70,40 @@ PostsController = {
         return next() if not posts
 
         # Initializing feed object
-        feed = new Feed {
+        feed = new Feed
           title:        config.site.title
           description:  config.site.description
           link:         res.locals.baseUrl
           image:        res.locals.gravatar
-          author: {
+          author:
             name:       config.site.author.name
             email:      config.site.author.email
-          }
-        }
 
         # Add the posts to the feed
         for post in posts
-          feed.addItem {
+          feed.addItem
             title:       post.title
             date:        post.dateObj
             link:        "#{res.locals.baseUrl}/#{post.slug}"
             description: post.description
-          }
 
         # Render the feed
-        res.send feed.render 'atom-1.0'
+        return res.send feed.render 'atom-1.0'
 
   sitemap: (req, res, next) ->
     PostsModel.getAll(true)
       .then (posts) ->
         return next() if not posts
 
-        sitemap = sm.createSitemap {
+        sitemap = sm.createSitemap
           hostname:  config.site.base_url
           cacheTime: 600000
-        }
 
         # Add the posts to the feed
         for post in posts
-          sitemap.add { url: "#{res.locals.baseUrl}/#{post.slug}" }
+          sitemap.add
+            url: "#{res.locals.baseUrl}/#{post.slug}"
 
         # Set the content type to xml and send the response back
         res.header 'Content-Type', 'application/xml'
         return res.send sitemap.toString()
-}
-
-module.exports = PostsController

@@ -31,14 +31,13 @@ getPost = (filePath) ->
   p.fs.readFile(filePath, encoding: 'utf8')
     .then (fileContent) ->
       tags = []
-      options = {
+      options =
         renderer: renderer
         gfm:      true
         tables:   true
         breaks:   true
         highlight: (code, lang) ->
           return highlight.highlightAuto(code).value
-      }
 
       md            = new MMD fileContent
       meta          = md.metadata()
@@ -52,14 +51,13 @@ getPost = (filePath) ->
 
       tags = [] if tags[0] is '' # Reset the tags if the meta.tags is blank
 
-      post = {
+      post =
         date:     moment(meta.date).format(config.site.settings.formatDate)
         dateObj:  moment(meta.date).toDate()
         title:    title
         slug:     slug
         tags:     tags
         isPage:   if meta.type is 'page' then true else false
-      }
 
       # Return the HTML-safe content that will be rendered to the page
       # post.content = new nunjucks.runtime.SafeString(content); // This is commented in favour of turning autoescape off app-wide
@@ -110,7 +108,7 @@ getAllPosts = (includePages) ->
         # Rudimentary way to reverse the order of the posts from the files list
         return posts.reverse()
 
-PostsModel = {
+module.exports =
   getAll: (includePages) ->
     deferred = Q.defer()
     getAllPosts includePages
@@ -157,11 +155,10 @@ PostsModel = {
 
         postsPerPage = config.site.settings.postsPerPage
         pageNum = parseInt(pageNum)
-        paginator = new (pagination.SearchPaginator) {
+        paginator = new (pagination.SearchPaginator)
           current: pageNum or 1
           rowsPerPage: postsPerPage
           totalResult: allPosts.length
-        }
 
         pgData = paginator.getPaginationData()
 
@@ -174,13 +171,12 @@ PostsModel = {
           posts.push allPosts[i] if allPosts[i]
           i++
 
-        deferred.resolve {
+        deferred.resolve
           pageNum: pgData.current
           posts: posts
           pagination:
             next: pgData.next
             prev: pgData.previous
-        }
 
     return deferred.promise
 
@@ -194,10 +190,9 @@ PostsModel = {
         for post in posts
           postsArr.push post if tag in post.tags
 
-        deferred.resolve {
+        deferred.resolve
           tag: tag
           posts: postsArr
-        }
 
     return deferred.promise
 
@@ -233,6 +228,3 @@ PostsModel = {
               deferred.resolve pages
 
     return deferred.promise
-}
-
-module.exports = PostsModel

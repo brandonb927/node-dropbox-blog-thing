@@ -96,67 +96,65 @@
     {% endif %}
   </head>
 
-  <body itemscope itemtype="http://schema.org/WebPage">
-    <header role="banner" itemscope itemtype="http://schema.org/WPHeader">
-      <h1 itemprop="headline">
-        <a href="/">{{site.title}}</a>
-      </h1>
+  <body class="body-container" itemscope itemtype="http://schema.org/WebPage">
+    <div class="site-container">
+      <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+        <h1 class="site-header-title" itemprop="headline">
+          <a href="/">{{site.title}}</a>
+        </h1>
 
-      <div>
-        <img src="{{gravatar}}" />
-        <p>{{site.description}}</p>
-      </div>
+        <div class="site-header-avatar">
+          <img src="{{gravatar}}" />
+          <p>{{site.description}}</p>
+        </div>
 
-      {% if pages %}
-      <nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-        <ul>
-          {% for page in pages %}
-          <li itemprop="url">
-            <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+        {% if pages %}
+        <nav class="site-header-navigation" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+          <ul>
+            {% for page in pages %}
+            <li itemprop="url">
+              <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
+        {% endif %}
+
+        <ul class="site-header-social">
+          {% if site.social.twitter %}
+          <li>
+            <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
+              Twitter
+            </a>
           </li>
-          {% endfor %}
+          {% endif %}
+          {% if site.social.github %}
+          <li>
+            <a href="https://github.com/{{site.social.github}}" title="Github">
+              Github
+            </a>
+          </li>
+          {% endif %}
+          {% if site.social.googleplus %}
+          <li>
+            <a href="https://plus.google.com/+{{site.social.googleplus}}?rel=author" title="Google+">
+              Google+
+            </a>
+          </li>
+          {% endif %}
+          <li>
+            <a href="/rss.xml" title="RSS">
+              RSS
+            </a>
+          </li>
         </ul>
-      </nav>
-      {% endif %}
+      </header>
 
-      <ul>
-        {% if site.social.twitter %}
-        <li>
-          <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
-            Twitter
-          </a>
-        </li>
-        {% endif %}
-        {% if site.social.github %}
-        <li>
-          <a href="https://github.com/{{site.social.github}}" title="Github">
-            Github
-          </a>
-        </li>
-        {% endif %}
-        {% if site.social.googleplus %}
-        <li>
-          <a href="https://plus.google.com/+{{site.social.googleplus}}?rel=author" title="Google+">
-            Google+
-          </a>
-        </li>
-        {% endif %}
-        <li>
-          <a href="/rss.xml" title="RSS">
-            RSS
-          </a>
-        </li>
-      </ul>
-    </header>
-
-    <main role="main" itemprop="mainContentOfPage">
-      <section itemscope itemtype="http://schema.org/Blog">
-        {% block body %}{% endblock %}
-      </section>
-    </main>
-
-    <footer>
-
-    </footer>
+      <main role="main" itemprop="mainContentOfPage">
+        <section class="site-content" itemscope itemtype="http://schema.org/Blog">
+          {% block body %}{% endblock %}
+        </section>
+      </main>
+    </div>
   </body>
 </html>
