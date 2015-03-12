@@ -2,16 +2,11 @@
 @import 'variables.less';
 
 // 3rd-party
-@bower: "bower_components";
-@fa-font-path: "/@{bower}/font-awesome/fonts";
-@import "@{bower}/font-awesome/less/font-awesome.less";
-@import (less) "@{bower}/highlightjs/styles/tomorrow-night-eighties.css";
-@import (less) "@{bower}/skeleton/css/normalize.css";
-@import (less) "@{bower}/skeleton/css/skeleton.css";
+@import (less) "tomorrow-night-eighties.css";
 
 
 /**
- * Test utilities
+ * Text utilities
  */
 .text-center { text-align: center; }
 .text-left   { text-align: left;   }
@@ -23,6 +18,7 @@
  */
 html {
   box-sizing: border-box;
+  font-size: 62.5%
 }
 
 *, *:before, *:after {
@@ -31,14 +27,25 @@ html {
 
 body {
   font-size: @base-rem-unit;
-  line-height: @base-line-height;
-  font-family: @base-font-family;
+  line-height: 1.6;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
 }
 
 // Give all links a nice transition
 a {
-  text-decoration: none;
   transition: all 0.2s;
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-color: @black;
+  line-height: 1.333;
+  font-weight: 400;
 }
 
 ul li,
@@ -48,10 +55,10 @@ ol li {
 
 blockquote {
   margin: 0;
-  padding: 4rem 4rem 2rem;
-  margin-bottom: 2rem;
+  padding: 2rem 4rem;
   background: @gray-lightest;
-  font-family: @blockquote-font-family;
+  font-size: 1.8rem;
+  border-left: solid .6rem @gray-lighter;
 }
 
 img {
@@ -59,240 +66,37 @@ img {
   height: auto;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 15;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,.6);
-  display: none;
+pre, code {
+  font-family: "Droid Sans Mono", Monaco, "Lucida Sans Typewriter", Consolas, "Courier New", monospace;
+  font-size: 1.4rem;
+  color: @gray-lighter;
+  background: @gray-darkest;
 }
 
-// Site sidebar
-.site-sidebar {
-  position: fixed;
-  top: 0;
-  left: -@sidebar-width;
-  width: @sidebar-width;
-  height: 100%;
-  background: #222;
-  z-index: 20;
-  overflow: hidden;
-  overflow-y: auto;
-  transition: all 0.2s;
-  text-align: center;
+pre {
+  padding: .7rem 1rem;
+  overflow-x: scroll;
 }
 
-.menu-trigger {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
+code {
+  padding: .1rem .5rem;
 }
 
-// Main site container
-.site-wrapper {
-  position: relative;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  transition: all 0.2s;
-}
-
-// Avatar
-.site-avatar {
-  height: 96px;
-  width: 96px;
-  border-radius: 50%;
-}
-
-// Main site header
-.site-header {
-  padding: @base-rem-unit 0 0;
-  text-align: center;
-
-  .header-title {
-    margin-top: @base-rem-unit;
-    font-size: (@base-rem-unit * 1.5);
-  }
-}
-
-.header-nav {
-  margin-bottom: (@base-rem-unit * 3);
-
-  .nav-menu {
-    list-style-type: none;
-  }
-
-  .nav-menu li {
-    padding: 0;
-  }
-
-  .nav-menu a {
-    display: block;
-    padding: (@base-rem-unit / 2) 0;
-    vertical-align: middle;
-  }
-
-  .nav-menu a:hover {
-    background: @gray-light;
-    color: @base-font-color;
-  }
-}
-
-.site-bio,
-.site-search {
-  padding: (@base-rem-unit * 1.5) (@base-rem-unit) (@base-rem-unit * 2);
-}
-
-.site-bio {
-  color: @gray-light;
-
-  p {
-    margin-top: (@base-rem-unit * 2);
-  }
-}
-
-.social-icons {
-  margin: (@base-rem-unit * 3) 0;
+pre code {
   padding: 0;
-  list-style-type: none;
-
-  li {
-    display: inline-block;
-    padding: (@base-rem-unit / 2);
-  }
-
-  a {
-    position: relative;
-    display: inline-block;
-  }
-
-  a:hover {
-    color: @gray;
-    transform: scale(1.5);
-  }
-
-  a i {
-    font-size: (@base-font-size * 2);
-  }
+  background: none;
 }
 
-// Posts feed on homepage
-.feed {
-  max-width: @grid-breakpoint-medium-max;
-  margin: (@base-rem-unit * 3) auto;
-}
-
-// Post within feed
-.feed-post {
-  padding: (@base-rem-unit * 5) 0;
-  border-bottom: solid 1px @gray-lighter;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.post-title {
-  a {
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-}
-
-// Posts metadata (byline, datetime, etc)
-.post-meta {
-  // margin-bottom: (@base-rem-unit * 2);
-  font-weight: 400;
-  .cf;
-
-  .meta-left,
-  .meta-right {
-    width: 49.9%;
-  }
-
-  .meta-left  {
-    float: left;
-  }
-
-  .meta-right {
-    float: right;
-    text-align: right;
-  }
-
-  .meta-label {
-    display: inline-block;
-  }
-}
-
-// Posts pagination in homepage feed
-.pagination {
-  max-width: @grid-breakpoint-medium-max;
-  margin: (@base-rem-unit * 2) auto;
-  .cf;
-
-  li {
-    list-style-type: none;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  a.pagination-prev {
-    float: left;
-  }
-
-  a.pagination-next {
-    float: right;
-  }
-}
-
-.post-wrapper {
-  max-width: @grid-breakpoint-medium-max;
-  margin: 0 auto;
-}
-
-.post-article {
-  margin: (@base-rem-unit * 3) auto;
-}
-
-.post-content {
-  h1,
-  h2,
-  h3 {
-    margin-top: (@base-rem-unit * 2);
-  }
-}
-
-.post-image {
-  text-align: center;
-  margin: (@base-rem-unit * 1.5) 0;
-
-  a {
-    display: block;
-  }
-
-  img {
-    opacity: 0;
-    transition: opacity .3s ease-in;
-  }
-}
-
-.post-comments {
-  margin: (@base-rem-unit * 3) 0;
-}
+// .overlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   z-index: 15;
+//   width: 100%;
+//   height: 100%;
+//   background: rgba(0,0,0,.6);
+//   display: none;
+// }
 
 // If there is an error with an embed, style it a bit
 .embed-error {
@@ -303,24 +107,6 @@ img {
 
 .error-page {
   text-align: center;
-}
-
-.related-posts {
-  margin-top: (@base-rem-unit * 3);
-
-  ul {
-    padding: 0;
-  }
-}
-
-// Fix Github gists
-.highlight {
-  margin: 0;
-
-  .line-data .line-pre {
-    color: inherit;
-    box-shadow: none;
-  }
 }
 
 // Responsive-related classes

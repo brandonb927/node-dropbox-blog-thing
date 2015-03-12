@@ -9,6 +9,7 @@ pagination  = require('pagination')
 path        = require('path')
 slugify     = require('slug')
 MMD         = require('marked-metadata')
+highlight   = require('highlight.js')
 config      = require('../../config.json')
 logger      = require('../../config/logger')
 p           = require('../../config/promise')
@@ -18,14 +19,9 @@ p           = require('../../config/promise')
 renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
-  return "<div class=\"post-image\">
-            <a href=\"#{src}\" target=\"_blank\">
-              <img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" data-src=\"#{src}\" alt=\"#{title}\" />
-            </a>
-            <noscript>
-              <img src=\"#{src}\" alt=\"#{title}\" style=\"opacity:1;\" />
-            </noscript>
-          </div>"
+  return "<figure>
+            <img src=\"#{src}\" alt=\"#{if title? then title else ''}\">
+          </figure>"
 
 # Process the markdown file given a filename/filepath
 # and return an object containing the data to be sent to the view
@@ -40,6 +36,8 @@ getPost = (filePath) ->
         gfm:      true
         tables:   true
         breaks:   true
+        highlight: (code, lang) ->
+          return highlight.highlightAuto(code).value
       }
 
       md            = new MMD fileContent

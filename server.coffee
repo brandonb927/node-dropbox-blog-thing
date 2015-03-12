@@ -3,9 +3,10 @@ morgan        = require 'morgan'
 favicon       = require 'serve-favicon'
 nunjucks      = require 'nunjucks'
 express       = require 'express'
-chokidar      = require 'chokidar'
+# chokidar      = require 'chokidar'
 fs            = require 'graceful-fs'
 robots        = require 'robots.txt'
+watch         = require 'watch'
 app           = module.exports = express()
 config        = require './config.json'
 routes        = require './config/routes'
@@ -122,25 +123,22 @@ Posts.initCache returnPages = true
       page.url = "/#{page.slug}"
     app.locals.pages = pages
 
-# Setup file-watching in posts folder
-# to re-fill post cache when files are updated
-watcher = chokidar.watch "#{process.env.HOME}/Dropbox/posts/**/*", {
-  ignored: /[\/\\]\./
-  persistent: true
-  ignoreInitial: true
-}
-
-watcher
-  .on 'add', (filename) ->
-    logger.info '[ADDED]', filename
+# Setup file-watching in posts folder to re-fill post cache when files are updated
+watch.watchTree './posts', (f, curr, prev) ->
+  if typeof f is "object" and prev is null and curr is null
+    # Finished walking the tree
+  else if prev is null
+    # f is a new file
+    logger.debug "#{f} is a new file"
     Posts.initCache()
-  .on 'change', (filename) ->
-    logger.info '[CHANGED]', filename
+  else if curr.nlink is 0
+    # f was removed
+    logger.debug "#{f} was removed"
     Posts.initCache()
-  .on 'unlink', (filename) ->
-    logger.info '[REMOVED]', filename
+  else
+    # f was changed
+    logger.debug "#{f} was changed"
     Posts.initCache()
-  .close()
 
 logger.info "[Server] All systems ready to go! The magic happens on port #{port}"
 app.listen port

@@ -29,7 +29,7 @@ watchify      = require 'watchify'
 imagemin      = require 'gulp-imagemin'
 pngcrush      = require 'imagemin-pngcrush'
 plumber       = require 'gulp-plumber'
-# jshint        = require 'gulp-jshint'
+coffeelint    = require 'gulp-coffeelint'
 cached        = require 'gulp-cached'
 
 isWatching  = false
@@ -79,8 +79,8 @@ gulp.task 'styles', () ->
     .pipe sourcemaps.init()
     .pipe less()
     .pipe autoprefixer()
-    # .pipe pixrem()
-    # .pipe cssmin()
+    .pipe pixrem()
+    .pipe cssmin()
     .pipe concat config.vars.site_min_css
     .pipe sourcemaps.write()
     .pipe gulp.dest config.paths.styles.dest
@@ -91,17 +91,16 @@ gulp.task 'fonts', () ->
   return gulp.src config.paths.vendor.fonts
     .pipe gulp.dest config.paths.fonts.dest
 
-# run JSHint on the scripts
-# gulp.task 'hint', () ->
-#   return gulp.src config.paths.scripts.src
-#     .pipe plumber { errorHandler: errorHandler }
-#     .pipe cached 'hinting'
-#     .pipe jshint()
-#     .pipe jshint.reporter 'jshint-stylish'
+# run CoffeeLint on the scripts
+gulp.task 'lint', () ->
+  return gulp.src config.paths.scripts.src
+    .pipe plumber { errorHandler: errorHandler }
+    .pipe cached 'linting'
+    .pipe coffeelint()
+    .pipe coffeelint.reporter 'fail'
 
 # Build scripts
-# gulp.task 'scripts', ['hint'], () ->
-gulp.task 'scripts', () ->
+gulp.task 'scripts', ['lint'], () ->
   rebundle = () ->
     return @bundle()
       .on 'end', "#{gutil.log.bind gutil, gutil.colors.green '✓'} Rebuilding JS..."
@@ -138,7 +137,6 @@ gulp.task 'scripts', () ->
     .pipe watchified
     .pipe gulp.dest config.paths.scripts.dest
 
-
 # Use the tasks below for running on the command line
 # Default task
 gulp.task 'default', () ->
@@ -147,7 +145,7 @@ gulp.task 'default', () ->
     'images'
     'styles'
     'fonts'
-    # 'hint'
+    'lint'
     'scripts'
     'watch'
   ]
@@ -164,7 +162,7 @@ gulp.task 'watch', () ->
     '!gulpfile.coffee'
     '!src/scripts/vendor-pack.js'
   ], [
-    # 'hint'
+    'lint'
     'scripts'
   ]
 

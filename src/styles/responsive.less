@@ -1,47 +1,15 @@
-@media (min-width: @grid-breakpoint-medium-min) {
+@media (min-width: @grid-breakpoint-large-min) { // Desktop or higher
 
-  .menu-trigger { display: none; }
-
-  .site-sidebar {
-    float: left;
-    height: 100%;
-  }
-
-  .site-wrapper {
-    width: 100%;
-    padding-left: (@sidebar-width + @base-rem-unit);
-    float: right;
-  }
-
-  .site-sidebar { left: 0; }
 
 }
 
 
-@media (max-width: @grid-breakpoint-medium-max) {
+@media (max-width: @grid-breakpoint-medium-max) { // Everything up to desktop
 
-  body {
-    overflow-x: hidden;
-    position: relative;
 
-    &.menu-open {
-      .site-sidebar { left: 0; }
-      .site-wrapper { left: @sidebar-width; }
-      .menu-trigger { z-index: 20; }
-      .overlay      { display: block; }
-    }
-  }
-
-  .site-container {
-    padding-top: (@base-rem-unit * 3);
-    padding-left: @base-rem-unit;
-  }
 }
 
 @media (max-width: 48rem) { // iPhone size
 
-  .grid.gutter {
-    .module { padding: (@base-rem-unit / 2); }
-  }
 
 }

@@ -1,4 +1,4 @@
-/* Clearfix to contain floats */
+// Clearfix to contain floats
 .cf {
   &:before,
   &:after {
@@ -9,41 +9,7 @@
   &:after { clear: both; }
 }
 
-/**
- * Show/hide ($show-hide)
- */
-
-/**
- * Hide only visually, but have it available for screenreaders -
- * http://cbrac.co/TUcUgH
- */
-
-.visuallyhidden {
-  position: absolute;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  margin: -.0625rem;
-  padding: 0;
-  width: .0625rem;
-  height: .0625rem;
-  border: 0;
-
-  /**
-   * Extends the `.visuallyhidden` class to allow the element to be
-   * focusable when navigated to via the keyboard - http://cbrac.co/RR8gO6
-   */
-
-  &.focusable:active,
-  &.focusable:focus {
-    position: static;
-    overflow: visible;
-    clip: auto;
-    margin: 0;
-    width: auto;
-    height: auto;
-  }
-}
-
+// Responsive media embeds
 .embed-container {
   position: relative;
   padding-bottom: 56.25%;
@@ -51,14 +17,15 @@
   overflow: hidden; max-
   width: 100%;
   height: auto;
+
+  iframe,
+  object,
+  embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-.embed-container iframe,
-.embed-container object,
-.embed-container embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}

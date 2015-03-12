@@ -6,49 +6,47 @@
 <h4>Showing posts found with tag: {{tag}}</h4>
 <hr />
 {% endif %}
+
 {% if term %}
 <h4>Showing posts found using term: {{term}}</h4>
 <hr />
 {% endif %}
+
 {% if posts %}
 {% for post in posts %}
-<article class="feed-post" itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
-  <h2 class="post-title" itemprop="name headline">
+<article itemprop="blogPosts" itemscope itemtype="http://schema.org/BlogPosting">
+  <h2 itemprop="name headline">
     <a href="{{post.url}}">{{this.title}}</a>
   </h2>
 
-  <div class="post-meta">
-    <div class="meta-left">
-      <p>
-        Posted by
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          {% if site.social.googleplus}}
-          <a href="{{site.social.googleplus}}?rel=author" target="_blank" itemprop="url">
-            <span itemprop="name">{{site.author.name}}</span>
-          </a>
-          {% else %}
+  <div>
+    <p>
+      Posted by
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        {% if site.social.googleplus}}
+        <a href="{{site.social.googleplus}}?rel=author" target="_blank" itemprop="url">
           <span itemprop="name">{{site.author.name}}</span>
-          {% endif %}
-        </span>
-        on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>
-      </p>
-    </div>
+        </a>
+        {% else %}
+        <span itemprop="name">{{site.author.name}}</span>
+        {% endif %}
+      </span>
+      on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>
+    </p>
 
     {% if post.tags %}
-    <div class="meta-right">
-      <p>
-        <span class="meta-label">Tags: </span>
-        <span class="meta-tags">
-        {% for tag in post.tags %}
-          <a href="/tag/{{tag}}">{{tag}}</a>
-        {% endfor %}
-        </span>
-      </p>
-    </div>
+    <p>
+      <span>Tags: </span>
+      <span>
+      {% for tag in post.tags %}
+        <a href="/tag/{{tag}}">{{tag}}</a>
+      {% endfor %}
+      </span>
+    </p>
     {% endif %}
   </div>
 
-  <div class="post-content" itemprop="text">
+  <div itemprop="text">
     {{post.content}}
   </div>
 </article>

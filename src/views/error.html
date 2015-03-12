@@ -2,9 +2,7 @@
 
 {% block body %}
 
-<div class="error-page">
-  {% if title %}<h2>{{title}}</h2>{% endif %}
-  <p>{{error}}</p>
-</div>
+{% if title %}<h2>{{title}}</h2>{% endif %}
+<p>{{error}}</p>
 
 {% endblock %}
