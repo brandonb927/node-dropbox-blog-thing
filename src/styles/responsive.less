@@ -1,15 +1,64 @@
 @media (min-width: @grid-breakpoint-large-min) { // Desktop or higher
 
+  body {
+    font-size: 1.8rem;
+  }
+
+  .site-content-container {
+    padding-top: 8rem;
+  }
 
 }
 
 
 @media (max-width: @grid-breakpoint-medium-max) { // Everything up to desktop
 
+  .site-content-container {
+    padding-top: 2rem;
+  }
+
+  .site-content {
+    padding: 1rem;
+    width: 76%;
+
+    // Fix long links breaking out of boxes
+    word-break: break-word;
+    hyphens:    auto;
+  }
 
 }
 
 @media (max-width: 48rem) { // iPhone size
 
+  // Resize for smaller screens
+  body {
+    font-size: 1.4rem;
+  }
+
+  blockquote {
+    padding: 1rem;
+  }
+
+  .site-header-title {
+    font-size: 2rem;
+  }
+
+  .site-header-avatar {
+    margin: 1.25rem 1rem 0 0;
+  }
+
+  .site-header-avatar-img {
+    height: 3.6rem;
+    width: 3.6rem;
+  }
+
+  .site-content {
+    padding: 1rem;
+    width: 92%;
+  }
+
+  .posts-feed-item {
+    padding: 1rem 0;
+  }
 
 }

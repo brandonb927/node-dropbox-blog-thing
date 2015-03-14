@@ -1,4 +1,5 @@
 gravatar  = require 'gravatar'
+moment    = require 'moment'
 config    = require '../config.json'
 protocol  = if process.env.NODE_ENV isnt 'production' then 'http' else 'https'
 
@@ -28,6 +29,10 @@ locals = (req, res, next) ->
     res.locals.baseUrl = "http://localhost:#{config.port}"
   else
     res.locals.baseUrl = "#{protocol}://#{config.site.domain}"
+
+  # Set the copyright date object and date timestamp
+  res.locals.site.date    = moment(new Date()).format('YYYY')
+  res.locals.site.dateObj = moment(new Date()).toDate()
 
   next()
 

@@ -46,6 +46,7 @@
     <meta name="msapplication-TileColor" content="#D83434">
     <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
 
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400" rel="stylesheet">
     <link href="/assets/css/site.min.css" rel="stylesheet">
     <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
 
@@ -104,57 +105,148 @@
         </h1>
 
         <div class="site-header-avatar">
-          <img src="{{gravatar}}" />
-          <p>{{site.description}}</p>
+          <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle">
+            <img class="site-header-avatar-img" src="{{gravatar}}">
+          </a>
+          <div id="social_menu" class="site-header-social site-header-menu">
+            <ul>
+              {% if site.social.twitter %}
+              <li>
+                <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
+                  Twitter
+                </a>
+              </li>
+              {% endif %}
+              {% if site.social.github %}
+              <li>
+                <a href="https://github.com/{{site.social.github}}" title="Github">
+                  Github
+                </a>
+              </li>
+              {% endif %}
+              {% if site.social.googleplus %}
+              <li>
+                <a href="https://plus.google.com/+{{site.social.googleplus}}?rel=author" title="Google+">
+                  Google+
+                </a>
+              </li>
+              {% endif %}
+              <li>
+                <a href="/rss.xml" title="RSS">
+                  RSS
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- <p class="site-header-description">{{site.description}}</p> -->
         </div>
 
         {% if pages %}
-        <nav class="site-header-navigation" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-          <ul>
-            {% for page in pages %}
-            <li itemprop="url">
-              <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
-            </li>
-            {% endfor %}
-          </ul>
-        </nav>
+        <div class="site-header-pages">
+          <a href="#pages_menu" id="pages_menu_toggle" class="site-header-menu-toggle"><span></span></a>
+          <nav id="pages_menu" class="site-header-pages-menu site-header-menu" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <ul>
+              {% for page in pages %}
+              <li itemprop="url">
+                <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
         {% endif %}
-
-        <ul class="site-header-social">
-          {% if site.social.twitter %}
-          <li>
-            <a href="https://twitter.com/{{site.social.twitter}}" title="Twitter">
-              Twitter
-            </a>
-          </li>
-          {% endif %}
-          {% if site.social.github %}
-          <li>
-            <a href="https://github.com/{{site.social.github}}" title="Github">
-              Github
-            </a>
-          </li>
-          {% endif %}
-          {% if site.social.googleplus %}
-          <li>
-            <a href="https://plus.google.com/+{{site.social.googleplus}}?rel=author" title="Google+">
-              Google+
-            </a>
-          </li>
-          {% endif %}
-          <li>
-            <a href="/rss.xml" title="RSS">
-              RSS
-            </a>
-          </li>
-        </ul>
       </header>
 
-      <main role="main" itemprop="mainContentOfPage">
+      <main class="site-content-container" role="main" itemprop="mainContentOfPage">
         <section class="site-content" itemscope itemtype="http://schema.org/Blog">
           {% block body %}{% endblock %}
         </section>
       </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-inner">
+          <p>Copyright &copy; <time datetime="{{site.dateObj}}" itemprop="datePublished">{{site.date}}</time>. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
+
+    <script>
+      var socialMenuToggle = document.getElementById('social_menu_toggle');
+      var socialMenu       = document.getElementById('social_menu');
+      var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
+      var pagesMenu        = document.getElementById('pages_menu');
+
+      // based on Todd Motto functions
+      // http://toddmotto.com/labs/reusable-js/
+
+      // hasClass
+      function hasClass(elem, className) {
+        return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+      }
+
+      //å addClass
+      function addClass(elem, className) {
+        if (!hasClass(elem, className)) {
+          elem.className += ' ' + className;
+        }
+      }
+
+      // removeClass
+      function removeClass(elem, className) {
+        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
+        if (hasClass(elem, className)) {
+          while (newClass.indexOf(' ' + className + ' ') >= 0) {
+            newClass = newClass.replace(' ' + className + ' ', ' ');
+          }
+          elem.className = newClass.replace(/^\s+|\s+$/g, '');
+        }
+      }
+
+      // toggleClass
+      function toggleClass(elem, className) {
+        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, " ") + ' ';
+        if (hasClass(elem, className)) {
+          while (newClass.indexOf(" " + className + " ") >= 0) {
+            newClass = newClass.replace(" " + className + " " , " ");
+          }
+          elem.className = newClass.replace(/^\s+|\s+$/g, '');
+        } else {
+          elem.className += ' ' + className;
+        }
+      }
+
+      socialMenuToggle.addEventListener('click', function (event) {
+         event.preventDefault();
+         toggleClass(this, 'on');
+         return false;
+      });
+
+      pagesMenuToggle.addEventListener('click', function (event) {
+         event.preventDefault();
+         toggleClass(this, 'on');
+         return false;
+      });
+
+      document.addEventListener('click', function (event) {
+        console.log(event);
+        console.log(event.target);
+        console.log(event.target.parentElement);
+        console.log(hasClass(pagesMenuToggle, 'on'));
+        console.log(event.target.parentElement !== pagesMenuToggle);
+        console.log(event.target.parentElement !== pagesMenu);
+
+        if(hasClass(pagesMenuToggle, 'on')
+          && event.target.parentElement !== pagesMenuToggle
+          && event.target.parentElement !== pagesMenu) {
+          removeClass(pagesMenuToggle, 'on');
+        }
+
+        if(hasClass(socialMenuToggle, 'on')
+          && event.target.parentElement !== socialMenuToggle
+          && event.target.parentElement !== socialMenu) {
+          removeClass(socialMenuToggle, 'on');
+        }
+      });
+    </script>
   </body>
 </html>

@@ -5,7 +5,7 @@ config      = require '../../config.json'
 PostsModel  = require '../models/posts'
 
 
-module.exports =
+PostsController =
   index: (req, res, next) ->
     PostsModel.getByPagination 1
       .then (data) ->
@@ -107,3 +107,5 @@ module.exports =
         # Set the content type to xml and send the response back
         res.header 'Content-Type', 'application/xml'
         return res.send sitemap.toString()
+
+module.exports = PostsController

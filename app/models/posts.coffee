@@ -108,7 +108,7 @@ getAllPosts = (includePages) ->
         # Rudimentary way to reverse the order of the posts from the files list
         return posts.reverse()
 
-module.exports =
+PostsModel =
   getAll: (includePages) ->
     deferred = Q.defer()
     getAllPosts includePages
@@ -228,3 +228,5 @@ module.exports =
               deferred.resolve pages
 
     return deferred.promise
+
+module.exports = PostsModel
