@@ -100,14 +100,12 @@
   <body class="body-container" itemscope itemtype="http://schema.org/WebPage">
     <div class="site-container">
       <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
-        <h1 class="site-header-title" itemprop="headline">
-          <a href="/">{{site.title}}</a>
-        </h1>
-
         <div class="site-header-avatar">
-          <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle">
+          <!-- <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle"> -->
+          <a href="#social_menu" id="social_menu_toggle">
             <img class="site-header-avatar-img" src="{{gravatar}}">
           </a>
+          <!--
           <div id="social_menu" class="site-header-social site-header-menu">
             <ul>
               {% if site.social.twitter %}
@@ -138,7 +136,14 @@
               </li>
             </ul>
           </div>
+          -->
           <!-- <p class="site-header-description">{{site.description}}</p> -->
+        </div>
+
+        <div class="site-header-title" >
+          <h1 itemprop="headline">
+            <a href="/">{{site.title}}</a>
+          </h1>
         </div>
 
         {% if pages %}
@@ -171,82 +176,51 @@
     </div>
 
     <script>
-      var socialMenuToggle = document.getElementById('social_menu_toggle');
-      var socialMenu       = document.getElementById('social_menu');
-      var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
-      var pagesMenu        = document.getElementById('pages_menu');
+      document.querySelector("#pages_menu_toggle")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          this.classList.toggle("menu-active");
+          return false;
+        });
 
-      // based on Todd Motto functions
-      // http://toddmotto.com/labs/reusable-js/
 
-      // hasClass
-      function hasClass(elem, className) {
-        return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-      }
+      // var socialMenuToggle = document.getElementById('social_menu_toggle');
+      // var socialMenu       = document.getElementById('social_menu');
+      // var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
+      // var pagesMenu        = document.getElementById('pages_menu');
 
-      //å addClass
-      function addClass(elem, className) {
-        if (!hasClass(elem, className)) {
-          elem.className += ' ' + className;
-        }
-      }
+      // socialMenuToggle.addEventListener('click', function (event) {
+      //    event.preventDefault();
+      //    toggleClass(this, 'on');
+      //    return false;
+      // });
 
-      // removeClass
-      function removeClass(elem, className) {
-        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
-        if (hasClass(elem, className)) {
-          while (newClass.indexOf(' ' + className + ' ') >= 0) {
-            newClass = newClass.replace(' ' + className + ' ', ' ');
-          }
-          elem.className = newClass.replace(/^\s+|\s+$/g, '');
-        }
-      }
+      // pagesMenuToggle.addEventListener('click', function (event) {
+      //    event.preventDefault();
+      //    toggleClass(this, 'on');
+      //    return false;
+      // });
 
-      // toggleClass
-      function toggleClass(elem, className) {
-        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, " ") + ' ';
-        if (hasClass(elem, className)) {
-          while (newClass.indexOf(" " + className + " ") >= 0) {
-            newClass = newClass.replace(" " + className + " " , " ");
-          }
-          elem.className = newClass.replace(/^\s+|\s+$/g, '');
-        } else {
-          elem.className += ' ' + className;
-        }
-      }
+      // document.addEventListener('click', function (event) {
+      //   // console.log(event);
+      //   // console.log(event.target);
+      //   // console.log(event.target.parentElement);
+      //   // console.log(hasClass(pagesMenuToggle, 'on'));
+      //   // console.log(event.target.parentElement !== pagesMenuToggle);
+      //   // console.log(event.target.parentElement !== pagesMenu);
 
-      socialMenuToggle.addEventListener('click', function (event) {
-         event.preventDefault();
-         toggleClass(this, 'on');
-         return false;
-      });
+      //   if(hasClass(pagesMenuToggle, 'on')
+      //     && event.target.parentElement !== pagesMenuToggle
+      //     && event.target.parentElement !== pagesMenu) {
+      //     removeClass(pagesMenuToggle, 'on');
+      //   }
 
-      pagesMenuToggle.addEventListener('click', function (event) {
-         event.preventDefault();
-         toggleClass(this, 'on');
-         return false;
-      });
-
-      document.addEventListener('click', function (event) {
-        console.log(event);
-        console.log(event.target);
-        console.log(event.target.parentElement);
-        console.log(hasClass(pagesMenuToggle, 'on'));
-        console.log(event.target.parentElement !== pagesMenuToggle);
-        console.log(event.target.parentElement !== pagesMenu);
-
-        if(hasClass(pagesMenuToggle, 'on')
-          && event.target.parentElement !== pagesMenuToggle
-          && event.target.parentElement !== pagesMenu) {
-          removeClass(pagesMenuToggle, 'on');
-        }
-
-        if(hasClass(socialMenuToggle, 'on')
-          && event.target.parentElement !== socialMenuToggle
-          && event.target.parentElement !== socialMenu) {
-          removeClass(socialMenuToggle, 'on');
-        }
-      });
+      //   if(hasClass(socialMenuToggle, 'on')
+      //     && event.target.parentElement !== socialMenuToggle
+      //     && event.target.parentElement !== socialMenu) {
+      //     removeClass(socialMenuToggle, 'on');
+      //   }
+      // });
     </script>
   </body>
 </html>

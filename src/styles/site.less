@@ -209,55 +209,65 @@ strong {
 
 // Menu toggle styles
 .site-header-menu-toggle {
-  span,
-  span:after,
-  span:before {
-    width: 100%;
-    height: .5rem;
-    background-color: @gray-lightest;
-    transition: all .3s;
-    backface-visibility: hidden;
-  }
+  cursor: pointer;
+  padding: 1rem 3.5rem 1.6rem 0;
+}
 
-  span {
-    position: relative;
+.site-header-menu-toggle span,
+.site-header-menu-toggle span:before,
+.site-header-menu-toggle span:after {
+  content: '';
+  position: absolute;
+  display: block;
+  height: .5rem;
+  width: 3.5rem;
+  border-radius: .1rem;
+  background: @white;
+  cursor: pointer;
+}
+
+.site-header-menu-toggle span:before {
+  top: -1rem;
+}
+
+.site-header-menu-toggle span:after {
+  bottom: -1rem;
+}
+
+.site-header-menu-toggle span,
+.site-header-menu-toggle span:before,
+.site-header-menu-toggle span:after {
+  transition: all .3s ease-in-out;
+}
+
+.site-header-menu-toggle.menu-active span {
+  background-color: transparent;
+}
+
+.site-header-menu-toggle.menu-active span:before,
+.site-header-menu-toggle.menu-active span:after {
+  top: 0;
+}
+
+.site-header-menu-toggle.menu-active span:before {
+  transform: rotate(45deg);
+}
+
+.site-header-menu-toggle.menu-active span:after {
+  transform: translateY(-1rem) rotate(-45deg);
+  top: 1rem;
+}
+
+.site-header-menu-toggle {
+  &.menu-active + #pages_menu,
+  &.menu-active + #social_menu,
+  &.menu-active + #pages_menu ul,
+  &.menu-active + #social_menu ul {
     display: block;
   }
 
-  span:after,
-  span:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: -.9rem;
-  }
-
-  span:after{
-    top: .9rem;
-  }
-
-  // On activate
-  &.on span {
-    background-color: transparent;
-  }
-
-  &.on span:before {
-    transform: rotate(45deg) translate(.5rem, .5rem);
-  }
-
-  &.on span:after {
-    transform: rotate(-45deg) translate(.7rem, -.8rem);
-  }
-
-  &.on + #pages_menu,
-  &.on + #social_menu,
-  &.on + #pages_menu ul,
-  &.on + #social_menu ul {
-    display: block;
-  }
-
-  &.on + #pages_menu,
-  &.on + #social_menu {
+  &.menu-active + #pages_menu,
+  &.menu-active + #social_menu {
     .fadeInDown;
   }
 }
@@ -265,9 +275,10 @@ strong {
 // Menu styles
 .site-header-menu {
   display: none;
-  position: relative;
+  position: absolute;
+  margin-top: 1rem;
   width: 28rem;
-  margin: 0 auto;
+  left: -23rem;
   color: @black;
   text-align: center;
   background: white;
@@ -277,7 +288,7 @@ strong {
   &:after {
     position: absolute;
     top: -1rem;
-    left: 13rem;
+    left: 23.7rem;
     content: "";
     display: inline-block;
     border-left: 1rem solid transparent;
@@ -311,11 +322,10 @@ strong {
 
 // Specific menu toggle styles
 #pages_menu_toggle {
+  flex-grow: 1;
   display: block;
   width: 3rem;
-  height: 2.7rem;
-  margin: 1.5rem auto;
-  padding-top: 1.25rem;
+  margin: 0 auto;
 }
 
 #social_menu {
@@ -375,7 +385,9 @@ strong {
 }
 
 .site-header {
-  .clearfix;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   position: absolute;
   background: rgba(44, 62, 80,1.0);
   width: 100%;
@@ -384,9 +396,12 @@ strong {
 }
 
 .site-header-title {
-  margin: .7rem 0 0 1rem;
+  flex-grow: 1;
   padding: 0;
-  float: left;
+
+  h1 {
+    margin: 0;
+  }
 
   a {
     color: @white;
@@ -395,13 +410,11 @@ strong {
 }
 
 .site-header-avatar {
-  float: right;
-  margin: 0 1rem 0 0;
+  flex-grow: 1;
 
   > a {
-    margin: 1.25rem 0 0 0;
-    display: block;
-    text-align: right;
+    margin: .7rem 0 0 2rem;
+    display: inline-block;
   }
 }
 
@@ -411,9 +424,9 @@ strong {
   border-radius: 50%;
 }
 
-.site-header-description {
-  display: none;
-}
+// .site-header-description {
+//   display: none;
+// }
 
 .site-header-social {
   ul {
@@ -432,7 +445,8 @@ strong {
 }
 
 .site-header-pages {
-  margin: 0 auto;
+  position: relative;
+  margin-right: 2rem;
 
   ul {
     margin: 0;
