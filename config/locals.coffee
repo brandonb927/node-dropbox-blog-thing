@@ -1,7 +1,7 @@
 gravatar  = require 'gravatar'
 moment    = require 'moment'
 config    = require '../config.json'
-protocol  = if process.env.NODE_ENV isnt 'production' then 'http' else 'https'
+protocol  = if process.env.NODE_ENV is 'production' then 'https' else 'http'
 
 ###
 # Globals for use in templates and remove the dropbox key from the config
