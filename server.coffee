@@ -65,17 +65,17 @@ app.use (req, res, next) ->
   url   = "/#{req.url}"
 
   # Respond with an HTML page
-  return res.render 'error.html',{
-    title: title
-    error: error
-    url: url
+  return res.render 'error.html', {
+    title : title
+    error : error
+    url   : url
   } if req.accepts 'html'
 
   # Respond with JSON
   return res.send {
-    code: 404
-    error: error
-    url: url
+    code  : 404
+    error : error
+    url   : url
   } if req.accepts 'json'
 
 # Everything else
@@ -104,16 +104,16 @@ app.use (err, req, res, next) ->
 
   # Respond with an HTML page
   return res.render 'error.html', {
-    title: title
-    error: error.toString()
-    url: url
+    title : title
+    error : error.toString()
+    url   : url
   } if req.accepts 'html'
 
   # Respond with JSON
   return res.send {
-    code: statusCode
-    error: error.toString()
-    url: url
+    code  : statusCode
+    error : error.toString()
+    url   : url
   } if req.accepts 'json'
 
   # default to plain-text. send()
