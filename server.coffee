@@ -117,7 +117,9 @@ app.use (err, req, res, next) ->
   } if req.accepts 'json'
 
   # default to plain-text. send()
-  res.type('txt').send('Not found')
+  res
+    .type 'txt'
+    .send 'Not found'
 
 # Setup the posts cache
 Posts.initCache returnPages = true
