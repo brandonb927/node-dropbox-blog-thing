@@ -129,7 +129,7 @@ Posts.initCache returnPages = true
     app.locals.pages = pages
 
 # Setup file-watching in posts folder to re-fill post cache when files are updated
-watch.watchTree './posts', (f, curr, prev) ->
+watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
   if typeof f is "object" and prev is null and curr is null
     # Finished walking the tree
   else if prev is null
