@@ -3,6 +3,7 @@ logger        = require './config/logger'
 config        = require './gulp_config.json'
 del           = require 'del'
 runSequence   = require 'run-sequence'
+notifier      = require 'node-notifier';
 gulp          = require 'gulp'
 gutil         = require 'gulp-util'
 nodemon       = require 'nodemon'
@@ -39,7 +40,12 @@ reloadDelay = 2000
 # Add the error handler to the config
 # Get the task from the gulp/tasks folder
 errorHandler = (err) ->
+  notifier.notify
+    title: 'Something wicked happened...'
+    message: "Error: #{err.message}"
+
   logger.error "#{gutil.colors.red '✗' } Error: #{err.message}"
+
   @emit 'end'
 
 # View templates task

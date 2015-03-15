@@ -210,7 +210,7 @@ strong {
 // Menu toggle styles
 .site-header-menu-toggle {
   cursor: pointer;
-  padding: 1rem 3.5rem 1.6rem 0;
+  padding: 2rem 4.5rem 2.5rem 1rem;
 }
 
 .site-header-menu-toggle span,
@@ -278,22 +278,20 @@ strong {
   position: absolute;
   margin-top: 1rem;
   width: 28rem;
-  left: -23rem;
   color: @black;
   text-align: center;
-  background: white;
+  background: @white;
   box-shadow: 0 .1rem .8rem rgba(0,0,0,.25);
   .animated;
 
   &:after {
     position: absolute;
     top: -1rem;
-    left: 23.7rem;
     content: "";
     display: inline-block;
     border-left: 1rem solid transparent;
     border-right: 1rem solid transparent;
-    border-bottom: 1rem solid white;
+    border-bottom: 1rem solid @white;
   }
 
   ul,
@@ -326,12 +324,26 @@ strong {
   display: block;
   width: 3rem;
   margin: 0 auto;
+  left: -23rem;
+}
+
+#pages_menu {
+  left: -23rem;
+
+  &:after {
+    left: 24.7rem;
+  }
+}
+
+#social_menu_toggle {
+  padding: 0;
 }
 
 #social_menu {
+  left: 2rem;
+
   &:after {
-    top: -1rem;
-    left: 25rem;
+    left: .7rem;
   }
 }
 
@@ -446,7 +458,7 @@ strong {
 
 .site-header-pages {
   position: relative;
-  margin-right: 2rem;
+  margin-right: 1rem;
 
   ul {
     margin: 0;
@@ -464,7 +476,7 @@ strong {
 }
 
 .site-content-container {
-  padding-top: 4rem;
+  padding-top: 10rem;
 }
 
 .site-content,
@@ -499,6 +511,10 @@ strong {
 
 .posts-feed-item {
   padding: 4rem 0;
+}
+
+.posts-feed-item:first-child {
+  padding-top: 0;
 }
 
 // Individual post

@@ -101,11 +101,9 @@
     <div class="site-container">
       <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
         <div class="site-header-avatar">
-          <!-- <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle"> -->
-          <a href="#social_menu" id="social_menu_toggle">
+          <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle">
             <img class="site-header-avatar-img" src="{{gravatar}}">
           </a>
-          <!--
           <div id="social_menu" class="site-header-social site-header-menu">
             <ul>
               {% if site.social.twitter %}
@@ -136,19 +134,17 @@
               </li>
             </ul>
           </div>
-          -->
-          <!-- <p class="site-header-description">{{site.description}}</p> -->
         </div>
 
         <div class="site-header-title" >
           <h1 itemprop="headline">
-            <a href="/">{{site.title}}</a>
+            <a href="/" title="{{site.description}}">{{site.title}}</a>
           </h1>
         </div>
 
         {% if pages %}
         <div class="site-header-pages">
-          <a href="#pages_menu" id="pages_menu_toggle" class="site-header-menu-toggle"><span></span></a>
+          <a href="#pages_menu" id="pages_menu_toggle" title="Pages Menu" class="site-header-menu-toggle"><span></span></a>
           <nav id="pages_menu" class="site-header-pages-menu site-header-menu" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
             <ul>
               {% for page in pages %}
@@ -176,51 +172,22 @@
     </div>
 
     <script>
-      document.querySelector("#pages_menu_toggle")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-          this.classList.toggle("menu-active");
-          return false;
-        });
+      var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
+      var pagesMenu        = document.getElementById('pages_menu');
+      var socialMenuToggle = document.getElementById('social_menu_toggle');
+      var socialMenu       = document.getElementById('social_menu');
 
+      pagesMenuToggle.addEventListener("click", function (event) {
+        event.preventDefault();
+        this.classList.toggle("menu-active");
+        return false;
+      });
 
-      // var socialMenuToggle = document.getElementById('social_menu_toggle');
-      // var socialMenu       = document.getElementById('social_menu');
-      // var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
-      // var pagesMenu        = document.getElementById('pages_menu');
-
-      // socialMenuToggle.addEventListener('click', function (event) {
-      //    event.preventDefault();
-      //    toggleClass(this, 'on');
-      //    return false;
-      // });
-
-      // pagesMenuToggle.addEventListener('click', function (event) {
-      //    event.preventDefault();
-      //    toggleClass(this, 'on');
-      //    return false;
-      // });
-
-      // document.addEventListener('click', function (event) {
-      //   // console.log(event);
-      //   // console.log(event.target);
-      //   // console.log(event.target.parentElement);
-      //   // console.log(hasClass(pagesMenuToggle, 'on'));
-      //   // console.log(event.target.parentElement !== pagesMenuToggle);
-      //   // console.log(event.target.parentElement !== pagesMenu);
-
-      //   if(hasClass(pagesMenuToggle, 'on')
-      //     && event.target.parentElement !== pagesMenuToggle
-      //     && event.target.parentElement !== pagesMenu) {
-      //     removeClass(pagesMenuToggle, 'on');
-      //   }
-
-      //   if(hasClass(socialMenuToggle, 'on')
-      //     && event.target.parentElement !== socialMenuToggle
-      //     && event.target.parentElement !== socialMenu) {
-      //     removeClass(socialMenuToggle, 'on');
-      //   }
-      // });
+      socialMenuToggle.addEventListener("click", function (event) {
+        event.preventDefault();
+        this.classList.toggle("menu-active");
+        return false;
+      });
     </script>
   </body>
 </html>
