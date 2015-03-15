@@ -16,12 +16,12 @@ locals = (req, res, next) ->
     d: '404'
   }
 
-  if process.env.NODE_ENV isnt 'production'
-    res.locals.gravatar = gravatar.url config.site.author.email, gravatarOptions
-  else
+  if process.env.NODE_ENV is 'production'
     res.locals.gravatar = gravatar.url config.site.author.email, gravatarOptions, true
+  else
+    res.locals.gravatar = gravatar.url config.site.author.email, gravatarOptions
 
-  res.locals.debug = if process.env.NODE_ENV isnt 'production' then true else false
+  res.locals.debug = if process.env.NODE_ENV is 'production' then false else true
 
   # Set the baseUrl for use in templates and generating URLs to different pages/posts
   if process.env.NODE_ENV is 'production'
