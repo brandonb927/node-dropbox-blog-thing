@@ -11,6 +11,7 @@
     "feed": "^0.2.6",
     "graceful-fs": "^3.0.5",
     "gravatar": "^1.1.0",
+    "highlight.js": "^8.4.0",
     "html-to-text": "^1.2.1",
     "marked": "^0.3.3",
     "marked-metadata": "git://github.com/brandonb927/marked-metadata.git",
