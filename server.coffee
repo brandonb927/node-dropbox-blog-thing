@@ -14,11 +14,6 @@ logger        = require './config/logger'
 locals        = require './config/locals'
 Posts         = require './app/models/posts'
 
-# New logging token for remote ip
-# morgan.token 'remote-ip', (req, res) ->
-#   return req.headers['x-forwarded-for'] || req.connection.remoteAddress
-
-# morganString  = '[:date[web]] :remote-ip - :method :url :status (:response-time ms) ":referrer" ":user-agent"'
 morganString  = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"'
 loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
 port          = config.port = process.env.PORT or 3000
