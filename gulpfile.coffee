@@ -156,6 +156,16 @@ gulp.task 'default', () ->
     'watch'
   ]
 
+gulp.task 'build', () ->
+  gulp.start [
+    'templates'
+    'images'
+    'styles'
+    'fonts'
+    'lint'
+    'scripts'
+  ]
+
 # Watch task
 gulp.task 'watch', () ->
   isWatching = true
