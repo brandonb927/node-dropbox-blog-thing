@@ -116,7 +116,7 @@ app.use (err, req, res, next) ->
     url   : url
   } if req.accepts 'json'
 
-  # default to plain-text. send()
+  # default to plain-text
   res
     .type 'txt'
     .send 'Not found'
