@@ -1,7 +1,6 @@
 gravatar  = require 'gravatar'
 moment    = require 'moment'
 config    = require '../config.json'
-protocol  = if process.env.NODE_ENV is 'production' then 'https' else 'http'
 
 ###
 # Globals for use in templates and remove the dropbox key from the config
@@ -25,10 +24,10 @@ locals = (req, res, next) ->
   res.locals.debug = if process.env.NODE_ENV isnt 'production' then true else false
 
   # Set the baseUrl for use in templates and generating URLs to different pages/posts
-  if process.env.NODE_ENV isnt 'production'
-    res.locals.baseUrl = "http://localhost:#{config.port}"
+  if process.env.NODE_ENV is 'production'
+    res.locals.baseUrl = "https://#{config.site.domain}"
   else
-    res.locals.baseUrl = "#{protocol}://#{config.site.domain}"
+    res.locals.baseUrl = "http://localhost:#{config.port}"
 
   # Set the copyright date object and date timestamp
   res.locals.site.date    = moment(new Date()).format('YYYY')
