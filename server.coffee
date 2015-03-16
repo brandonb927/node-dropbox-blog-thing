@@ -14,7 +14,7 @@ logger        = require './config/logger'
 locals        = require './config/locals'
 Posts         = require './app/models/posts'
 
-morganString  = '[:date[web]] :remote-addr - :method :url :status (:response-time ms) ":referrer" ":user-agent"'
+morganString  = '[:date] ip=:remote-addr method=:method path=:url status=:status (:response-time ms) ":referrer"'
 loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
 port          = config.port = process.env.PORT or 3000
 
