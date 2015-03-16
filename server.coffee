@@ -3,7 +3,6 @@ morgan        = require 'morgan'
 favicon       = require 'serve-favicon'
 nunjucks      = require 'nunjucks'
 express       = require 'express'
-# chokidar      = require 'chokidar'
 fs            = require 'graceful-fs'
 robots        = require 'robots.txt'
 watch         = require 'watch'
@@ -14,20 +13,25 @@ logger        = require './config/logger'
 locals        = require './config/locals'
 Posts         = require './app/models/posts'
 
+# Set the logging string for morgan and winston
 morganString  = '[:date] ip=:remote-addr method=:method path=:url status=:status (:response-time ms) ":referrer"'
 loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
+
+# Set the port for the server to run on
 port          = config.port = process.env.PORT or 3000
 
+# Set the base path of the app
 config.basePath = process.env.PWD
 
-# Use Nunjucks rather than Jade
-# and setup the views folder
+# Use Nunjucks rather than Jade and setup the views folder
 app.set 'views', "#{__dirname}/public/views"
 app.set 'view engine', 'nunjucks'
 
+# In production, this will sit behind an nginx proxy
 if process.env.NODE_ENV is 'production'
   app.enable 'trust proxy'
 
+# Configure the views folder
 env = nunjucks.configure "#{__dirname}/public/views", {
   autoescape: false
   express: app
@@ -57,7 +61,7 @@ app.use morgan loggingString, { 'stream': logger.stream }
 # Routes & Middleware
 app.use routes
 
-# 404
+# 404 route
 app.use (req, res, next) ->
   res.status 404
   title = '404: Not Found'
@@ -78,7 +82,7 @@ app.use (req, res, next) ->
     url   : url
   } if req.accepts 'json'
 
-# Everything else
+# Everything else, 500, etc.
 app.use (err, req, res, next) ->
   statusText  = undefined
   statusCode  = err.status or 500
@@ -145,6 +149,7 @@ watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
     logger.debug "#{f} was changed"
     Posts.initCache()
 
+# Setup the listener for the app
 logger.info "[Server] All systems ready to go! The magic happens on port #{port}"
 app.listen port
 
