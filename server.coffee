@@ -14,7 +14,7 @@ locals        = require './config/locals'
 Posts         = require './app/models/posts'
 
 # Set the logging string for morgan and winston
-morganString  = 'ip=:remote-addr method=:method path=:url status=:status (:response-time ms) ":referrer"'
+morganString  = 'method=:method path=:url status=:status response-time=:response-time referrer=:referrer ip=:remote-addr'
 loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
 
 # Set the port for the server to run on
