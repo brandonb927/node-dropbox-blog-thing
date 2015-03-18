@@ -10,6 +10,7 @@ path        = require('path')
 slugify     = require('slug')
 MMD         = require('marked-metadata')
 highlight   = require('highlight.js')
+jsdom       = require("jsdom").jsdom
 config      = require('../../config.json')
 logger      = require('../../config/logger')
 p           = require('../../config/promise')
@@ -58,6 +59,12 @@ getPost = (filePath) ->
         slug:     slug
         tags:     tags
         isPage:   if meta.type is 'page' then true else false
+
+      # Strip blank <p> tags from around figure elements
+      document = jsdom(content)
+      window = document.defaultView
+      body = window.document.body.innerHTML
+      content = body.replace /\<p\>\<\/p\>/g, ''
 
       # Return the HTML-safe content that will be rendered to the page
       # post.content = new nunjucks.runtime.SafeString(content); // This is commented in favour of turning autoescape off app-wide
