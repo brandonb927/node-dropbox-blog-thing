@@ -387,13 +387,7 @@ strong {
 
 // Main styles
 .body-container {
-
-}
-
-.site-container {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
+  // this may never be used but here until then
 }
 
 .site-header {
@@ -475,14 +469,20 @@ strong {
   }
 }
 
+.site-container {
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+  padding: 10rem 0;
+}
+
 .site-content-container {
-  padding-top: 10rem;
+  border: solid .1rem #f3f3f3;
+  box-shadow: 0 1rem 1.5rem rgba(0,0,0,.1)
 }
 
 .site-content,
-.site-footer-inner {
-  width: 60%;
-  margin: 0 auto;
+.site-footer {
   background: @white;
 }
 
@@ -491,9 +491,7 @@ strong {
 }
 
 .site-footer {
-  padding: 0 0 4rem;
   text-align: center;
-  background: @gray-lightest;
 }
 
 .site-footer-inner {
