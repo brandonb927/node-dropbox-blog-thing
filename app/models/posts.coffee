@@ -107,11 +107,7 @@ getAllPosts = (includePages) ->
         # Build the proper file list
         postFiles = []
         files.forEach (fileName) ->
-          logger.debug fileName
-          logger.debug config.postFileExt
-          logger.debug endswith fileName, config.postFileExt
-          postFiles.push fileName if endswith fileName, config.postFileExt
-          # postFiles.push fileName if endswith fileName, config.postFileExt or isDraft fileName
+          postFiles.push fileName if endswith fileName, config.postFileExt or isDraft fileName
 
         # Loop through the files, get data, and return them as promises
         return Q.all postFiles.map (fileName) ->
