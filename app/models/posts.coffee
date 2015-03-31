@@ -27,8 +27,11 @@ renderer.image = (src, title, text) ->
           </figure>"
 
 # Helper function to get draft status
-isDraft = (filename) ->
-  return startswith(filename, 'draft_') and process.env.NODE_ENV isnt 'production'
+canAddPost = (filename) ->
+  isDraft  = startswith filename, 'draft_'
+  isFile   = endswith filename, 'md'
+  isProd = process.env.NODE_ENV isnt 'production'
+  return if (isFile or isDraft) and isProd then true else false
 
 # Process the markdown file given a filename/filepath
 # and return an object containing the data to be sent to the view
@@ -107,7 +110,10 @@ getAllPosts = (includePages) ->
         # Build the proper file list
         postFiles = []
         files.forEach (fileName) ->
-          postFiles.push fileName if endswith fileName, config.postFileExt or isDraft fileName
+          logger.debug fileName
+          if canAddPost fileName
+            logger.debug 'CAN ADD POST'
+            postFiles.push fileName
 
         # Loop through the files, get data, and return them as promises
         return Q.all postFiles.map (fileName) ->
