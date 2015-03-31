@@ -134,7 +134,7 @@ h5 {
 }
 
 p {
-  margin: 0 0 6rem;
+  margin: 0 0 2rem;
 }
 
 ul li,
@@ -148,11 +148,11 @@ blockquote {
   background: @gray-lightest;
   border-left: solid .6rem @gray-lighter;
 
-  cite {
+  p {
     font-style: italic;
   }
 
-  cite:before {
+  p:before {
     content: '- ';
     padding-left: 2rem;
   }
@@ -173,7 +173,8 @@ code {
 }
 
 pre {
-  padding: .7rem 1rem;
+  margin: 2rem -4rem;
+  padding: 2rem 6rem;
   overflow-x: scroll;
 }
 
@@ -544,6 +545,15 @@ strong {
 .post-meta {
   font-size: 1.3rem;
   color: @gray-darker;
+  .clearfix;
+}
+
+.post-meta-left {
+  float: left;
+}
+
+.post-meta-right {
+  float: right;
 }
 
 .post-content {

@@ -7,6 +7,10 @@
   {% endif %}
   </h2>
 
+  <div class="post-content" itemprop="text">
+    {{post.content}}
+  </div>
+
   {% if not post.isPage %}
   <div class="post-meta">
     <div class="post-meta-left">
@@ -21,10 +25,13 @@
           <span itemprop="name">{{site.author.name}}</span>
           {% endif %}
         </span>
-        on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>,
+        on <time datetime="{{post.dateObj}}" itemprop="datePublished">{{post.date}}</time>
+      </p>
+    </div>
+    <div class="post-meta-right">
+      <p>
         {% if post.tags|length %}
-        <br />
-        tagged with
+        Tagged with
         <span class="post-meta-tags">
           {% for tag in post.tags %}
           <a href="/tag/{{tag}}">{{tag}}</a>{% if not loop.last %},{% endif %}
@@ -35,8 +42,4 @@
     </div>
   </div>
   {% endif %}
-
-  <div class="post-content" itemprop="text">
-    {{post.content}}
-  </div>
 </article>

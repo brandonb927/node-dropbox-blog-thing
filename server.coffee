@@ -45,7 +45,7 @@ require('./config/nunjucks_helpers')(env)
 app.use locals
 
 # Add some prototype helpers
-require './config/helpers'
+# require './config/helpers'
 
 # Setup to serve from these folders
 app.use express.static "#{__dirname}/public"
