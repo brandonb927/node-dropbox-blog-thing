@@ -28,7 +28,12 @@ renderer.image = (src, title, text) ->
 
 # Helper function to get draft status
 isDraft = (filename) ->
-  return startswith filename, 'draft_' and process.env.NODE_ENV isnt 'production'
+  draft = startswith filename, 'draft_'
+  dev = process.env.NODE_ENV isnt 'production'
+  console.log 'filename', filename
+  console.log 'draft', draft
+  console.log 'dev', dev
+  return draft and dev
 
 # Process the markdown file given a filename/filepath
 # and return an object containing the data to be sent to the view
