@@ -27,8 +27,8 @@ renderer.image = (src, title, text) ->
           </figure>"
 
 # Helper function to get draft status
-canAddDraft = (filename) ->
-  return if startswith filename, 'draft_' and process.env.NODE_ENV isnt 'production' then true else false
+isDraft = (filename) ->
+  return startswith filename, 'draft_' and process.env.NODE_ENV isnt 'production'
 
 # Process the markdown file given a filename/filepath
 # and return an object containing the data to be sent to the view
@@ -110,9 +110,9 @@ getAllPosts = (includePages) ->
           if endswith fileName, 'md'
             postFiles.push fileName
 
-            if canAddDraft fileName
-              logger.debug 'ADDING DRAFT'
-              postFiles.push fileName
+          if endswith fileName, 'md' and isDraft fileName
+            logger.debug 'ADDING DRAFT'
+            postFiles.push fileName
 
         # Loop through the files, get data, and return them as promises
         return Q.all postFiles.map (fileName) ->
@@ -174,9 +174,9 @@ PostsModel =
         postsPerPage = config.site.settings.postsPerPage
         pageNum = parseInt(pageNum)
         paginator = new (pagination.SearchPaginator)
-          current: pageNum or 1
-          rowsPerPage: postsPerPage
-          totalResult: allPosts.length
+          current     : pageNum or 1
+          rowsPerPage : postsPerPage
+          totalResult : allPosts.length
 
         pgData = paginator.getPaginationData()
 
@@ -234,8 +234,7 @@ PostsModel =
         logger.debug '[Cache] Adding posts to cache'
         cache.put 'posts', postsAssoc
 
-        logger.debug '[Cache] Posts cache size',cache.size
-        logger.debug '[Cache] %d posts indexed and added to cache', posts.length
+        logger.debug "[Cache] #{posts.length} posts indexed and added to cache"
 
         # Add pages for use in navigation
         unless returnPages
