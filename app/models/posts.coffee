@@ -26,15 +26,6 @@ renderer.image = (src, title, text) ->
             <img src=\"#{src}\" alt=\"#{if title? then title else ''}\">
           </figure>"
 
-# Helper function to get draft status
-isDraft = (filename) ->
-  draft = startswith filename, 'draft_'
-  dev = process.env.NODE_ENV isnt 'production'
-  console.log 'filename', filename
-  console.log 'draft', draft
-  console.log 'dev', dev
-  return draft and dev
-
 # Process the markdown file given a filename/filepath
 # and return an object containing the data to be sent to the view
 getPost = (filePath) ->
@@ -111,17 +102,20 @@ getAllPosts = (includePages) ->
       .then (files) ->
         # Build the proper file list
         postFiles = []
-        files.forEach (fileName) ->
-          if endswith fileName, 'md'
-            postFiles.push fileName
+        files.forEach (filename) ->
+          if endswith filename, 'md'
+            isDraft = startswith filename, 'draft_'
 
-          if endswith fileName, 'md' and isDraft fileName
-            logger.debug 'ADDING DRAFT'
-            postFiles.push fileName
+            # Add the file if it is prepended with draft
+            if config.isDev and isDraft
+              postFiles.push filename
+            else if not isDraft
+              # Otherwise just add it if not a draft
+              postFiles.push filename
 
         # Loop through the files, get data, and return them as promises
-        return Q.all postFiles.map (fileName) ->
-          filePath = "#{config.basePath}/posts/#{fileName}"
+        return Q.all postFiles.map (filename) ->
+          filePath = "#{config.basePath}/posts/#{filename}"
           getPost filePath
             .then (post) ->
               return post if includePages and post.isPage or not post.isPage

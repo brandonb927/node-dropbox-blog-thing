@@ -13,9 +13,13 @@ logger        = require './config/logger'
 locals        = require './config/locals'
 Posts         = require './app/models/posts'
 
+# set env vars for ease-of-use
+config.isDev  = process.env.NODE_ENV is 'development'
+config.isProd = process.env.NODE_ENV is 'production'
+
 # Set the logging string for morgan and winston
 morganString  = 'method=:method path=:url status=:status response-time=:response-time referrer=:referrer ip=:remote-addr'
-loggingString = if process.env.NODE_ENV is 'production' then morganString else 'dev'
+loggingString = if config.isProd then morganString else 'dev'
 
 # Set the port for the server to run on
 port          = config.port = process.env.PORT or 3000
@@ -28,8 +32,7 @@ app.set 'views', "#{__dirname}/public/views"
 app.set 'view engine', 'nunjucks'
 
 # In production, this will sit behind an nginx proxy
-if process.env.NODE_ENV is 'production'
-  app.enable 'trust proxy'
+app.enable 'trust proxy' if config.isProd
 
 # Configure the views folder
 env = nunjucks.configure "#{__dirname}/public/views", {
@@ -86,7 +89,7 @@ app.use (req, res, next) ->
 app.use (err, req, res, next) ->
   statusText  = undefined
   statusCode  = err.status or 500
-  errorDetail = if process.env.NODE_ENV is 'production' then err.toString() else err.stack
+  errorDetail = if config.isProd then err.toString() else err.stack
 
   switch statusCode
     when 400
