@@ -11,7 +11,9 @@ config        = require './config.json'
 routes        = require './config/routes'
 logger        = require './config/logger'
 locals        = require './config/locals'
-Posts         = require './app/models/posts'
+PostsModel    = require './app/models/posts'
+
+posts         = new PostsModel()
 
 # set env vars for ease-of-use
 config.isDev  = process.env.NODE_ENV is 'development'
@@ -129,11 +131,10 @@ app.use (err, req, res, next) ->
     .send 'Not found'
 
 # Setup the posts cache
-Posts.initCache returnPages = true
-  .then (pages) ->
-    for page in pages
-      page.url = "/#{page.slug}"
-    app.locals.pages = pages
+posts.initCache(true).then (pages) ->
+  for page in pages
+    page.url = "/#{page.slug}"
+  app.locals.pages = pages
 
 # Setup file-watching in posts folder to re-fill post cache when files are updated
 watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
@@ -142,15 +143,15 @@ watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
   else if prev is null
     # f is a new file
     logger.debug "#{f} is a new file"
-    Posts.initCache()
+    posts.initCache()
   else if curr.nlink is 0
     # f was removed
     logger.debug "#{f} was removed"
-    Posts.initCache()
+    posts.initCache()
   else
     # f was changed
     logger.debug "#{f} was changed"
-    Posts.initCache()
+    posts.initCache()
 
 # Setup the listener for the app
 logger.info "[Server] All systems ready to go! The magic happens on port #{port}"

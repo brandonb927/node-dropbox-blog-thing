@@ -1,18 +1,16 @@
+_           = require 'lodash'
 Q           = require 'q'
 fs          = require 'graceful-fs'
-cache       = require 'memory-cache'
-nunjucks    = require 'nunjucks'
+cheerio     = require 'cheerio'
 htmlToText  = require 'html-to-text'
 marked      = require 'marked'
 moment      = require 'moment'
+nunjucks    = require 'nunjucks'
 pagination  = require 'pagination'
 path        = require 'path'
 slugify     = require 'slug'
-endswith    = require 'lodash.endswith'
-startswith  = require 'lodash.startswith'
 MMD         = require 'marked-metadata'
 highlight   = require 'highlight.js'
-jsdom       = require("jsdom").jsdom
 config      = require '../../config.json'
 logger      = require '../../config/logger'
 p           = require '../../config/promise'
@@ -22,32 +20,41 @@ p           = require '../../config/promise'
 renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
-  return "<figure>
-            <img src=\"#{src}\" alt=\"#{if title? then title else ''}\">
-          </figure>"
+  return """
+    <figure>
+      <img src=\"#{src}\" alt=\"#{if title? then title else ''}\">
+    </figure>
+  """
 
-# Process the markdown file given a filename/filepath
-# and return an object containing the data to be sent to the view
-getPost = (filePath) ->
-  deferred = Q.defer()
 
-  p.fs.readFile(filePath, encoding: 'utf8')
-    .then (fileContent) ->
+class PostsModel
+
+  constructor: () ->
+    # Posts not found message
+    @errorPostsNotFound = new Error 'Posts not found :('
+
+  # Process the markdown file given a filename/filepath
+  # and return an object containing the data to be sent to the view
+  getPostFile: (filePath) ->
+    return p.fs.readFile(filePath, { encoding: 'utf8' }).then (fileContent) ->
       tags = []
       options =
         renderer : renderer
         gfm      : true
         tables   : true
         breaks   : true
-        highlight: (code, lang) ->
-          return highlight.highlightAuto(code).value
+        highlight: (code, lang) -> return highlight.highlightAuto(code).value
 
       md       = new MMD fileContent
       meta     = md.metadata()
       content  = md.markdown options
       slug     = slugify(meta.title).toLowerCase()
-      title    = if not Array.isArray meta.title then meta.title else meta.title.join ', '
       tags     = []
+
+      if not Array.isArray meta.title
+        title = meta.title
+      else
+        title = meta.title.join ', '
 
       if meta.tags?
         tags = if Array.isArray meta.tags then meta.tags else [meta.tags]
@@ -63,13 +70,12 @@ getPost = (filePath) ->
         isPage  : if meta.type is 'page' then true else false
 
       # Strip blank <p> tags from around figure elements
-      document = jsdom(content)
-      window = document.defaultView
-      body = window.document.body.innerHTML
+      body = cheerio.load(content).html()
       content = body.replace /\<p\>\<\/p\>/g, ''
 
       # Return the HTML-safe content that will be rendered to the page
-      # post.content = new nunjucks.runtime.SafeString(content); // This is commented in favour of turning autoescape off app-wide
+      # NOTE: This is commented in favour of turning autoescape off app-wide
+      # post.content = new nunjucks.runtime.SafeString(content);
       post.content  = content
       post.text     = htmlToText.fromString post.content
 
@@ -79,170 +85,151 @@ getPost = (filePath) ->
       delete meta.tags
       delete meta.type
       post.meta = meta
-      deferred.resolve post
 
-  return deferred.promise
+      return post
 
-getAllPosts = (includePages) ->
-  deferred = Q.defer()
+  getAll: (includePages) ->
+    return @getAllPosts(includePages).then (posts) =>
+      return @errorPostsNotFound if not posts
+      return posts
 
-  # Check the cache to see if we already have the posts available
-  if cache.get 'posts'
-    cachePosts = cache.get 'posts'
-    postsArr = []
-    cachePosts.forEach (post, i) ->
-      postData = post[Object.keys(post)[0]]
-      postsArr.push postData if includePages and postData.isPage or not postData.isPage
+  getAllPosts: (includePages) ->
+    reversePosts = (results) ->
+      posts = []
 
-    deferred.resolve postsArr
-    return deferred.promise
-  else
-    # Otherwise query the filesystem and get the posts
-    return p.fs.readdir 'posts'
-      .then (files) ->
-        # Build the proper file list
-        postFiles = []
-        files.forEach (filename) ->
-          if endswith filename, 'md'
-            isDraft = startswith filename, 'draft_'
+      results.forEach (result) ->
+        posts.push if result.value? then result.value else result
 
-            # Add the file if it is prepended with draft
-            if config.isDev and isDraft
-              postFiles.push filename
-            else if not isDraft
-              # Otherwise just add it if not a draft
-              postFiles.push filename
+      # TODO: better way to do this if file order changes
+      # Rudimentary way to reverse the order of the posts from the files list
+      return posts.reverse()
 
-        # Loop through the files, get data, and return them as promises
-        return Q.all postFiles.map (filename) ->
-          filePath = "#{config.basePath}/posts/#{filename}"
-          getPost filePath
-            .then (post) ->
+    # Check the cache to see if we already have the posts available
+    return p.cache.get('posts').then (cachePosts) ->
+      if cachePosts?
+        try
+          logger.debug '[Cache] Posts exist in cache, serving from memory'
+          posts = []
+          cachePosts.forEach (post) ->
+            postData = post[Object.keys(post)[0]]
+            if includePages and postData.isPage or not postData.isPage
+              posts.push postData
+
+          return posts
+        catch e
+          logger.error new Error(e)
+
+      else
+        logger.debug '[Cache] Posts don\'t exist in cache, serving from file'
+
+        # Otherwise query the filesystem and get the posts
+        return p.fs.readdir('posts').then (files) ->
+          # Build the proper file list
+          postFiles = []
+          files.forEach (filename) ->
+            if _.endsWith filename, 'md'
+              isDraft = _.startsWith filename, 'draft_'
+
+              # Add the file if it is prepended with draft
+              if config.isDev and isDraft
+                postFiles.push filename
+              else if not isDraft
+                # Otherwise just add it if not a draft
+                postFiles.push filename
+
+          return Q.allSettled postFiles.map (filename) ->
+            filePath = "#{config.basePath}/posts/#{filename}"
+            return @getPostFile(filePath).then (post) ->
               return post if includePages and post.isPage or not post.isPage
 
-      .then (posts) ->
-        # TODO: better way to do this if file order changes
-        # Rudimentary way to reverse the order of the posts from the files list
-        return posts.reverse()
+        .then(reversePosts)
 
-PostsModel =
-  getAll: (includePages) ->
-    deferred = Q.defer()
-    getAllPosts includePages
-      .then (posts) ->
-        return deferred.reject(Error('Posts not found :(')) if not posts
-
-        deferred.resolve posts
-
-    return deferred.promise
 
   getAllPages: () ->
-    deferred = Q.defer()
-    getAllPosts true
-      .then (posts) ->
-        return deferred.reject(Error('Posts not found :(')) if not posts
+    return @getAllPosts(true).then (posts) =>
+      return @errorPostsNotFound if not posts
 
-        pagesArr = []
-        for post in posts
-          pagesArr.push post if post.isPage
+      postsArr = []
+      for post in posts
+        postsArr.push post if post.isPage
 
-        deferred.resolve pagesArr
-
-    return deferred.promise
+      return postsArr
 
   getBySlug: (slug) ->
-    deferred = Q.defer()
-    getAllPosts(true)
-      .then (posts) ->
-        return deferred.reject(Error('Posts not found :(')) if not posts
+    return @getAllPosts(true).then (posts) =>
+      return @errorPostsNotFound if not posts
 
-        post = posts.filter((p) ->
-          p.slug is slug
-        )[0]
-
-        deferred.resolve(post)
-
-    return deferred.promise
+      return posts.filter((p) -> return p.slug is slug)[0]
 
   getByPagination: (pageNum) ->
-    deferred = Q.defer()
-    getAllPosts(false)
-      .then (allPosts) ->
-        return deferred.reject(Error('Posts not found :(')) if not allPosts
+    return @getAllPosts(false).then (allPosts) =>
+      return @errorPostsNotFound if not allPosts
 
-        postsPerPage = config.site.settings.postsPerPage
-        pageNum = parseInt(pageNum)
-        paginator = new (pagination.SearchPaginator)
-          current     : pageNum or 1
-          rowsPerPage : postsPerPage
-          totalResult : allPosts.length
+      postsPerPage = config.site.settings.postsPerPage
+      pageNum = parseInt(pageNum)
+      paginator = new (pagination.SearchPaginator)
+        current     : pageNum or 1
+        rowsPerPage : postsPerPage
+        totalResult : allPosts.length
 
-        pgData = paginator.getPaginationData()
+      pgData = paginator.getPaginationData()
 
-        return deferred.reject Error 'Pagination out of range' if pageNum > pgData.pageCount
+      return Error 'Pagination out of range' if pageNum > pgData.pageCount
 
-        posts = []
+      posts = []
 
-        i = if pgData.fromResult is 1 then pgData.fromResult - 1 else pgData.fromResult
-        while i <= pgData.toResult
-          posts.push allPosts[i] if allPosts[i]
-          i++
+      if pgData.fromResult is 1
+        i = pgData.fromResult - 1
+      else
+        i = pgData.fromResult
 
-        deferred.resolve
-          pageNum: pgData.current
-          posts: posts
-          pagination:
-            next: pgData.next
-            prev: pgData.previous
+      while i <= pgData.toResult
+        posts.push allPosts[i] if allPosts[i]
+        i++
 
-    return deferred.promise
+      return {
+        pageNum: pgData.current
+        posts: posts
+        pagination:
+          next: pgData.next
+          prev: pgData.previous
+      }
 
   getByTag: (tag) ->
-    deferred = Q.defer()
-    getAllPosts false
-      .then (posts) ->
-        return deferred.reject Error "No posts found with tag #{tag} :(" if not posts
+    @getAllPosts(false).then (posts) ->
+      return Error "No posts found with tag #{tag} :(" if not posts
 
-        postsArr = []
-        for post in posts
-          postsArr.push post if tag in post.tags
+      postsArr = []
+      for post in posts
+        postsArr.push post if tag in post.tags
 
-        deferred.resolve
-          tag: tag
-          posts: postsArr
-
-    return deferred.promise
+      return {
+        tag: tag
+        posts: postsArr
+      }
 
   initCache: (returnPages = false) ->
-    deferred = Q.defer()
-
     # Clear the current posts cache
-    cache.del 'posts'
+    return p.cache.del('posts').then () =>
+      return @getAllPosts(true).then (results) ->
+        return @errorPostsNotFound if not results
 
-    # Get all the posts
-    Q.when getAllPosts true
-      .then (posts) ->
-        return deferred.reject Error 'Posts not found :(' if not posts
+        logger.debug '[Cache] Adding posts to cache...'
 
-        postsAssoc = []
-        posts.forEach (post, i) ->
+        posts = []
+        results.forEach (result) ->
+          post = result.value? or result
           postObj = {}
           postObj[post.slug] = post
-          postsAssoc.push postObj
+          posts.push postObj
 
-        logger.debug '[Cache] Adding posts to cache'
-        cache.put 'posts', postsAssoc
+        p.cache.put('posts', posts).then () =>
+          logger.debug "└── #{posts?.length} posts indexed and added to cache"
 
-        logger.debug "[Cache] #{posts.length} posts indexed and added to cache"
-
-        # Add pages for use in navigation
-        unless returnPages
-          deferred.resolve()
-        else
-          Q.when PostsModel.getAllPages()
-            .then (pages) ->
-              deferred.resolve pages
-
-    return deferred.promise
+          # Add pages for use in navigation
+          unless returnPages
+            return
+          else
+            return @getAllPages().then (pages) -> return pages
 
 module.exports = PostsModel

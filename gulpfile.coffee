@@ -99,11 +99,11 @@ gulp.task 'fonts', () ->
 
 # run CoffeeLint on the scripts
 gulp.task 'lint', () ->
-  return gulp.src config.paths.scripts.src
+  return gulp.src config.paths.scripts.src.concat(config.paths.app.src)
     .pipe plumber { errorHandler: errorHandler }
     .pipe cached 'linting'
     .pipe coffeelint()
-    .pipe coffeelint.reporter 'fail'
+    .pipe coffeelint.reporter()
 
 # Build scripts
 gulp.task 'scripts', ['lint'], () ->

@@ -55,6 +55,11 @@
       "fonts": [
         "bower_components/font-awesome/fonts/*"
       ]
+    },
+    "app": {
+      "src": [
+        "app/**/*.coffee"
+      ]
     }
   }
 }
