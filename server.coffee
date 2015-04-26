@@ -134,6 +134,7 @@ app.use (err, req, res, next) ->
 posts.initCache(true).then (pages) ->
   for page in pages
     page.url = "/#{page.slug}"
+
   app.locals.pages = pages
 
 # Setup file-watching in posts folder to re-fill post cache when files are updated

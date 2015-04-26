@@ -2,7 +2,7 @@
   "site": {
     "domain": "brandonb.io",
     "title": "Brandons Blog",
-    "description": "Canadian, passion for open source, tech, and web development. This is where I dump my ideas, thoughts, and tech-related bits & pieces that I find interesting.",
+    "description": "Canadian, passion for open source, tech, and front-end web development. This is where I dump my ideas, thoughts, and tech-related bits & pieces that I find interesting.",
     "author": {
       "name": "Brandon Brown",
       "email": "brandon@brandonb.io"

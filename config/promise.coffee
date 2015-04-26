@@ -35,18 +35,15 @@ exports.request =
 exports.cache =
   get: (key) ->
     deferred = Q.defer()
-    contents = cache.get(key)
-    deferred.resolve contents
+    deferred.resolve cache.get(key)
     return deferred.promise
 
   put: (key, value) ->
     deferred = Q.defer()
-    contents = cache.put(key, value)
-    deferred.resolve contents
+    deferred.resolve cache.put(key, value)
     return deferred.promise
 
   del: (key) ->
     deferred = Q.defer()
-    contents = cache.del(key)
-    deferred.resolve contents
+    deferred.resolve cache.del(key)
     return deferred.promise

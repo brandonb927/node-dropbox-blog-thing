@@ -1,4 +1,5 @@
 _           = require 'lodash'
+path        = require 'path'
 Q           = require 'q'
 fs          = require 'graceful-fs'
 cheerio     = require 'cheerio'
@@ -20,9 +21,19 @@ p           = require '../../config/promise'
 renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
+  pathObj = path.parse(src)
+  buildRetina = (scale) ->
+    return "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+
   return """
     <figure>
-      <img src=\"#{src}\" alt=\"#{if title? then title else ''}\">
+      <picture>
+        <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
+        <img
+          src=\"#{src}\"
+          srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
+          alt=\"#{if title? then title else ''}\">
+      </picture>
     </figure>
   """
 
@@ -105,7 +116,7 @@ class PostsModel
       return posts.reverse()
 
     # Check the cache to see if we already have the posts available
-    return p.cache.get('posts').then (cachePosts) ->
+    return p.cache.get('posts').then (cachePosts) =>
       if cachePosts?
         try
           logger.debug '[Cache] Posts exist in cache, serving from memory'
@@ -123,7 +134,7 @@ class PostsModel
         logger.debug '[Cache] Posts don\'t exist in cache, serving from file'
 
         # Otherwise query the filesystem and get the posts
-        return p.fs.readdir('posts').then (files) ->
+        return p.fs.readdir('posts').then (files) =>
           # Build the proper file list
           postFiles = []
           files.forEach (filename) ->
@@ -137,10 +148,12 @@ class PostsModel
                 # Otherwise just add it if not a draft
                 postFiles.push filename
 
-          return Q.allSettled postFiles.map (filename) ->
+          posts = _.map postFiles, (filename) =>
             filePath = "#{config.basePath}/posts/#{filename}"
             return @getPostFile(filePath).then (post) ->
               return post if includePages and post.isPage or not post.isPage
+
+          return Q.allSettled posts
 
         .then(reversePosts)
 
@@ -211,7 +224,7 @@ class PostsModel
   initCache: (returnPages = false) ->
     # Clear the current posts cache
     return p.cache.del('posts').then () =>
-      return @getAllPosts(true).then (results) ->
+      return @getAllPosts(true).then (results) =>
         return @errorPostsNotFound if not results
 
         logger.debug '[Cache] Adding posts to cache...'
@@ -223,13 +236,13 @@ class PostsModel
           postObj[post.slug] = post
           posts.push postObj
 
-        p.cache.put('posts', posts).then () =>
+        return p.cache.put('posts', posts).then () =>
           logger.debug "└── #{posts?.length} posts indexed and added to cache"
 
           # Add pages for use in navigation
-          unless returnPages
-            return
-          else
+          if returnPages
             return @getAllPages().then (pages) -> return pages
+          else
+            return
 
 module.exports = PostsModel

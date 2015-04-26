@@ -94,7 +94,7 @@ gulp.task 'styles', () ->
 
 # Deal with fonts
 gulp.task 'fonts', () ->
-  return gulp.src config.paths.vendor.fonts
+  return gulp.src config.paths.fonts.src
     .pipe gulp.dest config.paths.fonts.dest
 
 # run CoffeeLint on the scripts

@@ -15,51 +15,34 @@
       "images": "src/images"
     },
     "templates": {
-      "src": [
-        "src/views/**/*.html"
-      ],
+      "src": "src/views/**/*.html",
       "dest": "public/views"
     },
     "fonts": {
-      "src": [
-        "src/fonts/**/*"
-      ],
+      "src": "src/fonts/**/*",
       "dest": "public/assets/fonts"
     },
     "images": {
-      "src": [
-        "src/images/**/*"
-      ],
+      "src": "src/images/**/*",
       "dest": "public/images"
     },
     "styles": {
-      "src": [
-        "src/styles/site.less"
-      ],
+      "src": "src/styles/site.less",
       "src_all": "src/styles/**/*",
       "dest": "public/assets/css"
     },
     "scripts": {
-      "src": [
-        "src/scripts/site.coffee"
-      ],
+      "src": "src/scripts/site.coffee",
       "dest": "public/assets/js"
     },
     "vendor": {
       "scripts": [
-        "bower_components/jquery/dist/jquery.js",
         "bower_components/fastclick/lib/fastclick.js",
-        "bower_components/highlightjs/highlight.pack.js",
-        "bower_components/jquery-unveil/jquery.unveil.js"
-      ],
-      "fonts": [
-        "bower_components/font-awesome/fonts/*"
+        "bower_components/highlightjs/highlight.pack.js"
       ]
     },
     "app": {
-      "src": [
-        "app/**/*.coffee"
-      ]
+      "src": "app/**/*.coffee"
     }
   }
 }
