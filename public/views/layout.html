@@ -1,109 +1,47 @@
 <!doctype html>
 <html prefix="og: http://ogp.me/ns#" xmlns:og="http://ogp.me/ns#" class="no-js">
   <head>
-    <meta charset="utf-8">
-    <title>{{site.title}} | {% if post %}{{post.title}}{% else %}{{site.description|striptags}}{% endif %}</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="author" content="{{site.author.name}}">
-    <meta name="description" content="{% if post %}{{post.title}}{% else %}{{site.description}}{% endif %}">
-
-    <base href="{{baseUrl}}/">
-
-    <!-- OpenGraph tags -->
-    <meta property="og:site_name" content="{{site.title}}">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="{{gravatar}}">
-    <meta property="og:title" content="{{site.title}}">
-    <meta property="og:url" content="{{baseUrl}}">
-    <meta property="og:description" content="{% if post %}{{post.title}}{% else %}{{site.description}}{% endif %}">
-
-    {% if site.social.twitter %}
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@{{site.social.twitter}}">
-    <meta name="twitter:creator" content="@{{site.social.twitter}}">
-    <meta name="twitter:image:src" content="{{gravatar}}">
-    <meta name="twitter:domain" content="{{baseUrl}}">
-    {% endif %}
-
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{baseURL}}/rss.xml">
-
-    <!-- Favicons for all browsers and unfortunately IE8/9 -->
-    <link rel="icon" href="{{site.favicon.png}}">
-    <!--[if IE]><link rel="shortcut icon" href="{{site.favicon.ico}}" /><![endif]-->
-    <link rel="apple-touch-icon" sizes="144x144" href="{{site.favicon.png}}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{site.favicon.png}}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{site.favicon.png}}">
-    <link rel="apple-touch-icon" href="{{site.favicon.png}}">
-    <link rel="apple-touch-icon-precomposed" href="{{site.favicon.png}}">
-
-    <!-- Because IE10 ignores conditionals and doesn't support PNG for favicons, we use start screen tile icons!
-       - http://www.jonathantneal.com/blog/understand-the-favicon/ -->
-    <meta name="msapplication-TileColor" content="#D83434">
-    <meta name="msapplication-TileImage" content="{{site.favicon.png}}">
-
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400" rel="stylesheet">
-    <link href="/assets/css/site.min.css" rel="stylesheet">
-    <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
-
-    {% if googleAnalytics %}
-    <!-- Google Analytics -->
-    <script>
-      /**
-       * Detect if localStorage exists in the browser
-       */
-      var hasLocalStorage = (function () {
-        try {
-          localStorage.setItem(mod, mod);
-          localStorage.removeItem(mod);
-          return true;
-        }
-        catch (exception) {
-          return false;
-        }
-      }());
-
-      /**
-       * Use localstorage to store the Google tracking cookie
-       * so it's not sent to the server on every request
-       * See: https://github.com/h5bp/html5-boilerplate/issues/1444
-       *
-       * Or, if localStorage isn't available, use the regular Google Analytics code
-       */
-      if (hasLocalStorage) {
-        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='//www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-        ga('create', '{{googleAnalytics}}', '{{site.domain}}', {'storage': 'none','clientId':localStorage.getItem('gaClientId')});
-        ga(function(t){localStorage.setItem('gaClientId',t.get('clientId'));});
-        ga('require', 'displayfeatures');
-        ga('send','pageview');
-      } else {
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', '{{googleAnalytics}}', '{{site.domain}}');
-        ga('require', 'displayfeatures');
-        ga('send', 'pageview');
-      }
-    </script>
-    {% endif %}
+    {% include 'head.html' %}
   </head>
 
-  <body class="body-container" itemscope itemtype="http://schema.org/WebPage">
-    <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="site-header-avatar">
-        <a href="#social_menu" id="social_menu_toggle" class="site-header-menu-toggle">
+  <body itemscope itemtype="http://schema.org/WebPage">
+    <div class="site-container">
+      <header class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="site-header-avatar">
           <img class="site-header-avatar-img" src="{{gravatar}}">
-        </a>
-        <div id="social_menu" class="site-header-social site-header-menu">
+        </div>
+
+        <div class="site-header-title">
+          <h1 itemprop="headline">
+            <a href="/" title="{{site.description}}">{{site.title}}</a>
+          </h1>
+        </div>
+
+        <div class="site-header-description">
+          <p>{{site.description}}</p>
+        </div>
+
+        <div class="site-header-nav">
+          <nav class="site-header-nav-pages" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <ul>
+              {% for page in pages %}
+              <li itemprop="url">
+                <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <main class="site-content" role="main" itemprop="mainContentOfPage">
+        <section itemscope itemtype="http://schema.org/Blog">
+          {% block body %}{% endblock %}
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-social">
           <ul>
             {% if site.social.twitter %}
             <li>
@@ -133,63 +71,14 @@
             </li>
           </ul>
         </div>
-      </div>
 
-      <div class="site-header-title" >
-        <h1 itemprop="headline">
-          <a href="/" title="{{site.description}}">{{site.title}}</a>
-        </h1>
-      </div>
-
-      {% if pages %}
-      <div class="site-header-pages">
-        <a href="#pages_menu" id="pages_menu_toggle" title="Pages Menu" class="site-header-menu-toggle"><span></span></a>
-        <nav id="pages_menu" class="site-header-pages-menu site-header-menu" role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-          <ul>
-            {% for page in pages %}
-            <li itemprop="url">
-              <a href="{{page.url}}" title="{{page.title}}" itemprop="name">{{page.title}}</a>
-            </li>
-            {% endfor %}
-          </ul>
-        </nav>
-      </div>
-      {% endif %}
-    </header>
-
-    <div class="site-container">
-      <div class="site-content-container">
-        <main class="site-content" role="main" itemprop="mainContentOfPage">
-          <section itemscope itemtype="http://schema.org/Blog">
-            {% block body %}{% endblock %}
-          </section>
-        </main>
-
-        <footer class="site-footer">
-          <div class="site-footer-inner">
-            <p>Copyright &copy; <time datetime="{{site.dateObj}}" itemprop="datePublished">{{site.date}}</time>. All rights reserved.</p>
-          </div>
-        </footer>
-      </div>
+        <div class="site-footer-inner">
+          <p>Want to send email better? <a href="https://www.sendwithus.com?ref=brandonb.io">Try Sendwithus for free</a>!</p>
+          <p>Copyright &copy; <time datetime="{{site.dateObj}}" itemprop="datePublished">{{site.date}}</time>. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
 
-    <script>
-      var pagesMenuToggle  = document.getElementById('pages_menu_toggle');
-      var pagesMenu        = document.getElementById('pages_menu');
-      var socialMenuToggle = document.getElementById('social_menu_toggle');
-      var socialMenu       = document.getElementById('social_menu');
-
-      pagesMenuToggle.addEventListener("click", function (event) {
-        event.preventDefault();
-        this.classList.toggle("menu-active");
-        return false;
-      });
-
-      socialMenuToggle.addEventListener("click", function (event) {
-        event.preventDefault();
-        this.classList.toggle("menu-active");
-        return false;
-      });
-    </script>
+    {% include 'foot.html' %}
   </body>
 </html>
