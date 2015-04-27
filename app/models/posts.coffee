@@ -35,7 +35,7 @@ renderer.image = (src, title, text) ->
       @src2x = buildRetina '2x'
       @src3x = buildRetina '3x'
     catch e
-      logger.error new Error(e)
+      logger.error e
 
     return """
       <figure>
@@ -60,60 +60,56 @@ class PostsModel
   # and return an object containing the data to be sent to the view
   getPostFile: (filePath) ->
     return p.fs.readFile(filePath, { encoding: 'utf8' }).then (fileContent) ->
-      try
-        tags = []
-        options =
-          renderer : renderer
-          gfm      : true
-          tables   : true
-          breaks   : true
-          highlight: (code, lang) -> return highlight.highlightAuto(code).value
+      tags = []
+      options =
+        renderer : renderer
+        gfm      : true
+        tables   : true
+        breaks   : true
+        highlight: (code, lang) -> return highlight.highlightAuto(code).value
 
-        md       = new MMD fileContent
-        meta     = md.metadata()
-        content  = md.markdown options
-        slug     = slugify(meta.title).toLowerCase()
-        tags     = []
+      md       = new MMD fileContent
+      meta     = md.metadata()
+      content  = md.markdown options
+      slug     = slugify(meta.title).toLowerCase()
+      tags     = []
 
-        if not Array.isArray meta.title
-          title = meta.title
-        else
-          title = meta.title.join ', '
+      if not Array.isArray meta.title
+        title = meta.title
+      else
+        title = meta.title.join ', '
 
-        if meta.tags?
-          tags = if Array.isArray meta.tags then meta.tags else [meta.tags]
+      if meta.tags?
+        tags = if Array.isArray meta.tags then meta.tags else [meta.tags]
 
-        tags = [] if tags[0] is '' # Reset the tags if the meta.tags is blank
+      tags = [] if tags[0] is '' # Reset the tags if the meta.tags is blank
 
-        post =
-          date    : moment(meta.date).format(config.site.settings.formatDate)
-          dateObj : moment(meta.date).toDate()
-          title   : title
-          slug    : slug
-          tags    : tags
-          isPage  : if meta.type is 'page' then true else false
+      post =
+        date    : moment(meta.date).format(config.site.settings.formatDate)
+        dateObj : moment(meta.date).toDate()
+        title   : title
+        slug    : slug
+        tags    : tags
+        isPage  : if meta.type is 'page' then true else false
 
-        # Strip blank <p> tags from around figure elements
-        body = cheerio.load(content).html()
-        content = body.replace /\<p\>\<\/p\>/g, ''
+      # Strip blank <p> tags from around figure elements
+      body = cheerio.load(content).html()
+      content = body.replace /\<p\>\<\/p\>/g, ''
 
-        # Return the HTML-safe content that will be rendered to the page
-        # NOTE: This is commented in favour of turning autoescape off app-wide
-        # post.content = new nunjucks.runtime.SafeString(content);
-        post.content  = content
-        post.text     = htmlToText.fromString post.content
+      # Return the HTML-safe content that will be rendered to the page
+      # NOTE: This is commented in favour of turning autoescape off app-wide
+      # post.content = new nunjucks.runtime.SafeString(content);
+      post.content  = content
+      post.text     = htmlToText.fromString post.content
 
-        # remove these duplicates from the meta
-        delete meta.title
-        delete meta.date
-        delete meta.tags
-        delete meta.type
-        post.meta = meta
+      # remove these duplicates from the meta
+      delete meta.title
+      delete meta.date
+      delete meta.tags
+      delete meta.type
+      post.meta = meta
 
-        return post
-      catch e
-        logger.error new Error(e)
-        return
+      return post
 
   getAll: (includePages) ->
     return @getAllPosts(includePages).then (posts) =>
@@ -137,17 +133,14 @@ class PostsModel
     # Check the cache to see if we already have the posts available
     return p.cache.get('posts').then (cachePosts) =>
       if cachePosts?
-        try
-          logger.debug '[Cache] Posts exist in cache, serving from memory'
-          posts = []
-          cachePosts.forEach (post) ->
-            postData = post[Object.keys(post)[0]]
-            if includePages and postData.isPage or not postData.isPage
-              posts.push postData
+        logger.debug '[Cache] Posts exist in cache, serving from memory'
+        posts = []
+        cachePosts.forEach (post) ->
+          postData = post[Object.keys(post)[0]]
+          if includePages and postData.isPage or not postData.isPage
+            posts.push postData
 
-          return posts
-        catch e
-          logger.error new Error(e)
+        return posts
 
       else
         logger.debug '[Cache] Posts don\'t exist in cache, serving from file'
