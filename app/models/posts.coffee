@@ -27,6 +27,7 @@ renderer.image = (src, title, text) ->
 
     buildRetina = (scale) =>
       pathObj = path.parse(@src)
+      logger.debug pathObj
       imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
       logger.debug imgPath
       return imgPath
