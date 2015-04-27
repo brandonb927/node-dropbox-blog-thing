@@ -21,20 +21,29 @@ p           = require '../../config/promise'
 renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
-  pathObj = path.parse(src)
-  buildRetina = (scale) ->
-    imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
-    logger.debug imgPath
-    return imgPath
+  if not _.startsWith src, 'http'
+    pathObj = path.parse(src)
+    buildRetina = (scale) ->
+      imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+      logger.debug imgPath
+      return imgPath
+
+    imgCode = """
+      <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
+      <img
+        src=\"#{src}\"
+        srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
+        alt=\"#{if title? then title else ''}\">
+    """
+  else
+    imgCode = "<img src=\"#{src}\" alt=\"#{if title? then title else ''}\">"
+
+  logger.debug imgCode
 
   return """
     <figure>
       <picture>
-        <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
-        <img
-          src=\"#{src}\"
-          srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
-          alt=\"#{if title? then title else ''}\">
+        #{imgCode}
       </picture>
     </figure>
   """
