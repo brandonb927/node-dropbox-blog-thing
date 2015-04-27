@@ -1,5 +1,4 @@
 _           = require 'lodash'
-path        = require 'path'
 Q           = require 'q'
 fs          = require 'graceful-fs'
 cheerio     = require 'cheerio'
@@ -7,6 +6,7 @@ htmlToText  = require 'html-to-text'
 marked      = require 'marked'
 moment      = require 'moment'
 nunjucks    = require 'nunjucks'
+parsePath   = require 'parse-filepath'
 pagination  = require 'pagination'
 slugify     = require 'slug'
 MMD         = require 'marked-metadata'
@@ -25,16 +25,16 @@ renderer.image = (src, title, text) ->
   if not _.startsWith @src, 'http'
     logger.debug 'parsing src:', @src
 
-    buildRetina = (scale) =>
-      pathObj = path.parse(@src)
+    buildRetinaPath = (scale) =>
+      pathObj = parsePath @src
       logger.debug pathObj
-      imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+      imgPath = "#{if pathObj.dirname isnt '.' then pathObj.dirname else ''}#{pathObj.name}@#{scale}#{pathObj.extname}"
       logger.debug imgPath
       return imgPath
 
     try
-      @src2x = buildRetina '2x'
-      @src3x = buildRetina '3x'
+      @src2x = buildRetinaPath '2x'
+      @src3x = buildRetinaPath '3x'
     catch e
       logger.error e
 
