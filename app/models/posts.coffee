@@ -23,7 +23,9 @@ renderer = new marked.Renderer()
 renderer.image = (src, title, text) ->
   pathObj = path.parse(src)
   buildRetina = (scale) ->
-    return "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+    imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+    logger.debug imgPath
+    return imgPath
 
   return """
     <figure>
