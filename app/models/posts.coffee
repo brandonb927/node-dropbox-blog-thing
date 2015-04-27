@@ -22,31 +22,29 @@ renderer = new marked.Renderer()
 renderer.image = (src, title, text) ->
   if not _.startsWith src, 'http'
     logger.debug 'parsing src:', src
-    pathObj = path.parse(src)
+
     buildRetina = (scale) ->
+      pathObj = path.parse(src)
       imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
       logger.debug imgPath
       return imgPath
 
-    imgCode = """
-      <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
-      <img
-        src=\"#{src}\"
-        srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
-        alt=\"#{if title? then title else ''}\">
-    """
-  else
-    imgCode = "<img src=\"#{src}\" alt=\"#{if title? then title else ''}\">"
+    try
+      return """
+        <figure>
+          <picture>
+            <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
+            <img
+              src=\"#{src}\"
+              srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
+              alt=\"#{if title? then title else ''}\">
+          </picture>
+        </figure>
+      """
+    catch e
+      logger.error new Error(e)
+      return "<img src=\"#{src}\" alt=\"#{if title? then title else ''}\">"
 
-  logger.debug imgCode
-
-  return """
-    <figure>
-      <picture>
-        #{imgCode}
-      </picture>
-    </figure>
-  """
 
 
 class PostsModel
