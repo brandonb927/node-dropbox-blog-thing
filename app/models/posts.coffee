@@ -29,7 +29,11 @@ renderer.image = (src, title, text) ->
         pathObj = path.parse(@src)
         imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
         logger.debug imgPath
-      return imgPath
+        return imgPath
+      catch e
+        logger.error new Error(e)
+        return @src
+
 
     try
       return """
