@@ -22,6 +22,7 @@ renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
   if not _.startsWith src, 'http'
+    logger.debug 'parsing src:', src
     pathObj = path.parse(src)
     buildRetina = (scale) ->
       imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
