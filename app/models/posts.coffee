@@ -40,13 +40,15 @@ renderer.image = (src, title, text) ->
 
     return """
       <figure>
-        <picture>
-          <source srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x">
-          <img
-            src=\"#{@src}\"
-            srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x"
-            alt=\"#{if title? then title else ''}\">
-        </picture>
+        <a href="#{@src2x}">
+          <picture>
+            <source srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x">
+            <img
+              src=\"#{@src}\"
+              srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x"
+              alt=\"#{if title? then title else ''}\">
+          </picture>
+        </a>
       </figure>
     """
 
