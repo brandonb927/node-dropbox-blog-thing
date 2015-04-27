@@ -20,30 +20,32 @@ p           = require '../../config/promise'
 renderer = new marked.Renderer()
 
 renderer.image = (src, title, text) ->
-  if not _.startsWith src, 'http'
-    logger.debug 'parsing src:', src
+  @src = src
+  if not _.startsWith @src, 'http'
+    logger.debug 'parsing src:', @src
 
-    buildRetina = (scale) ->
-      pathObj = path.parse(src)
-      imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
-      logger.debug imgPath
+    buildRetina = (scale) =>
+      try
+        pathObj = path.parse(@src)
+        imgPath = "#{pathObj.dir}#{pathObj.name}@#{scale}#{pathObj.ext}"
+        logger.debug imgPath
       return imgPath
 
     try
       return """
         <figure>
           <picture>
-            <source srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
+            <source srcset="#{@src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x">
             <img
-              src=\"#{src}\"
-              srcset="#{src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
+              src=\"#{@src}\"
+              srcset="#{@src}, #{buildRetina '2x'} 2x, #{buildRetina '3x'} 3x"
               alt=\"#{if title? then title else ''}\">
           </picture>
         </figure>
       """
     catch e
       logger.error new Error(e)
-      return "<img src=\"#{src}\" alt=\"#{if title? then title else ''}\">"
+      return "<img src=\"#{@src}\" alt=\"#{if title? then title else ''}\">"
 
 
 
