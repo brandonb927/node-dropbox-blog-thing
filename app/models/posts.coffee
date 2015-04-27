@@ -33,7 +33,7 @@ renderer.image = (src, title, text) ->
 
     return """
       <figure>
-        <a href="#{@src2x}">
+        <a href="#{@src2x}" target="_blank">
           <picture>
             <source srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x">
             <img
