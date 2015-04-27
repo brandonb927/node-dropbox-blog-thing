@@ -23,20 +23,13 @@ renderer.image = (src, title, text) ->
   @src = src
 
   if not _.startsWith @src, 'http'
-    logger.debug 'parsing src:', @src
-
     buildRetinaPath = (scale) =>
       pathObj = parsePath @src
-      logger.debug pathObj
       imgPath = "#{if pathObj.dirname isnt '.' then pathObj.dirname else ''}#{pathObj.name}@#{scale}#{pathObj.extname}"
-      logger.debug imgPath
       return imgPath
 
-    try
-      @src2x = buildRetinaPath '2x'
-      @src3x = buildRetinaPath '3x'
-    catch e
-      logger.error e
+    @src2x = buildRetinaPath '2x'
+    @src3x = buildRetinaPath '3x'
 
     return """
       <figure>
