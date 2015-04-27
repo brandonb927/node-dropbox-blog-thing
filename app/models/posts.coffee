@@ -178,7 +178,9 @@ class PostsModel
 
   getAllPages: () ->
     return @getAllPosts(true).then (posts) =>
-      return @errorPostsNotFound if not posts
+      if not posts
+        logger.error @errorPostsNotFound
+        return @errorPostsNotFound
 
       postsArr = []
       for post in posts
@@ -188,13 +190,17 @@ class PostsModel
 
   getBySlug: (slug) ->
     return @getAllPosts(true).then (posts) =>
-      return @errorPostsNotFound if not posts
+      if not posts
+        logger.error @errorPostsNotFound
+        return @errorPostsNotFound
 
       return posts.filter((p) -> return p.slug is slug)[0]
 
   getByPagination: (pageNum) ->
     return @getAllPosts(false).then (allPosts) =>
-      return @errorPostsNotFound if not allPosts
+      if not allPosts
+        logger.error @errorPostsNotFound
+        return @errorPostsNotFound
 
       postsPerPage = config.site.settings.postsPerPage
       pageNum = parseInt(pageNum)
@@ -205,7 +211,10 @@ class PostsModel
 
       pgData = paginator.getPaginationData()
 
-      return Error 'Pagination out of range' if pageNum > pgData.pageCount
+      if pageNum > pgData.pageCount
+        e = Error 'Pagination out of range'
+        logger.error e
+        return e
 
       posts = []
 
@@ -228,7 +237,10 @@ class PostsModel
 
   getByTag: (tag) ->
     @getAllPosts(false).then (posts) ->
-      return Error "No posts found with tag #{tag} :(" if not posts
+      if not posts
+        e = "No posts found with tag #{tag} :("
+        logger.error e
+        return Error e
 
       postsArr = []
       for post in posts
@@ -243,7 +255,9 @@ class PostsModel
     # Clear the current posts cache
     return p.cache.del('posts').then () =>
       return @getAllPosts(true).then (results) =>
-        return @errorPostsNotFound if not results
+        if not results
+          logger.error @errorPostsNotFound
+          return @errorPostsNotFound
 
         logger.debug '[Cache] Adding posts to cache...'
 
