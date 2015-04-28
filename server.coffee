@@ -131,15 +131,11 @@ app.use (err, req, res, next) ->
     .send 'Not found'
 
 # Setup the posts cache
-posts.initCache(true).then(
-  (pages) ->
-    for page in pages
-      page.url = "/#{page.slug}"
+posts.initCache(true).then (pages) ->
+  for page in pages
+    page.url = "/#{page.slug}"
 
-    app.locals.pages = pages
-  (err) ->
-    logger.error err
-)
+  app.locals.pages = pages
 
 # Setup file-watching in posts folder to re-fill post cache when files are updated
 watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
@@ -148,27 +144,15 @@ watch.watchTree "#{__dirname}/posts", (f, curr, prev) ->
   else if prev is null
     # f is a new file
     logger.debug "#{f} is a new file"
-    posts.initCache().then(
-      () -> return
-      (err) ->
-        logger.error err
-    )
+    posts.initCache()
   else if curr.nlink is 0
     # f was removed
     logger.debug "#{f} was removed"
-    posts.initCache().then(
-      () -> return
-      (err) ->
-        logger.error err
-    )
+    posts.initCache()
   else
     # f was changed
     logger.debug "#{f} was changed"
-    posts.initCache().then(
-      () -> return
-      (err) ->
-        logger.error err
-    )
+    posts.initCache()
 
 # Setup the listener for the app
 logger.info "[Server] All systems ready to go! The magic happens on port #{port}"

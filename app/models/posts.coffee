@@ -36,10 +36,7 @@ renderer.image = (src, title, text) ->
         <a href="#{@src2x}" target="_blank">
           <picture>
             <source srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x">
-            <img
-              src=\"#{@src}\"
-              srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x"
-              alt=\"#{if title? then title else ''}\">
+            <img src=\"#{@src}\" srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x" alt=\"#{if title? then title else ''}\">
           </picture>
         </a>
       </figure>
@@ -56,7 +53,6 @@ class PostsModel
   # and return an object containing the data to be sent to the view
   getPostFile: (filePath) ->
     return p.fs.readFile(filePath, { encoding: 'utf8' }).then (fileContent) ->
-      tags = []
       options =
         renderer : renderer
         gfm      : true
@@ -107,11 +103,15 @@ class PostsModel
 
       return post
 
-  getAll: (includePages) ->
-    return @getAllPosts(includePages).then (posts) =>
-      return @errorPostsNotFound if not posts
+    .then null, logger.error
 
-      return posts
+  getAll: (includePages) ->
+    return @getAllPosts(includePages)
+      .then (posts) =>
+        return @errorPostsNotFound if not posts
+        return posts
+
+      .then null, logger.error
 
   getAllPosts: (includePages) ->
     reversePosts = (results) ->
@@ -125,118 +125,135 @@ class PostsModel
       return posts.reverse()
 
     # Check the cache to see if we already have the posts available
-    return p.cache.get('posts').then (cachePosts) =>
-      if cachePosts?
-        logger.debug '[Cache] Posts exist in cache, serving from memory'
-        posts = []
-        cachePosts.forEach (post) ->
-          postData = post[Object.keys(post)[0]]
-          if includePages and postData.isPage or not postData.isPage
-            posts.push postData
+    return p.cache.get('posts')
+      .then (cachePosts) =>
+        if cachePosts?
+          logger.debug '[Cache] Posts exist in cache, serving from memory'
+          posts = []
+          cachePosts.forEach (post) ->
+            postData = post[Object.keys(post)[0]]
+            if includePages and postData.isPage or not postData.isPage
+              posts.push postData
 
-        return posts
+          return posts
 
-      else
-        logger.debug '[Cache] Posts don\'t exist in cache, serving from file'
+        else
+          logger.debug '[Cache] Posts don\'t exist in cache, serving from file'
 
-        # Otherwise query the filesystem and get the posts
-        return p.fs.readdir('posts').then (files) =>
-          # Build the proper file list
-          postFiles = []
-          files.forEach (filename) ->
-            if _.endsWith filename, 'md'
-              isDraft = _.startsWith filename, 'draft_'
+          # Otherwise query the filesystem and get the posts
+          return p.fs.readdir('posts').then (files) =>
+            # Build the proper file list
+            postFiles = []
+            files.forEach (filename) ->
+              if _.endsWith filename, 'md'
+                isDraft = _.startsWith filename, 'draft_'
 
-              # Add the file if it is prepended with draft
-              if config.isDev and isDraft
-                postFiles.push filename
-              else if not isDraft
-                # Otherwise just add it if not a draft
-                postFiles.push filename
+                # Add the file if it is prepended with draft
+                if config.isDev and isDraft
+                  postFiles.push filename
+                else if not isDraft
+                  # Otherwise just add it if not a draft
+                  postFiles.push filename
 
-          posts = _.map postFiles, (filename) =>
-            filePath = "#{config.basePath}/posts/#{filename}"
-            return @getPostFile(filePath).then (post) ->
-              return post if includePages and post.isPage or not post.isPage
+            posts = _.map postFiles, (filename) =>
+              filePath = "#{config.basePath}/posts/#{filename}"
+              return @getPostFile(filePath).then (post) ->
+                return post if includePages and post.isPage or not post.isPage
 
-          return Q.allSettled posts
+            return Q.allSettled posts
 
-        .then(reversePosts)
+          .then(reversePosts)
+
+      .then null, logger.error
 
 
   getAllPages: () ->
-    return @getAllPosts(true).then (posts) =>
-      return @errorPostsNotFound if not posts
+    return @getAllPosts(true)
+      .then (posts) =>
+        return @errorPostsNotFound if not posts
 
-      postsArr = []
-      for post in posts
-        postsArr.push post if post.isPage
+        postsArr = []
+        for post in posts
+          postsArr.push post if post.isPage
 
-      return postsArr
+        return postsArr
+
+      .then null, logger.error
 
   getBySlug: (slug) ->
-    return @getAllPosts(true).then (posts) =>
-      return @errorPostsNotFound if not posts
+    return @getAllPosts(true)
+      .then (posts) =>
+        return @errorPostsNotFound if not posts
+        return posts.filter((p) -> return p.slug is slug)[0]
 
-      return posts.filter((p) -> return p.slug is slug)[0]
+      .then null, logger.error
 
   getByPagination: (pageNum) ->
-    return @getAllPosts(false).then (allPosts) =>
-      return @errorPostsNotFound if not allPosts
+    return @getAllPosts(false)
+      .then (allPosts) =>
+        return @errorPostsNotFound if not allPosts
 
-      postsPerPage = config.site.settings.postsPerPage
-      pageNum = parseInt(pageNum)
-      paginator = new (pagination.SearchPaginator)
-        current     : pageNum or 1
-        rowsPerPage : postsPerPage
-        totalResult : allPosts.length
+        postsPerPage = config.site.settings.postsPerPage
+        pageNum = parseInt(pageNum)
+        paginator = new (pagination.SearchPaginator)
+          current     : pageNum or 1
+          rowsPerPage : postsPerPage
+          totalResult : allPosts.length
 
-      pgData = paginator.getPaginationData()
+        pgData = paginator.getPaginationData()
 
-      if pageNum > pgData.pageCount
-        e = Error 'Pagination out of range'
-        logger.error e
-        return e
+        if pageNum > pgData.pageCount
+          e = Error 'Pagination out of range'
+          logger.error e
+          return e
 
-      posts = []
+        posts = []
 
-      if pgData.fromResult is 1
-        i = pgData.fromResult - 1
-      else
-        i = pgData.fromResult
+        if pgData.fromResult is 1
+          i = pgData.fromResult - 1
+        else
+          i = pgData.fromResult
 
-      while i <= pgData.toResult
-        posts.push allPosts[i] if allPosts[i]
-        i++
+        while i <= pgData.toResult
+          posts.push allPosts[i] if allPosts[i]
+          i++
 
-      return {
-        pageNum: pgData.current
-        posts: posts
-        pagination:
-          next: pgData.next
-          prev: pgData.previous
-      }
+        return {
+          pageNum: pgData.current
+          posts: posts
+          pagination:
+            next: pgData.next
+            prev: pgData.previous
+        }
+
+      .then null, logger.error
 
   getByTag: (tag) ->
-    @getAllPosts(false).then (posts) ->
-      if not posts
-        e = "No posts found with tag #{tag} :("
-        logger.error e
-        return Error e
+    @getAllPosts(false)
+      .then (posts) ->
+        if not posts
+          e = "No posts found with tag #{tag} :("
+          logger.error e
+          return Error e
 
-      postsArr = []
-      for post in posts
-        postsArr.push post if tag in post.tags
+        postsArr = []
+        for post in posts
+          postsArr.push post if tag in post.tags
 
-      return {
-        tag: tag
-        posts: postsArr
-      }
+        return {
+          tag: tag
+          posts: postsArr
+        }
+
+      .then null, logger.error
 
   initCache: (returnPages = false) ->
     # Clear the current posts cache
-    return p.cache.del('posts').then () =>
-      return @getAllPosts(true).then (results) =>
+    return p.cache.del('posts')
+      .then () =>
+        return @getAllPosts(true)
+
+      .then (results) =>
         return @errorPostsNotFound if not results
 
         logger.debug '[Cache] Adding posts to cache...'
@@ -256,5 +273,7 @@ class PostsModel
             return @getAllPages().then (pages) -> return pages
           else
             return
+
+      .then null, logger.error
 
 module.exports = PostsModel
