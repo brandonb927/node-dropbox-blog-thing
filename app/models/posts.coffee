@@ -109,9 +109,7 @@ class PostsModel
 
   getAll: (includePages) ->
     return @getAllPosts(includePages).then (posts) =>
-      if not posts
-        logger.error @errorPostsNotFound
-        return @errorPostsNotFound
+      return @errorPostsNotFound if not posts
 
       return posts
 
@@ -168,9 +166,7 @@ class PostsModel
 
   getAllPages: () ->
     return @getAllPosts(true).then (posts) =>
-      if not posts
-        logger.error @errorPostsNotFound
-        return @errorPostsNotFound
+      return @errorPostsNotFound if not posts
 
       postsArr = []
       for post in posts
@@ -180,17 +176,13 @@ class PostsModel
 
   getBySlug: (slug) ->
     return @getAllPosts(true).then (posts) =>
-      if not posts
-        logger.error @errorPostsNotFound
-        return @errorPostsNotFound
+      return @errorPostsNotFound if not posts
 
       return posts.filter((p) -> return p.slug is slug)[0]
 
   getByPagination: (pageNum) ->
     return @getAllPosts(false).then (allPosts) =>
-      if not allPosts
-        logger.error @errorPostsNotFound
-        return @errorPostsNotFound
+      return @errorPostsNotFound if not allPosts
 
       postsPerPage = config.site.settings.postsPerPage
       pageNum = parseInt(pageNum)
@@ -245,9 +237,7 @@ class PostsModel
     # Clear the current posts cache
     return p.cache.del('posts').then () =>
       return @getAllPosts(true).then (results) =>
-        if not results
-          logger.error @errorPostsNotFound
-          return @errorPostsNotFound
+        return @errorPostsNotFound if not results
 
         logger.debug '[Cache] Adding posts to cache...'
 
