@@ -5,6 +5,19 @@
 {% include 'post_article.html' %}
 
 {% if not post.isPage %}
+<!-- Testing Carnival comments -->
+<script src="https://carnivalapp.io/sites/122/init.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    Carnival.init({
+      enabled: true,
+      article_author: "{{ site.author.name }}",
+      article_selector: "article",
+      block_selector: ":scope > p, :scope > pre"
+    });
+  });
+</script>
+
 {% if disqus.shortname %}
 <div class="post-comments">
   <div class="post-comments-button">

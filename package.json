@@ -7,7 +7,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "cheerio": "^0.19.0",
     "express": "^4.12.2",
     "feed": "^0.2.6",
     "graceful-fs": "^3.0.5",
@@ -46,6 +45,7 @@
     "gulp-coffeelint": "^0.4.0",
     "gulp-concat": "^2.5.2",
     "gulp-cssmin": "^0.1.6",
+    "gulp-htmlmin": "^1.1.1",
     "gulp-imagemin": "^2.2.1",
     "gulp-less": "^3.0.1",
     "gulp-pixrem": "^0.1.3",

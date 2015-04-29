@@ -4,34 +4,31 @@ config        = require './gulp_config.json'
 del           = require 'del'
 runSequence   = require 'run-sequence'
 notifier      = require 'node-notifier';
-gulp          = require 'gulp'
-gutil         = require 'gulp-util'
 nodemon       = require 'nodemon'
+browserify    = require 'browserify'
 browserSync   = require 'browser-sync'
 reload        = browserSync.reload
+watchify      = require 'watchify'
+buffer        = require 'vinyl-buffer'
+source        = require 'vinyl-source-stream'
+transform     = require 'vinyl-transform'
 
+gulp          = require 'gulp'
 autoprefixer  = require 'gulp-autoprefixer'
+cached        = require 'gulp-cached'
+coffee        = require 'gulp-coffee'
+coffeelint    = require 'gulp-coffeelint'
 concat        = require 'gulp-concat'
-less          = require 'gulp-less'
-sourcemaps    = require 'gulp-sourcemaps'
-pixrem        = require 'gulp-pixrem'
 cssmin        = require 'gulp-cssmin'
-browserify    = require 'browserify'
-concat        = require 'gulp-concat'
+htmlmin       = require 'gulp-htmlmin'
+imagemin      = require 'gulp-imagemin'
+less          = require 'gulp-less'
+pixrem        = require 'gulp-pixrem'
 plumber       = require 'gulp-plumber'
 sourcemaps    = require 'gulp-sourcemaps'
 uglify        = require 'gulp-uglify'
 gutil         = require 'gulp-util'
-buffer        = require 'vinyl-buffer'
-source        = require 'vinyl-source-stream'
-transform     = require 'vinyl-transform'
-coffee        = require 'gulp-coffee'
-watchify      = require 'watchify'
-imagemin      = require 'gulp-imagemin'
 pngcrush      = require 'imagemin-pngcrush'
-plumber       = require 'gulp-plumber'
-coffeelint    = require 'gulp-coffeelint'
-cached        = require 'gulp-cached'
 
 isWatching  = false
 reloadDelay = 2000
@@ -51,6 +48,7 @@ errorHandler = (err) ->
 # View templates task
 gulp.task 'templates', () ->
   gulp.src config.paths.templates.src
+      .pipe htmlmin { collapseWhitespace: true }
       .pipe gulp.dest config.paths.templates.dest
 
 # Clean the assets folder

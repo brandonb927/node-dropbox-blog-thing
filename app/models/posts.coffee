@@ -1,7 +1,6 @@
 _           = require 'lodash'
 Q           = require 'q'
 fs          = require 'graceful-fs'
-cheerio     = require 'cheerio'
 htmlToText  = require 'html-to-text'
 marked      = require 'marked'
 moment      = require 'moment'
@@ -85,8 +84,8 @@ class PostsModel
         isPage  : if meta.type is 'page' then true else false
 
       # Strip blank <p> tags from around figure elements
-      body = cheerio.load(content).html()
-      content = body.replace /\<p\>\<\/p\>/g, ''
+      content = content.replace /<p><figure>/g, '<figure>'
+      content = content.replace /<\/figure><\/p>/g, '</figure>'
 
       # Return the HTML-safe content that will be rendered to the page
       # NOTE: This is commented in favour of turning autoescape off app-wide
