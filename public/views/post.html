@@ -1,31 +1,4 @@
-{% extends 'layout.html' %}
-
-{% block body %}
-
-{% include 'post_article.html' %}
-
-{% if not post.isPage %}
-<!-- Testing Carnival comments -->
-<script src="https://carnivalapp.io/sites/122/init.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    Carnival.init({
-      enabled: true,
-      article_author: "{{ site.author.name }}",
-      article_selector: "article",
-      block_selector: ":scope > p, :scope > pre"
-    });
-  });
-</script>
-
-{% if disqus.shortname %}
-<div class="post-comments">
-  <div class="post-comments-button">
-    <button class="button show-comments">Load Comments</button>
-  </div>
-  <div id="disqus_thread" data-disqus-shortname="{{disqus.shortname}}" data-disqus-url="{{post.url}}"></div>
-  <script>
-    var commentsButton = document.querySelector('.show-comments');
+{% extends 'layout.html' %} {% block body %} {% include 'post_article.html' %} {% if not post.isPage %} {% if disqus.shortname %}<div class="post-comments"><div class="post-comments-button"><button class="button show-comments">Load Comments</button></div><div id="disqus_thread" data-disqus-shortname="{{disqus.shortname}}" data-disqus-url="{{post.url}}"></div><script>var commentsButton = document.querySelector('.show-comments');
     var s = commentsButton.style;
     s.opacity = 1;
 
@@ -44,10 +17,4 @@
       }, 200);
 
       ;(function fade () { (s.opacity -= .1) < 0 ? s.display = "none" : setTimeout(fade ,40) })();
-    });
-  </script>
-</div>
-{% endif %}
-{% endif %}
-
-{% endblock %}
+    });</script></div>{% endif %} {% endif %} {% endblock %}
