@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "skeleton": "~2.0.4"
+    "skeleton": "~2.0.4",
+    "picturefill": "~2.3.1"
   }
 }

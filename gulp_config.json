@@ -1,11 +1,12 @@
 {
   "vars": {
-    "site_coffee":  "site.coffee",
-    "site_min_js":  "site.min.js",
-    "site_pack":    "site-pack.js",
-    "site_css":     "site.css",
-    "site_min_css": "site.min.css",
-    "vendor_pack":  "vendor-pack.js"
+    "site_coffee":    "site.coffee",
+    "site_js":        "site.js",
+    "site_min_js":    "site.min.js",
+    "site_pack":      "site-pack.js",
+    "vendor_pack_js": "vendor-pack.js",
+    "site_css":       "site.css",
+    "site_min_css":   "site.min.css"
   },
   "paths": {
     "src": {
@@ -33,12 +34,13 @@
     },
     "scripts": {
       "src": "src/scripts/site.coffee",
+      "src_all": "src/scripts/**/*.coffee",
       "dest": "public/assets/js"
     },
     "vendor": {
       "scripts": [
         "bower_components/fastclick/lib/fastclick.js",
-        "bower_components/highlightjs/highlight.pack.js"
+        "bower_components/picturefill/dist/picturefill.js"
       ]
     },
     "app": {

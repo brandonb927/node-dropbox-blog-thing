@@ -24,7 +24,8 @@ renderer.image = (src, title, text) ->
   if not _.startsWith @src, 'http'
     buildRetinaPath = (scale) =>
       pathObj = parsePath @src
-      imgPath = "#{if pathObj.dirname isnt '.' then pathObj.dirname else ''}#{pathObj.name}@#{scale}#{pathObj.extname}"
+      dirName = if pathObj.dirname isnt '.' then pathObj.dirname else ''
+      imgPath = "#{dirName}#{pathObj.name}@#{scale}#{pathObj.extname}"
       return imgPath
 
     @src2x = buildRetinaPath '2x'
@@ -35,7 +36,9 @@ renderer.image = (src, title, text) ->
         <a href="#{@src2x}" target="_blank">
           <picture>
             <source srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x">
-            <img src=\"#{@src}\" srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x" alt=\"#{if title? then title else ''}\">
+            <img src=\"#{@src}\"
+              srcset="#{@src}, #{@src2x} 2x, #{@src3x} 3x"
+              alt=\"#{if title? then title else ''}\">
           </picture>
         </a>
       </figure>

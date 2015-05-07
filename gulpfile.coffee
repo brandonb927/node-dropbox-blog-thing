@@ -5,13 +5,8 @@ del           = require 'del'
 runSequence   = require 'run-sequence'
 notifier      = require 'node-notifier';
 nodemon       = require 'nodemon'
-browserify    = require 'browserify'
 browserSync   = require 'browser-sync'
 reload        = browserSync.reload
-watchify      = require 'watchify'
-buffer        = require 'vinyl-buffer'
-source        = require 'vinyl-source-stream'
-transform     = require 'vinyl-transform'
 
 gulp          = require 'gulp'
 autoprefixer  = require 'gulp-autoprefixer'
@@ -45,16 +40,19 @@ errorHandler = (err) ->
 
   @emit 'end'
 
+
 # View templates task
 gulp.task 'templates', () ->
   gulp.src config.paths.templates.src
-      .pipe htmlmin { collapseWhitespace: true }
-      .pipe gulp.dest config.paths.templates.dest
+    .pipe htmlmin { collapseWhitespace: true }
+    .pipe gulp.dest config.paths.templates.dest
+
 
 # Clean the assets folder
 gulp.task 'clean', () ->
   gulp.src 'public/{images,assets,views}', { read: false }
-      .pipe del()
+    .pipe del()
+
 
 # Images stuff
 gulp.task 'images', () ->
@@ -68,6 +66,7 @@ gulp.task 'images', () ->
     }
     .pipe gulp.dest config.paths.images.dest
     .pipe reload { stream: true }
+
 
 # Compile CSS styles
 gulp.task 'styles', () ->
@@ -90,79 +89,89 @@ gulp.task 'styles', () ->
     .pipe gulp.dest config.paths.styles.dest
     .pipe reload { stream: true }
 
+
 # Deal with fonts
 gulp.task 'fonts', () ->
   return gulp.src config.paths.fonts.src
     .pipe gulp.dest config.paths.fonts.dest
 
+
 # run CoffeeLint on the scripts
 gulp.task 'lint', () ->
-  return gulp.src config.paths.scripts.src.concat(config.paths.app.src)
+  return gulp.src [config.paths.scripts.src, config.paths.app.src]
     .pipe plumber { errorHandler: errorHandler }
     .pipe cached 'linting'
     .pipe coffeelint()
     .pipe coffeelint.reporter()
 
+
 # Build scripts
-gulp.task 'scripts', ['lint'], () ->
-  rebundle = () ->
-    return @bundle()
-      .on 'end', "#{gutil.log.bind gutil, gutil.colors.green '✓'} Rebuilding JS..."
-      .on 'error', "#{gutil.log.bind gutil, gutil.colors.red '✗'} Error rebuilding JS..."
-      .pipe source config.vars.site_coffee
-      .pipe buffer()
-      .pipe gulp.dest config.paths.scripts.dest
-      .pipe sourcemaps.init { loadMaps: true }
-      .pipe coffee { bare: true }
-      .pipe uglify()
-      .pipe sourcemaps.write()
-      .pipe concat config.vars.site_min_js
-      .pipe gulp.dest config.paths.scripts.dest
-      .pipe reload { stream: true }
-
-  watchified = transform (filename) ->
-    b = browserify filename, {
-      debug: true
-      cache: {}
-      packageCache: {}
-      fullPaths: true
-    }
-
-    bundler = watchify b
-    bundler.on 'update', rebundle.bind bundler
-    bundler.bundle()
-
-  gulp.src config.paths.vendor.scripts
-    .pipe concat config.vars.vendor_pack
+gulp.task 'scripts:vendor', () ->
+  return gulp.src config.paths.vendor.scripts
+    .pipe plumber { errorHandler: errorHandler }
+    .pipe sourcemaps.init { loadMaps: true }
+    .pipe sourcemaps.write()
+    .pipe concat config.vars.vendor_pack_js
     .pipe gulp.dest config.paths.src.scripts
 
-  return gulp.src config.paths.scripts.src, { read: false }
+
+gulp.task 'scripts', ['lint'], () ->
+  return gulp.src config.paths.scripts.src
     .pipe plumber { errorHandler: errorHandler }
-    .pipe watchified
+    .pipe sourcemaps.init { loadMaps: true }
+    .pipe coffee { bare: true }
+    .pipe sourcemaps.write()
     .pipe gulp.dest config.paths.scripts.dest
+    .pipe reload { stream: true }
+
+gulp.task 'scripts:minify', () ->
+  return gulp.src [
+      "#{config.paths.src.scripts}/#{config.vars.vendor_pack_js}"
+      "#{config.paths.scripts.dest}/#{config.vars.site_js}"
+    ]
+    .pipe plumber { errorHandler: errorHandler }
+    .pipe concat config.vars.site_min_js
+    .pipe sourcemaps.init { loadMaps: true }
+    .pipe uglify()
+    .pipe sourcemaps.write()
+    .pipe gulp.dest config.paths.scripts.dest
+
+
 
 # Use the tasks below for running on the command line
 # Default task
 gulp.task 'default', () ->
-  gulp.start [
-    'templates'
-    'images'
-    'styles'
-    'fonts'
-    'lint'
-    'scripts'
+  runSequence(
+    [
+      'templates'
+      'images'
+      'styles'
+      'fonts'
+    ]
+    [
+      'scripts:vendor'
+      'scripts'
+    ]
+    'scripts:minify'
     'watch'
-  ]
+  )
+
 
 gulp.task 'build', () ->
-  gulp.start [
-    'templates'
-    'images'
-    'styles'
-    'fonts'
-    'lint'
-    'scripts'
-  ]
+  runSequence(
+    [
+      'templates'
+      'images'
+      'styles'
+      'fonts'
+    ]
+    [
+      'scripts:vendor'
+      'scripts'
+    ]
+    'scripts:minify'
+  )
+
 
 # Watch task
 gulp.task 'watch', () ->
@@ -172,12 +181,13 @@ gulp.task 'watch', () ->
   gulp.watch [
     'app/**/*.coffee'
     'config/*.coffee'
-    'src/scripts/site.coffee'
+    config.paths.scripts.src,
     '!gulpfile.coffee'
     '!src/scripts/vendor-pack.js'
   ], [
-    'lint'
+    'scripts:vendor'
     'scripts'
+    'scripts:minify'
   ]
 
   # Copy templates from the src directory to the public dir
@@ -192,6 +202,7 @@ gulp.task 'watch', () ->
   # Watch for font files
   gulp.watch config.paths.fonts.src, ['fonts', reload]
 
+
 gulp.task 'browser-sync', () ->
   browserSync.init
     proxy: 'localhost:3000'
@@ -199,6 +210,7 @@ gulp.task 'browser-sync', () ->
     open: false
     browser: [ 'google chrome' ]
     ui: port: 9001
+
 
 # Run the server
 gulp.task 'nodemon', (cb) ->
@@ -235,6 +247,7 @@ gulp.task 'nodemon', (cb) ->
 
     logger.warn '[nodemon] Server restarted!'
 
+
 gulp.task 'serve', () ->
   isWatching = true
   runSequence(
@@ -242,6 +255,7 @@ gulp.task 'serve', () ->
     'nodemon'
     'browser-sync'
   )
+
 
 # Hack to keep build task from hanging
 gulp.on 'stop', () ->
