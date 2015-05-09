@@ -11,5 +11,5 @@ window.requestAnimFrame = () ->
          window.mozRequestAnimationFrame or
          (callback) -> window.setTimeout(callback, 1000 / 60)
 
-$ () ->
-  console.log 'Blarg'
+# $ () ->
+#   console.log 'Blarg'
