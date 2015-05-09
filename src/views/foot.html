@@ -1,2 +1,21 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 <script src="/assets/js/site.min.js"></script>
+
+{% if post.isPage and post.title == 'About' %}
+<script>
+  L.mapbox.accessToken = '{{ site.mapbox.accessToken }}';
+
+  var map = L.mapbox.map('map', '{{ site.mapbox.mapId }}', {
+    zoomControl: false
+  });
+
+  // Disable drag and zoom handlers.
+  map.dragging.disable();
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+  map.scrollWheelZoom.disable();
+
+  // Disable tap handler, if present.
+  if (map.tap) { map.tap.disable(); }
+</script>
+{% endif %}

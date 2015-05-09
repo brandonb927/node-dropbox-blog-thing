@@ -7,6 +7,12 @@
   {% endif %}
   </h2>
 
+  {% if post.isPage and post.title == 'About' %}
+  <div class="mapbox-map-container">
+    <div id="map" class="mapbox-map"></div>
+  </div>
+  {% endif %}
+
   <div class="post-content" itemprop="text">
     {{post.content}}
   </div>

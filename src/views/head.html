@@ -92,3 +92,8 @@
   }
 </script>
 {% endif %}
+
+{% if post.isPage and post.title == 'About' %}
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+{% endif %}

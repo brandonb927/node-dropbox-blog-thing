@@ -33,6 +33,11 @@ locals = (req, res, next) ->
   res.locals.site.date    = moment(new Date()).format('YYYY')
   res.locals.site.dateObj = moment(new Date()).toDate()
 
+  # Mapbox stuff
+  res.locals.site.mapbox =
+    mapId       : process.env.MAPBOX_MAP_ID
+    accessToken : process.env.MAPBOX_ACCESS_TOKEN
+
   next()
 
 module.exports = locals
