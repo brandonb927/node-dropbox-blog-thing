@@ -1,3 +1,6 @@
+if process.env.NODE_ENV is 'production'
+  require('newrelic');
+
 Q             = require 'q'
 morgan        = require 'morgan'
 favicon       = require 'serve-favicon'
