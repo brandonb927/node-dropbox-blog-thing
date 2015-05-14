@@ -1,5 +1,5 @@
 if process.env.NODE_ENV is 'production'
-  require('newrelic');
+  require 'newrelic'
 
 Q             = require 'q'
 morgan        = require 'morgan'
