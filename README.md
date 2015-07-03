@@ -1,5 +1,7 @@
 # Dropbox-powered Blog Thing
 
+## This project has been deprecated as of July 1, 2015 in favour of a static site hosted on [surge.sh](https://surge.sh)
+
 **tl;dr** I wrote this blog "thing" to scratch my own itch, so if you have some time on your hands and you happen to like node.js, 
 you can have a sweet Dropbox-powered blog like mine running on your own server.
 
